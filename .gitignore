@@ -1,5 +1,7 @@
 node_modules/
 dist/
+coverage/
+.env
 .claude/
 *.log
 src/data/parts/
