@@ -15,8 +15,11 @@ export const SHIELD_CAP = 99;
 export const SHIELD_PERSISTS = false;
 export const FIGHT_TURN_CAP = 40;
 
-// Map, deck, shrine
-export const MAP_FLOORS = 7;
+// Dungeon, deck, shrine
+/** Fewest fight sites on any gate-free route from the start to the boss (R3, Dungeon). */
+export const MIN_ROUTE_FIGHTS = 4;
+/** A gate opens when the deck holds at least this many cards with its tag (R3, decision 9). */
+export const GATE_TAG_CARDS = 4;
 export const MIN_DECK_SIZE = 5;
 export const SHRINE_HEAL_PERCENT = 30;
 

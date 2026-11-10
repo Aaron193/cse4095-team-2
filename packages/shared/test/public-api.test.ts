@@ -1,7 +1,7 @@
-// Imports every name in TODO.md Reference R4 from the package (task P0-A3).
+// Imports every name in TODO.md Reference R4 from the package (tasks P0-A3 and P0-A5).
 // The type imports are checked by `npm run typecheck`; the sample values below fail to
-// compile if a type drifts from R4.
-import { describe, expect, it } from 'vitest';
+// compile if a type drifts from R4, and so do the `expectTypeOf` checks.
+import { describe, expect, expectTypeOf, it } from 'vitest';
 import {
   CARDS,
   ENEMIES,
@@ -84,12 +84,19 @@ const enemyDef: EnemyDef = {
   traits,
   phase2: { atOrBelowHpPercent: 50, intents },
 };
-const node: MapNode = { id: 'f1n0', floor: 1, index: 0, type: 'fight', next: ['f2n0'] };
+// A 7 by 3 dungeon. The player started at (1, 1), cleared shrine n0, opened the Fire gate at
+// (3, 1), which is tile index 1 * 7 + 3 = 10, and is now fighting at n1.
+const shrine: MapNode = { id: 'n0', x: 2, y: 1, type: 'shrine' };
+const node: MapNode = { id: 'n1', x: 5, y: 1, type: 'fight' };
 const dungeon: Dungeon = {
   seed: 'seed',
-  nodes: [node],
-  encounters: { f1n0: ['sample'] },
-  rewards: { f1n0: ['sample', 'sample', 'sample'] },
+  width: 7,
+  height: 3,
+  tiles: ['#######', '#..B..#', '#######'],
+  start: { x: 1, y: 1 },
+  nodes: [shrine, node],
+  encounters: { n1: ['sample'] },
+  rewards: { n1: ['sample', 'sample', 'sample'] },
 };
 const rng: RngState = { a: 1, b: 2, c: 3, d: 4 };
 const enemy: EnemyState = {
@@ -103,7 +110,7 @@ const enemy: EnemyState = {
   phase: 1,
 };
 const combat: CombatState = {
-  nodeId: 'f1n0',
+  nodeId: 'n1',
   turn: 1,
   energy: 3,
   hand: ['sample'],
@@ -121,17 +128,19 @@ const state: RunState = {
   phase: 'combat',
   outcome: null,
   dungeon,
-  position: 'f1n0',
-  nodesCleared: 0,
+  pos: { x: 5, y: 1 },
+  cleared: ['n0'],
+  openedGates: [10],
+  nodesCleared: 1,
   hp: 60,
   maxHp: 60,
-  deck: ['sample'],
+  deck: ['sample', 'sample', 'sample', 'sample'],
   combat,
   rewardOffers: null,
-  stats: { turns: 0, comboTriggers: 0 },
+  stats: { turns: 0, comboTriggers: 0, steps: 4 },
 };
 const actions: Action[] = [
-  { type: 'chooseNode', nodeId: 'f1n0' },
+  { type: 'move', dir: 'E' },
   { type: 'playCard', handIndex: 0, target: 0 },
   { type: 'playCard', handIndex: 0 },
   { type: 'endTurn' },
@@ -153,8 +162,8 @@ const simResults: SimResult[] = [
 ];
 
 describe('engine public API (R4)', () => {
-  it('exports ENGINE_VERSION 0.1.0', () => {
-    expect(ENGINE_VERSION).toBe('0.1.0');
+  it('exports ENGINE_VERSION 0.2.0', () => {
+    expect(ENGINE_VERSION).toBe('0.2.0');
   });
 
   it('exports the content tables', () => {
@@ -178,5 +187,37 @@ describe('engine public API (R4)', () => {
   it('accepts sample values for every R4 type as plain JSON', () => {
     const samples = { card, enemyDef, state, actions, applyResults, simResults };
     expect(JSON.parse(JSON.stringify(samples))).toEqual(samples);
+  });
+
+  it('has exactly the R4 grid-dungeon fields and actions (P0-A5)', () => {
+    expectTypeOf<keyof MapNode>().toEqualTypeOf<'id' | 'x' | 'y' | 'type'>();
+    expectTypeOf<keyof Dungeon>().toEqualTypeOf<
+      'seed' | 'width' | 'height' | 'tiles' | 'start' | 'nodes' | 'encounters' | 'rewards'
+    >();
+    expectTypeOf<keyof RunState>().toEqualTypeOf<
+      | 'engineVersion'
+      | 'seed'
+      | 'phase'
+      | 'outcome'
+      | 'dungeon'
+      | 'pos'
+      | 'cleared'
+      | 'openedGates'
+      | 'nodesCleared'
+      | 'hp'
+      | 'maxHp'
+      | 'deck'
+      | 'combat'
+      | 'rewardOffers'
+      | 'stats'
+    >();
+    expectTypeOf<keyof RunState['stats']>().toEqualTypeOf<'turns' | 'comboTriggers' | 'steps'>();
+    expectTypeOf<Action['type']>().toEqualTypeOf<
+      'move' | 'playCard' | 'endTurn' | 'pickReward' | 'shrine'
+    >();
+    expectTypeOf<Extract<Action, { type: 'move' }>>().toEqualTypeOf<{
+      type: 'move';
+      dir: 'N' | 'E' | 'S' | 'W';
+    }>();
   });
 });

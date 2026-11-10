@@ -14,7 +14,7 @@ Edit only your own line. Keep the blank lines between entries.
 
 **Phase:** P0 Foundations (due Thu Nov 12)
 
-**A (engine and cards):** P0-A1 to P0-A4 done, pending review; P0-A5 not started. Blocked by: P0-T2
+**A (engine and cards):** P0-A1 to P0-A5 done, pending review. Blocked by: nothing
 
 **B (API, database, auth, verification):** not started. Blocked by: nothing
 
@@ -123,7 +123,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/engine/content/balance.ts` exporting every constant in the R3 table with the listed default.
   - Done when: A test asserts every exported constant is an integer or boolean and matches the R3 table names.
 
-- [ ] **P0-A5 · Grid-dungeon contract change in types and constants** — Owner: Aaron Mark — Needs: P0-A3, P0-A4, P0-T2
+- [x] **P0-A5 · Grid-dungeon contract change in types and constants** — Owner: Aaron Mark — Needs: P0-A3, P0-A4, P0-T2
   - Do: Bring `types.ts` and `balance.ts` in line with R3 and R4 as changed for the grid dungeon: `MapNode` has `x` and `y` instead of `floor`, `index`, and `next`; `Dungeon` gains `width`, `height`, `tiles`, and `start`; `RunState` has `pos` instead of `position` and gains `cleared` and `openedGates`; the `move` action replaces `chooseNode`; `stats.steps` is added; `MAP_FLOORS` is replaced by `GATE_TAG_CARDS` and `MIN_ROUTE_FIGHTS`.
   - Done when: The public-API and balance tests pass against the new names, and no file in `packages/shared` mentions `chooseNode` or `MAP_FLOORS`.
 

@@ -63,18 +63,26 @@ export interface EnemyDef {
   phase2?: { atOrBelowHpPercent: number; intents: Intent[] };
 }
 
+/** A site on the grid: one floor tile holding a fight, an elite, a shrine, or the boss. */
 export interface MapNode {
-  /** For example "f3n1". */
+  /** "n<index>", numbered in reading order (top row first, left to right), for example "n4". */
   id: string;
-  floor: number;
-  index: number;
+  /** Its tile. */
+  x: number;
+  y: number;
   type: 'fight' | 'elite' | 'shrine' | 'boss';
-  /** Node ids on the next floor. */
-  next: string[];
 }
 
 export interface Dungeon {
   seed: string;
+  width: number;
+  height: number;
+  /**
+   * One string per row: '#' wall, '.' floor, 'B' brambles (Fire), '~' water (Frost),
+   * 'R' bars (Poison). Sites and the start are floor tiles.
+   */
+  tiles: string[];
+  start: { x: number; y: number };
   nodes: MapNode[];
   /** nodeId -> enemy ids */
   encounters: Record<string, string[]>;
@@ -113,18 +121,24 @@ export interface RunState {
   phase: 'map' | 'combat' | 'reward' | 'shrine' | 'ended';
   outcome: 'won' | 'lost' | null;
   dungeon: Dungeon;
-  position: string | null;
+  /** The player's tile. */
+  pos: { x: number; y: number };
+  /** Node ids, in the order cleared. */
+  cleared: string[];
+  /** Tile indexes (y * width + x) of opened gates, in the order opened. */
+  openedGates: number[];
   nodesCleared: number;
   hp: number;
   maxHp: number;
   deck: string[];
   combat: CombatState | null;
   rewardOffers: string[] | null;
-  stats: { turns: number; comboTriggers: number };
+  stats: { turns: number; comboTriggers: number; steps: number };
 }
 
 export type Action =
-  | { type: 'chooseNode'; nodeId: string }
+  /** One tile north, east, south, or west. */
+  | { type: 'move'; dir: 'N' | 'E' | 'S' | 'W' }
   /** `target` is an enemy index. */
   | { type: 'playCard'; handIndex: number; target?: number }
   | { type: 'endTurn' }
