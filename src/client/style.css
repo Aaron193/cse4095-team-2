@@ -1,0 +1,72 @@
+/* Placeholder look. Tag colors follow the design doc: Fire orange, Frost cyan, Poison green. */
+:root {
+  --bg: #15121c; --panel: #211c2c; --line: #3d3650; --text: #e8e4f0; --dim: #9a94ac;
+  --gold: #ffd040; --bad: #ff6a5a;
+  font-family: 'Courier New', ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); }
+#app { max-width: 1400px; margin: 0 auto; padding: 12px 16px 32px; }
+header { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+h1 { margin: 0; font-size: 26px; letter-spacing: 4px; color: var(--gold); text-shadow: 2px 2px 0 #7a4a20; }
+h2 { margin: 0; font-size: 16px; }
+h3 { margin: 0 0 4px; font-size: 13px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+p { margin: 0 0 6px; font-size: 13px; line-height: 1.4; }
+small, .dim { color: var(--dim); font-weight: normal; }
+.sub { color: var(--dim); font-size: 13px; }
+kbd { background: #000; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; font-size: 11px; }
+
+#hud { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; margin: 10px 0; padding: 8px 12px; background: var(--panel); border: 2px solid var(--line); font-size: 14px; }
+#hud b { color: #fff; }
+#hud .hp b { color: #ff5a6a; letter-spacing: 1px; }
+#hud .hp em { color: #4a3040; font-style: normal; }
+#hud .buffs { color: #5ad4ff; }
+#hud .tag { margin-left: auto; color: var(--gold); font-size: 12px; letter-spacing: 2px; }
+
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 12px; align-items: start; }
+.board { border: 2px solid var(--line); background: #000; line-height: 0; }
+canvas { width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; cursor: crosshair; }
+aside { display: grid; gap: 8px; }
+.stage.veiled .board canvas { filter: brightness(0); }
+.intro { display: grid; gap: 10px; padding: 16px; max-width: 720px; }
+.intro button { justify-self: start; }
+.box { background: var(--panel); border: 2px solid var(--line); padding: 8px 10px; min-height: 60px; }
+#info { min-height: 120px; }
+#log { min-height: 150px; }
+#log p { margin: 0 0 2px; font-size: 12px; }
+.combo { color: var(--gold); }
+.bad { color: var(--bad); }
+
+#tray { margin-top: 12px; }
+.trayhead { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.cards { display: grid; gap: 8px; }
+.cards.nine { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+.cards.hand { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.card { display: grid; gap: 4px; text-align: left; padding: 8px 10px; background: var(--panel); color: var(--text); border: 2px solid var(--line); border-left: 6px solid var(--el); font: inherit; cursor: pointer; }
+.card:hover { border-color: var(--el); }
+.card.sel { background: color-mix(in srgb, var(--el) 22%, var(--panel)); border-color: var(--el); box-shadow: 0 0 0 2px var(--el); }
+.card.spent { opacity: 0.4; }
+.card .top { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.card .top i { color: var(--el); font-style: normal; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+.card .charges { color: var(--el); letter-spacing: 2px; font-size: 12px; }
+.card .text { font-size: 12px; color: var(--dim); line-height: 1.35; }
+
+button { font: inherit; }
+button:not(.card) { background: var(--panel); color: var(--text); border: 2px solid var(--line); padding: 6px 14px; cursor: pointer; }
+button.go { background: var(--gold); color: #15121c; border-color: #7a4a20; font-weight: bold; }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#modal { position: fixed; inset: 0; background: rgba(8, 6, 12, 0.8); display: grid; place-items: center; padding: 16px; }
+#modal[hidden] { display: none; }
+.panel { background: var(--panel); border: 2px solid var(--gold); padding: 20px 24px; width: min(460px, 100%); display: grid; gap: 10px; }
+.panel h2 { font-size: 22px; color: var(--gold); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+td { padding: 3px 0; }
+td:last-child { text-align: right; }
+td.dim { font-size: 12px; }
+tr.total td { border-top: 2px solid var(--line); padding-top: 8px; font-size: 18px; font-weight: bold; color: var(--gold); }
+textarea { width: 100%; background: #000; color: var(--text); border: 1px solid var(--line); font: inherit; font-size: 12px; padding: 6px; resize: none; }
+.replay { word-break: break-all; font-size: 11px; max-height: 48px; overflow: auto; }
+.row { display: flex; gap: 8px; justify-content: flex-end; }
+
+@media (max-width: 900px) { .stage { grid-template-columns: 1fr; } }
