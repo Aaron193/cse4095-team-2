@@ -14,7 +14,7 @@ Edit only your own line. Keep the blank lines between entries.
 
 **Phase:** P0 Foundations (due Thu Nov 12)
 
-**A (engine and cards):** P0 in progress (P0-A1 done). Blocked by: nothing
+**A (engine and cards):** P0 in progress (P0-A1, P0-A2 done). Blocked by: nothing
 
 **B (API, database, auth, verification):** not started. Blocked by: nothing
 
@@ -111,7 +111,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Create `packages/shared` as `@daily-delve/shared` per R1 (source-only `exports`, Vitest, folders `src/engine` and `src/api`). Add an ESLint override for `src/engine/**` enforcing R2 rules 1 and 2.
   - Done when: A file in `src/engine` that calls `Math.random()` or `Date.now()`, or imports from outside `src/engine`, fails `npm run lint`; a trivial test passes.
 
-- [ ] **P0-A2 · Seeded random generator** — Owner: ____ — Needs: P0-A1
+- [x] **P0-A2 · Seeded random generator** — Owner: Tyler — Needs: P0-A1
   - Do: Write `src/engine/rng.ts` per R2 rule 4: `createRng(seed, stream)`, `nextU32`, `nextInt(rng, n)`, `shuffle(rng, array)`, `pick`. Integer math only.
   - Done when: Tests assert a committed table of outputs for three seed and stream pairs, show that drawing from one stream never changes another, and check `nextInt` stays in range.
 
