@@ -1,0 +1,30 @@
+{
+  "name": "daily-delve",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Daily Delve: a shared daily dungeon card game",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "node scripts/run-workspaces.mjs typecheck",
+    "test": "node scripts/run-workspaces.mjs test",
+    "build": "node scripts/run-workspaces.mjs build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.0.0",
+    "prettier": "^3.3.0",
+    "typescript": "~5.9.0",
+    "typescript-eslint": "^8.0.0"
+  }
+}

@@ -157,7 +157,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P0 Stream D
 
-- [ ] **P0-D1 · Root workspace** — Owner: Justin Morneau — Needs: none
+- [x] **P0-D1 · Root workspace** — Owner: Justin Morneau — Needs: none
   - Do: Add root `package.json` (private, workspaces `packages/*` and `apps/*`), `tsconfig.base.json` (strict), `.nvmrc` (current Node LTS), `.gitignore`, `.editorconfig`, ESLint and Prettier configs, and `.prettierignore` containing `TODO.md`. Root scripts `lint`, `typecheck`, `test`, `build` run across workspaces. Leave the existing proposal, slides, and design document files where they are.
   - Done when: On a fresh clone `npm install && npm run lint && npm run typecheck && npm test` exits 0.
 
