@@ -68,7 +68,8 @@ describe('engine lint rule (R2 rules 1 and 2)', () => {
   });
 
   it('accepts an import of the engine root from a nested engine folder', async () => {
-    const code = "import { ENGINE_VERSION } from '../version.ts';\nexport const v = ENGINE_VERSION;";
+    const code =
+      "import { ENGINE_VERSION } from '../version.ts';\nexport const v = ENGINE_VERSION;";
     expect(await lint(code, NESTED_ENGINE_FILE)).toEqual([]);
   });
 

@@ -14,11 +14,11 @@ Edit only your own line. Keep the blank lines between entries.
 
 **Phase:** P0 Foundations (due Thu Nov 12)
 
-**A (engine and cards):** P0 done (P0-A1 to P0-A4), pending review. Blocked by: nothing
+**A (engine and cards):** P0-A1 to P0-A4 done, pending review; P0-A5 not started. Blocked by: P0-T2
 
 **B (API, database, auth, verification):** not started. Blocked by: nothing
 
-**C (map, combat, reward screens):** not started. Blocked by: nothing
+**C (map, combat, reward screens):** playable grid-dungeon prototype on branch `antonio-dev`; this file now plans the hybrid in R3 DECISION 8 to 10. Blocked by: P0-T2
 
 **D (leaderboard, profile, deploy, tests, docs):** not started. Blocked by: nothing
 
@@ -37,8 +37,8 @@ Filled in once by task P0-T1.
 | Stream | Scope | Person | Default reviewer |
 | --- | --- | --- | --- |
 | A | Shared engine, card and enemy data, engine tests | ____ | B |
-| B | REST API, database, auth, run verification | ____ | A |
-| C | Game screens: map, combat, reward, shrine, summary | ____ | D |
+| B | REST API, database, auth, run verification | Justin Morneau | A |
+| C | Game screens: map, combat, reward, shrine, summary | Antonio Ayala | D |
 | D | Auth, leaderboard and profile screens, deploy, CI, end-to-end tests, docs | ____ | C |
 
 ## How to update this file
@@ -98,7 +98,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Done when: The Roles table on `main` has four names.
 
 - [ ] **P0-T2 · Confirm the flagged rule decisions** — Owner: ____ — Needs: none
-  - Do: Read the seven lines marked `DECISION` in R3. For each, either keep it or edit it, then replace `DECISION` with `CONFIRMED`.
+  - Do: Read the ten lines marked `DECISION` in R3. For each, either keep it or edit it, then replace `DECISION` with `CONFIRMED`.
   - Done when: No line in R3 contains the word `DECISION`, in a pull request approved by all four members.
 
 - [ ] **P0-T3 · Phase 0 exit check** — Owner: ____ — Needs: P0-D4
@@ -122,6 +122,10 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 - [x] **P0-A4 · Balance constants file** — Owner: Tyler — Needs: P0-A3
   - Do: Write `src/engine/content/balance.ts` exporting every constant in the R3 table with the listed default.
   - Done when: A test asserts every exported constant is an integer or boolean and matches the R3 table names.
+
+- [ ] **P0-A5 · Grid-dungeon contract change in types and constants** — Owner: ____ — Needs: P0-A3, P0-A4, P0-T2
+  - Do: Bring `types.ts` and `balance.ts` in line with R3 and R4 as changed for the grid dungeon: `MapNode` has `x` and `y` instead of `floor`, `index`, and `next`; `Dungeon` gains `width`, `height`, `tiles`, and `start`; `RunState` has `pos` instead of `position` and gains `cleared` and `openedGates`; the `move` action replaces `chooseNode`; `stats.steps` is added; `MAP_FLOORS` is replaced by `GATE_TAG_CARDS` and `MIN_ROUTE_FIGHTS`.
+  - Done when: The public-API and balance tests pass against the new names, and no file in `packages/shared` mentions `chooseNode` or `MAP_FLOORS`.
 
 ### P0 Stream B
 
@@ -155,9 +159,13 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/styles/tokens.css` (Fire orange, Frost cyan, Poison green, spacing, type sizes) and `src/components/Card.tsx`, which draws a `CardDef` (name, cost, type, tags, text) with SVG and CSS only.
   - Done when: A component test renders one sample card per tag and finds its name, cost, text, and tag color class.
 
+- [ ] **P0-C4 · Prototype kept as reference code** — Owner: ____ — Needs: P0-D1
+  - Do: Copy the `antonio-dev` prototype into `prototypes/dungeon-puzzle/` (its `src/engine`, `src/client`, `src/data`, `tests`, `scripts`, `Docs/Game Content.md`, and `Docs/Expansion Ideas.md`), outside the npm workspaces and ignored by the root lint, typecheck, and test scripts. Add a README there saying it is reference code for P2-A1, P2-C1, P2-C2, and O6, how to run it, and that nothing imports from it.
+  - Done when: On a fresh clone the root `npm install && npm run lint && npm run typecheck && npm test` still exits 0, and the prototype runs with the commands in its README.
+
 ### P0 Stream D
 
-- [ ] **P0-D1 · Root workspace** — Owner: ____ — Needs: none
+- [x] **P0-D1 · Root workspace** — Owner: Justin Morneau — Needs: none
   - Do: Add root `package.json` (private, workspaces `packages/*` and `apps/*`), `tsconfig.base.json` (strict), `.nvmrc` (current Node LTS), `.gitignore`, `.editorconfig`, ESLint and Prettier configs, and `.prettierignore` containing `TODO.md`. Root scripts `lint`, `typecheck`, `test`, `build` run across workspaces. Leave the existing proposal, slides, and design document files where they are.
   - Done when: On a fresh clone `npm install && npm run lint && npm run typecheck && npm test` exits 0.
 
@@ -311,17 +319,17 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P2 Stream A
 
-- [ ] **P2-A1 · Map generation** — Owner: ____ — Needs: P0-A2, P0-A4
-  - Do: Write `generateMap(seed)` in `src/engine/map.ts` using stream `map` and the R3 map rules: `MAP_FLOORS` floors of 2 or 3 nodes, a single boss node on the floor after, each node linked to 1 or 2 nodes on the next floor, node IDs `f<floor>n<index>`.
-  - Done when: Tests over 500 seeds assert every R3 map rule, and the same seed gives a deep-equal map.
+- [ ] **P2-A1 · Dungeon grid generation** — Owner: ____ — Needs: P0-A2, P0-A5
+  - Do: Write `generateMap(seed)` in `src/engine/map.ts` using stream `map` and the R3 dungeon rules. Port the room-grid layout from `prototypes/dungeon-puzzle/src/engine/generator.ts` (`generateCandidate`: rooms, two routes, side rooms, doorways), rewritten to R2 (integer random numbers, no solver, no enemies or hazards). Place sites and gates per R3, with node IDs `n<index>` in reading order (top row first, left to right).
+  - Done when: Tests over 500 seeds assert every R3 dungeon rule, including a flood fill that reaches the boss with every gate closed, and the same seed gives a deep-equal map.
 
 - [ ] **P2-A2 · Dungeon generation** — Owner: ____ — Needs: P2-A1, P1-A7
   - Do: Write `generateDungeon(seed)`: the map, an encounter for every fight, elite, and boss node from stream `encounters:<nodeId>`, and three distinct reward cards for every fight and elite node from stream `rewards:<nodeId>` (elite offers include at least one rare).
   - Done when: Tests show the same seed gives a deep-equal dungeon, every referenced ID exists in content, elite offers include a rare, and two seeds differ.
 
 - [ ] **P2-A3 · Start a run and choose a node** — Owner: ____ — Needs: P2-A2
-  - Do: Implement `createRun(seed)` (phase `map`, starter deck, full HP, dungeon inside the state) and the `chooseNode` action: legal for floor 1 nodes at the start, afterwards only for nodes linked from the current position. Fight, elite, and boss nodes start combat; shrine nodes set phase `shrine`.
-  - Done when: Tests cover legal and illegal choices and each phase change.
+  - Do: Implement `createRun(seed)` (phase `map`, starter deck, full HP, dungeon inside the state, `pos` on the start tile) and the `move` action per R3: one tile north, east, south, or west; illegal into a wall, off the grid, or into a gate. Moving onto an uncleared fight, elite, or boss site starts combat; onto an uncleared shrine sets phase `shrine`. Each legal move adds 1 to `stats.steps`.
+  - Done when: Tests cover legal and illegal moves, each phase change, and that a cleared site is plain floor.
 
 - [ ] **P2-A4 · Fight rewards** — Owner: ____ — Needs: P2-A3
   - Do: On a fight win add 1 to `nodesCleared` and enter phase `reward` with that node's offers; a boss win ends the run as won. Implement `pickReward` (an offer index adds the card, `null` skips), then return to phase `map`. HP carries over; Shield and statuses do not.
@@ -351,6 +359,10 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Random-walk complete runs for 200 seeds with deep-frozen states.
   - Done when: Every run ends within `MAX_ACTIONS`, nothing throws, no input is mutated, and replaying each run's actions gives the same hash.
 
+- [ ] **P2-A11 · Gates** — Owner: ____ — Needs: P2-A3
+  - Do: Implement the R3 gate rule in `move` and `legalActions`: moving into a gate is legal only when the deck holds at least `GATE_TAG_CARDS` cards with the gate's tag; the gate then becomes floor for the rest of the run and the player steps onto it.
+  - Done when: Tests cover a refused gate, an opened gate for each of the three tags, a gate staying open, and a deck that drops below the count after a shrine removal.
+
 ### P2 Stream B
 
 - [ ] **P2-B1 · Run payload schema** — Owner: ____ — Needs: P0-B3, P0-B4
@@ -374,7 +386,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Done when: Tests cover ordering, paging, `total`, and that another user's runs never appear.
 
 - [ ] **P2-B6 · Bot and fixture generator** — Owner: ____ — Needs: P2-A7
-  - Do: Write `packages/shared/scripts/bot.ts` with `playRun(seed, policy)` for policies `random` and `greedy`, using its own `createRng(seed, 'bot')`. Add `npm run fixtures:generate -w packages/shared` (writes replay fixtures as `{ engineVersion, seed, actions, expected: { hash, result } }`) and `npm run bot:stats` (win rate and average nodes cleared over 200 seeds).
+  - Do: Write `packages/shared/scripts/bot.ts` with `playRun(seed, policy)` for policies `random` and `greedy`, using its own `createRng(seed, 'bot')`. On the map both policies walk the shortest gate-free path to the nearest uncleared site (`greedy` prefers shrines when below half HP), so runs finish well inside `MAX_ACTIONS`. Add `npm run fixtures:generate -w packages/shared` (writes replay fixtures as `{ engineVersion, seed, actions, expected: { hash, result } }`) and `npm run bot:stats` (win rate and average nodes cleared over 200 seeds).
   - Done when: Generating twice gives byte-identical files, at least 20 fixtures are committed, and `bot:stats` prints both numbers for both policies.
 
 - [ ] **P2-B7 · Tamper tests** — Owner: ____ — Needs: P2-B3, P2-B6
@@ -387,13 +399,13 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P2 Stream C
 
-- [ ] **P2-C1 · Map screen** — Owner: ____ — Needs: P0-A3, P0-C3
-  - Do: Write `src/screens/MapScreen.tsx` drawing `state.dungeon.nodes` as an SVG graph: floors from bottom to top, lines for links, an icon per node type, the current position, and the path taken. Build it against a hand-written dungeon fixture.
-  - Done when: A component test finds every fixture node with its type and marks the current position.
+- [ ] **P2-C1 · Dungeon screen** — Owner: ____ — Needs: P0-A5, P0-C3, P0-C4
+  - Do: Write `src/screens/MapScreen.tsx` drawing `state.dungeon.tiles` on a canvas: walls, floor, the three gate kinds, an icon per site type (cleared sites dimmed), and the player at `state.pos`. Port the tile drawing and sprites from `prototypes/dungeon-puzzle/src/client/render.ts` and `sprites.ts`. Beside the canvas list every site with its type and state as text, so the screen can be tested and read without the canvas. Build it against a hand-written dungeon fixture.
+  - Done when: A component test finds every fixture site with its type in the list and the player's position.
 
-- [ ] **P2-C2 · Choosing a node** — Owner: ____ — Needs: P2-C1, P2-A3
-  - Do: Highlight the nodes that `legalActions` allows and dispatch `chooseNode` on click. Other nodes do nothing.
-  - Done when: Tests show a legal node dispatches and an illegal node does not.
+- [ ] **P2-C2 · Moving through the dungeon** — Owner: ____ — Needs: P2-C1, P2-A3
+  - Do: Dispatch `move` from the arrow keys, WASD, and a click on a tile next to the player, only for directions `legalActions` allows. Hovering a tile shows what it is; a closed gate shows which tag opens it and how many cards of that tag the deck holds.
+  - Done when: Tests show a legal direction dispatches, a blocked direction does not, and the gate hint shows the tag and the count.
 
 - [ ] **P2-C3 · Run flow by phase** — Owner: ____ — Needs: P1-C5, P2-C1
   - Do: Make `/play` render by `state.phase`: `map`, `combat`, `reward`, `shrine`, `ended`. No manual navigation between them.
@@ -420,7 +432,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Done when: Tests on mocks cover the states before and after an official run.
 
 - [ ] **P2-C9 · Run summary and submit** — Owner: ____ — Needs: P2-C7, P1-D1
-  - Do: When the run ends show outcome, floor reached, score, and turns, and send `POST /api/runs` exactly once. Show Verified, Rejected with the reason, or Already submitted. Clear the save on success; keep it on a network failure.
+  - Do: When the run ends show outcome, sites cleared out of the dungeon's total, score, and turns, and send `POST /api/runs` exactly once. Show Verified, Rejected with the reason, or Already submitted. Clear the save on success; keep it on a network failure.
   - Done when: Tests on mocks cover the four response states and show a double click sends one request.
 
 ### P2 Stream D
@@ -438,7 +450,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Done when: The CI job is green and fails when one expected hash in a fixture file is edited (shown in the pull request).
 
 - [ ] **P2-D4 · Leaderboard screen on mocks** — Owner: ____ — Needs: P1-D2
-  - Do: Write `/leaderboard`: rank, name, floor reached ("Floor 5" or "Cleared"), score, turns, and time; my row highlighted; my row pinned when off the page; an empty state; paging.
+  - Do: Write `/leaderboard`: rank, name, progress ("5 sites" or "Cleared"), score, turns, and time; my row highlighted; my row pinned when off the page; an empty state; paging.
   - Done when: Component tests cover a full page, the empty state, and the pinned row.
 
 - [ ] **P2-D5 · Profile screen on mocks** — Owner: ____ — Needs: P1-D2
@@ -484,7 +496,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Done when: The pull request shows `bot:stats` output before and after, inside both targets.
 
 - [ ] **P3-A7 · Engine freeze 1.0.0** — Owner: ____ — Needs: P3-A5, P3-A6
-  - Do: Set `ENGINE_VERSION = '1.0.0'`. Regenerate at least 30 fixtures including 5 wins and 5 deaths before floor 4. Write `docs/engine-rules.md` describing the final rules and the order of operations.
+  - Do: Set `ENGINE_VERSION = '1.0.0'`. Regenerate at least 30 fixtures including 5 wins and 5 deaths before the fourth site is cleared. Write `docs/engine-rules.md` describing the final rules and the order of operations.
   - Done when: Golden, API, and cross-browser fixture tests are green on `main` by Mon Nov 30.
 
 ### P3 Stream B
@@ -767,6 +779,27 @@ starting it if it will not fit one small pull request.
   - Do: After a player's official run, show the day's map with a death count on each node and a flag on the farthest node anyone reached.
   - Done when: A component test finds the counts and the flag from mock data.
 
+## O6 Dungeon hazards and field cards
+
+Everything else the `antonio-dev` prototype has that the MVP leaves out. Reference code is in
+`prototypes/dungeon-puzzle/`.
+
+- [ ] **O6-A1 · Field cards** — Owner: ____ — Needs: P3-T1, P0-C4
+  - Do: Let a card be used on the map: add an optional `field` effect to `CardDef` and a `useCard` action with a direction and a per-run charge count. Start with the three effects the prototype's maps use most: Fire burns brambles, Frost freezes water, Poison acid dissolves bars. A gate then opens by either the R3 count rule or a field card.
+  - Done when: Tests cover each effect, a card with no charges left, and a use that would do nothing being refused.
+
+- [ ] **O6-A2 · Dungeon hazards and roaming enemies** — Owner: ____ — Needs: O6-A1
+  - Do: Port tile hazards (spike trap, gas vent, pit, crate) and two roaming enemies (slime, bat) from the prototype's `engine.ts` as map-phase rules written to R2. Touching a roaming enemy starts a fight with it.
+  - Done when: Tests cover each hazard and enemy, and the property tests still pass.
+
+- [ ] **O6-A3 · Solver gate for generated dungeons** — Owner: ____ — Needs: O6-A2
+  - Do: Port the prototype's `solver.ts` as a script (not engine code) that proves each day's dungeon is winnable by at least two different routes, and run it over 200 seeds in CI.
+  - Done when: The script reports every seed winnable, and a deliberately sealed dungeon fixture makes it fail.
+
+- [ ] **O6-C1 · Field card and hazard display** — Owner: ____ — Needs: O6-A2
+  - Do: Show field cards with their charges on the dungeon screen, an aim preview, and the hazard sprites and hover text from the prototype.
+  - Done when: Component tests cover using a field card and the hover text of each hazard.
+
 ---
 
 # REFERENCE
@@ -813,7 +846,7 @@ requests.
 1. The folder imports nothing from outside itself and has no npm dependencies.
 2. Forbidden: `Date`, `Math.random`, `performance`, timers, `async`, promises, `fetch`, `process`, `window`, `document`, `Intl`, any `toLocale…` or `localeCompare` call, and module-level mutable variables. Allowed `Math` functions: `floor`, `ceil`, `trunc`, `min`, `max`, `abs`, `imul`.
 3. Every game number is an integer. Any division is followed at once by `Math.floor`. Percentages are `Math.floor(value * percent / 100)`.
-4. All randomness comes from `rng.ts`. A stream is `createRng(seed, streamName)`. Stream names: `map`, `encounters:<nodeId>`, `rewards:<nodeId>`, `shuffle:<nodeId>`. A stream is advanced only by its own system, so one choice never shifts another system's outcomes. A stream's state is plain numbers stored inside the game state.
+4. All randomness comes from `rng.ts`. A stream is `createRng(seed, streamName)`. Stream names: `map` (the grid, its sites, and its gates), `encounters:<nodeId>`, `rewards:<nodeId>`, `shuffle:<nodeId>`. A stream is advanced only by its own system, so one choice never shifts another system's outcomes. A stream's state is plain numbers stored inside the game state.
 5. Game state is plain JSON data: objects, arrays, strings, integers, booleans, `null`. No `Map`, `Set`, class instances, functions, or `undefined` values.
 6. `applyAction` never changes its input. It copies the state, changes the copy, and returns it. Tests deep-freeze inputs.
 7. Number changes apply in one order, in `calc.ts` only: additive, then multiplicative, then caps and the floor of 0.
@@ -827,17 +860,28 @@ Design detail comes from the game design document only where the proposal includ
 
 **Flagged decisions (task P0-T2 confirms or changes each):**
 
-- DECISION 1: The map is one act of 7 floors plus a boss, not the design document's three acts.
+- DECISION 1: The run is one act ending in one boss, not the design document's three acts. (The 7-floor node graph this line first described is replaced by DECISION 8.)
 - DECISION 2: Shield expires just before its owner's side acts again. The design document implies Shield carries over between turns; the constant `SHIELD_PERSISTS` switches this.
 - DECISION 3: Status numbers below are starting values; the design document gives none.
 - DECISION 4: Score weights below are starting values; the design document leaves them open.
 - DECISION 5: A shrine offers heal or remove a card. Card upgrades are deferred.
 - DECISION 6: The official attempt is used up when an official run is verified, not when it starts.
 - DECISION 7: Not in the MVP engine: gold, relics, events, Curse cards, the Echo and Cascade keywords, and per-node action choices (Ambush, Sneak past).
+- DECISION 8: The map is a seeded grid dungeon walked one tile at a time, taken from the `antonio-dev` prototype, not a node graph. Fights, elites, shrines, and the boss are sites on tiles. Card combat, rewards, shrines, scoring, the API, and the database are unchanged. If this is not confirmed, revert the pull request that added DECISION 8 to 10.
+- DECISION 9: A gate opens when the deck holds at least `GATE_TAG_CARDS` cards with its tag, at no cost. The boss can always be reached without opening a gate; gates guard shortcuts and side rooms.
+- DECISION 10: Not in the MVP: the prototype's field cards with charges, tile hazards, roaming enemies, and solver bot. They are optional feature O6.
 
-**Run.** The player starts with `PLAYER_MAX_HP`, the 10-card `STARTER_DECK`, and the full map visible. The run ends when the boss is defeated (`won`) or the player's HP reaches 0 (`lost`).
+**Run.** The player starts on the start tile with `PLAYER_MAX_HP`, the 10-card `STARTER_DECK`, and the full dungeon visible. The run ends when the boss is defeated (`won`) or the player's HP reaches 0 (`lost`).
 
-**Map.** Floors 1 to `MAP_FLOORS` have 2 or 3 nodes each; the floor after has one boss node. Each node links to 1 or 2 nodes on the next floor; every node can be reached and can reach the boss. Floor 1 is all fights. Elites appear only on floors 4 to 6, and every map has at least one. The last floor before the boss is all shrines. Other nodes are fights or shrines by seeded weight. Every route is `MAP_FLOORS + 1` nodes long, so `nodesCleared` runs from 0 to 8.
+**Dungeon.** The map is a grid of tiles, 33 wide and 19 high: a 4 by 3 block of rooms joined by one-tile doorways. Tiles are wall, floor, or a gate. The start tile and the boss are in opposite corner rooms. A node is a site: one floor tile holding a fight, an elite, a shrine, or the boss.
+
+- Moving: one tile north, east, south, or west per `move` action. Walls and the grid edge block. Enemies do not move and nothing happens between moves.
+- Sites: moving onto an uncleared fight, elite, or boss site starts that fight; onto an uncleared shrine opens the shrine. A cleared site is plain floor. A lost fight ends the run, so a site is never left half done.
+- Gates: brambles open for Fire, water for Frost, bars for Poison, by the rule in DECISION 9. An opened gate is floor for the rest of the run.
+- Guarantees, checked by the generator's tests: with every gate closed the boss can be reached from the start; on every such route the player crosses at least `MIN_ROUTE_FIGHTS` fight sites, which stand in doorways; the boss stands in the only doorway of its room.
+- Counts: 1 boss, 6 to 9 fights, 1 or 2 elites, 2 or 3 shrines. Every elite and at least one shrine is in a side room or behind a gate.
+
+`nodesCleared` counts sites cleared, from 0 to the number of nodes. On a win it is set to the number of nodes, so every cleared run ranks above every lost one.
 
 **Turn order in a fight.**
 
@@ -880,7 +924,7 @@ The fight is won the moment every enemy is at 0 HP. If the player reaches 0 HP a
 
 | Name | Default | Name | Default |
 | --- | --- | --- | --- |
-| `PLAYER_MAX_HP` | 60 | `MAP_FLOORS` | 7 |
+| `PLAYER_MAX_HP` | 60 | `GATE_TAG_CARDS` | 4 |
 | `HAND_SIZE` | 5 | `MIN_DECK_SIZE` | 5 |
 | `MAX_HAND` | 10 | `SHRINE_HEAL_PERCENT` | 30 |
 | `ENERGY_PER_TURN` | 3 | `MAX_ACTIONS` | 2000 |
@@ -889,7 +933,7 @@ The fight is won the moment every enemy is at 0 HP. If the player reaches 0 HP a
 | `SHIELD_CAP` | 99 | `SCORE_SPEED_BASE` | 300 |
 | `SHIELD_PERSISTS` | false | `SCORE_SPEED_PER_TURN` | 3 |
 | `FIGHT_TURN_CAP` | 40 | `SCORE_PER_COMBO` | 5 |
-| | | `SCORE_STYLE_CAP` | 150 |
+| `MIN_ROUTE_FIGHTS` | 4 | `SCORE_STYLE_CAP` | 150 |
 
 ## R4 Engine public API and types
 
@@ -950,14 +994,18 @@ interface EnemyDef {
   phase2?: { atOrBelowHpPercent: number; intents: Intent[] };
 }
 
-interface MapNode {
-  id: string;                       // "f3n1"
-  floor: number; index: number;
+interface MapNode {                 // a site on the grid
+  id: string;                       // "n4", numbered in reading order
+  x: number; y: number;             // its tile
   type: 'fight' | 'elite' | 'shrine' | 'boss';
-  next: string[];                   // node ids on the next floor
 }
 interface Dungeon {
-  seed: string; nodes: MapNode[];
+  seed: string;
+  width: number; height: number;
+  tiles: string[];                  // one string per row: '#' wall, '.' floor,
+                                    // 'B' brambles (Fire), '~' water (Frost), 'R' bars (Poison)
+  start: { x: number; y: number };
+  nodes: MapNode[];
   encounters: Record<string, string[]>;   // nodeId -> enemy ids
   rewards: Record<string, string[]>;      // nodeId -> three card ids
 }
@@ -981,15 +1029,18 @@ interface RunState {
   phase: 'map' | 'combat' | 'reward' | 'shrine' | 'ended';
   outcome: 'won' | 'lost' | null;
   dungeon: Dungeon;
-  position: string | null; nodesCleared: number;
+  pos: { x: number; y: number };
+  cleared: string[];                // node ids, in the order cleared
+  openedGates: number[];            // tile indexes (y * width + x), in the order opened
+  nodesCleared: number;
   hp: number; maxHp: number; deck: string[];
   combat: CombatState | null;
   rewardOffers: string[] | null;
-  stats: { turns: number; comboTriggers: number };
+  stats: { turns: number; comboTriggers: number; steps: number };
 }
 
 type Action =
-  | { type: 'chooseNode'; nodeId: string }
+  | { type: 'move'; dir: 'N' | 'E' | 'S' | 'W' }
   | { type: 'playCard'; handIndex: number; target?: number }   // target = enemy index
   | { type: 'endTurn' }
   | { type: 'pickReward'; choice: number | null }              // offer index, null = skip

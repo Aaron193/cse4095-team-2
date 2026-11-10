@@ -1,0 +1,45 @@
+import js from '@eslint/js';
+import prettier from 'eslint-config-prettier';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+import { enginePlugin, engineDeterminismRules } from './tools/eslint-engine-rules.js';
+
+export default tseslint.config(
+  {
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/coverage/**',
+      '**/data/**',
+      // The antonio-dev prototype still sits at the repo root. It is reference code, not part
+      // of the workspaces; task P0-C4 moves it to prototypes/dungeon-puzzle/.
+      'src/**',
+      'tests/**',
+      'scripts/*.ts',
+      'prototypes/**',
+    ],
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+    },
+  },
+  {
+    // Tooling scripts and config files run in Node.
+    files: ['scripts/**/*.mjs', 'tools/**/*.js', '*.config.{js,mjs,cjs,ts}'],
+    languageOptions: { globals: globals.node },
+  },
+  {
+    // Determinism rules for the game engine: TODO.md, Reference R2 rules 1 and 2.
+    files: ['packages/shared/src/engine/**/*.ts'],
+    plugins: { engine: enginePlugin },
+    rules: engineDeterminismRules,
+  },
+  // Keep last: turns off rules that would fight Prettier.
+  prettier,
+);

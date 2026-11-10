@@ -28,8 +28,7 @@ export type Effect =
   | { kind: 'power'; power: PowerDef };
 
 export type PowerDef =
-  | { kind: 'turnStart'; effect: Effect }
-  | { kind: 'damageBonus'; tag: Tag; amount: number };
+  { kind: 'turnStart'; effect: Effect } | { kind: 'damageBonus'; tag: Tag; amount: number };
 
 export interface CardDef {
   id: string;

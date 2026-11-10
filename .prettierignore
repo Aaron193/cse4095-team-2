@@ -1,0 +1,8 @@
+# Edited by four people at once; never reformat (see "How to update this file").
+TODO.md
+
+node_modules
+dist
+coverage
+package-lock.json
+packages/shared/fixtures
