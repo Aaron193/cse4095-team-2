@@ -97,7 +97,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Agree who takes streams A to D and fill in the Person column of the Roles table.
   - Done when: The Roles table on `main` has four names.
 
-- [ ] **P0-T2 · Confirm the flagged rule decisions** — Owner: ____ — Needs: none
+- [ ] **P0-T2 · Confirm the flagged rule decisions** — Owner: Aaron Mark — Needs: none
   - Do: Read the ten lines marked `DECISION` in R3. For each, either keep it or edit it, then replace `DECISION` with `CONFIRMED`.
   - Done when: No line in R3 contains the word `DECISION`, in a pull request approved by all four members.
 
