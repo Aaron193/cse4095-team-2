@@ -14,7 +14,7 @@ Edit only your own line. Keep the blank lines between entries.
 
 **Phase:** P0 Foundations (due Thu Nov 12)
 
-**A (engine and cards):** P0 in progress (P0-A1, P0-A2, P0-A3 done). Blocked by: nothing
+**A (engine and cards):** P0 done (P0-A1 to P0-A4), pending review. Blocked by: nothing
 
 **B (API, database, auth, verification):** not started. Blocked by: nothing
 
@@ -119,7 +119,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/engine/types.ts` with every type in R4 and export every function in R4 from the package index. Functions throw `not implemented` for now. `ENGINE_VERSION = '0.1.0'`.
   - Done when: A test file imports every name listed in R4 from `@daily-delve/shared` and `npm run typecheck` passes.
 
-- [ ] **P0-A4 · Balance constants file** — Owner: ____ — Needs: P0-A3
+- [x] **P0-A4 · Balance constants file** — Owner: Tyler — Needs: P0-A3
   - Do: Write `src/engine/content/balance.ts` exporting every constant in the R3 table with the listed default.
   - Done when: A test asserts every exported constant is an integer or boolean and matches the R3 table names.
 
