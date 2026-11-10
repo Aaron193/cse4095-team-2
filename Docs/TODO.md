@@ -14,7 +14,7 @@ Edit only your own line. Keep the blank lines between entries.
 
 **Phase:** P0 Foundations (due Thu Nov 12)
 
-**A (engine and cards):** P0 in progress (P0-A1, P0-A2 done). Blocked by: nothing
+**A (engine and cards):** P0 in progress (P0-A1, P0-A2, P0-A3 done). Blocked by: nothing
 
 **B (API, database, auth, verification):** not started. Blocked by: nothing
 
@@ -115,7 +115,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/engine/rng.ts` per R2 rule 4: `createRng(seed, stream)`, `nextU32`, `nextInt(rng, n)`, `shuffle(rng, array)`, `pick`. Integer math only.
   - Done when: Tests assert a committed table of outputs for three seed and stream pairs, show that drawing from one stream never changes another, and check `nextInt` stays in range.
 
-- [ ] **P0-A3 · Engine types and stubbed public functions** — Owner: ____ — Needs: P0-A1
+- [x] **P0-A3 · Engine types and stubbed public functions** — Owner: Tyler — Needs: P0-A1
   - Do: Write `src/engine/types.ts` with every type in R4 and export every function in R4 from the package index. Functions throw `not implemented` for now. `ENGINE_VERSION = '0.1.0'`.
   - Done when: A test file imports every name listed in R4 from `@daily-delve/shared` and `npm run typecheck` passes.
 
