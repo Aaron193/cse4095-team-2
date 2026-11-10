@@ -14,7 +14,7 @@ Edit only your own line. Keep the blank lines between entries.
 
 **Phase:** P0 Foundations (due Thu Nov 12)
 
-**A (engine and cards):** not started. Blocked by: nothing
+**A (engine and cards):** P0 in progress (P0-A1 done). Blocked by: nothing
 
 **B (API, database, auth, verification):** not started. Blocked by: nothing
 
@@ -107,7 +107,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P0 Stream A
 
-- [ ] **P0-A1 · Shared package scaffold and engine lint rule** — Owner: ____ — Needs: P0-D1
+- [x] **P0-A1 · Shared package scaffold and engine lint rule** — Owner: Tyler — Needs: P0-D1
   - Do: Create `packages/shared` as `@daily-delve/shared` per R1 (source-only `exports`, Vitest, folders `src/engine` and `src/api`). Add an ESLint override for `src/engine/**` enforcing R2 rules 1 and 2.
   - Done when: A file in `src/engine` that calls `Math.random()` or `Date.now()`, or imports from outside `src/engine`, fails `npm run lint`; a trivial test passes.
 
