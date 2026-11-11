@@ -97,7 +97,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Agree who takes streams A to D and fill in the Person column of the Roles table.
   - Done when: The Roles table on `main` has four names.
 
-- [ ] **P0-T2 · Confirm the flagged rule decisions** — Owner: ____ — Needs: none
+- [x] **P0-T2 · Confirm the flagged rule decisions** — Owner: Aaron Mark — Needs: none
   - Do: Read the ten lines marked `DECISION` in R3. For each, either keep it or edit it, then replace `DECISION` with `CONFIRMED`.
   - Done when: No line in R3 contains the word `DECISION`, in a pull request approved by all four members.
 
@@ -860,16 +860,16 @@ Design detail comes from the game design document only where the proposal includ
 
 **Flagged decisions (task P0-T2 confirms or changes each):**
 
-- DECISION 1: The run is one act ending in one boss, not the design document's three acts. (The 7-floor node graph this line first described is replaced by DECISION 8.)
-- DECISION 2: Shield expires just before its owner's side acts again. The design document implies Shield carries over between turns; the constant `SHIELD_PERSISTS` switches this.
-- DECISION 3: Status numbers below are starting values; the design document gives none.
-- DECISION 4: Score weights below are starting values; the design document leaves them open.
-- DECISION 5: A shrine offers heal or remove a card. Card upgrades are deferred.
-- DECISION 6: The official attempt is used up when an official run is verified, not when it starts.
-- DECISION 7: Not in the MVP engine: gold, relics, events, Curse cards, the Echo and Cascade keywords, and per-node action choices (Ambush, Sneak past).
-- DECISION 8: The map is a seeded grid dungeon walked one tile at a time, taken from the `antonio-dev` prototype, not a node graph. Fights, elites, shrines, and the boss are sites on tiles. Card combat, rewards, shrines, scoring, the API, and the database are unchanged. If this is not confirmed, revert the pull request that added DECISION 8 to 10.
-- DECISION 9: A gate opens when the deck holds at least `GATE_TAG_CARDS` cards with its tag, at no cost. The boss can always be reached without opening a gate; gates guard shortcuts and side rooms.
-- DECISION 10: Not in the MVP: the prototype's field cards with charges, tile hazards, roaming enemies, and solver bot. They are optional feature O6.
+- CONFIRMED 1: The run is one act ending in one boss, not the design document's three acts. (The 7-floor node graph this line first described is replaced by decision 8.)
+- CONFIRMED 2: Shield expires just before its owner's side acts again. The design document implies Shield carries over between turns; the constant `SHIELD_PERSISTS` switches this.
+- CONFIRMED 3: Status numbers below are starting values; the design document gives none.
+- CONFIRMED 4: Score weights below are starting values; the design document leaves them open.
+- CONFIRMED 5: A shrine offers heal or remove a card. Card upgrades are deferred.
+- CONFIRMED 6: The official attempt is used up when an official run is verified, not when it starts.
+- CONFIRMED 7: Not in the MVP engine: gold, relics, events, Curse cards, the Echo and Cascade keywords, and per-node action choices (Ambush, Sneak past).
+- CONFIRMED 8: The map is a seeded grid dungeon walked one tile at a time, taken from the `antonio-dev` prototype, not a node graph. Fights, elites, shrines, and the boss are sites on tiles. Card combat, rewards, shrines, scoring, the API, and the database are unchanged.
+- CONFIRMED 9: A gate opens when the deck holds at least `GATE_TAG_CARDS` cards with its tag, at no cost. The boss can always be reached without opening a gate; gates guard shortcuts and side rooms.
+- CONFIRMED 10: Not in the MVP: the prototype's field cards with charges, tile hazards, roaming enemies, and solver bot. They are optional feature O6.
 
 **Run.** The player starts on the start tile with `PLAYER_MAX_HP`, the 10-card `STARTER_DECK`, and the full dungeon visible. The run ends when the boss is defeated (`won`) or the player's HP reaches 0 (`lost`).
 
@@ -877,7 +877,7 @@ Design detail comes from the game design document only where the proposal includ
 
 - Moving: one tile north, east, south, or west per `move` action. Walls and the grid edge block. Enemies do not move and nothing happens between moves.
 - Sites: moving onto an uncleared fight, elite, or boss site starts that fight; onto an uncleared shrine opens the shrine. A cleared site is plain floor. A lost fight ends the run, so a site is never left half done.
-- Gates: brambles open for Fire, water for Frost, bars for Poison, by the rule in DECISION 9. An opened gate is floor for the rest of the run.
+- Gates: brambles open for Fire, water for Frost, bars for Poison, by the rule in decision 9. An opened gate is floor for the rest of the run.
 - Guarantees, checked by the generator's tests: with every gate closed the boss can be reached from the start; on every such route the player crosses at least `MIN_ROUTE_FIGHTS` fight sites, which stand in doorways; the boss stands in the only doorway of its room.
 - Counts: 1 boss, 6 to 9 fights, 1 or 2 elites, 2 or 3 shrines. Every elite and at least one shrine is in a side room or behind a gate.
 
