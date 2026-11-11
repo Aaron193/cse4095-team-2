@@ -11,11 +11,7 @@ export default tseslint.config(
       '**/dist/**',
       '**/coverage/**',
       '**/data/**',
-      // The antonio-dev prototype still sits at the repo root. It is reference code, not part
-      // of the workspaces; task P0-C4 moves it to prototypes/dungeon-puzzle/.
-      'src/**',
-      'tests/**',
-      'scripts/*.ts',
+      // Reference code only (task P0-C4): outside the workspaces, never linted or imported.
       'prototypes/**',
     ],
   },

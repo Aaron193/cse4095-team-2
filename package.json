@@ -17,13 +17,7 @@
     "format:check": "prettier --check .",
     "typecheck": "node scripts/run-workspaces.mjs typecheck",
     "test": "node scripts/run-workspaces.mjs test",
-    "build": "node scripts/run-workspaces.mjs build",
-    "dev": "vite",
-    "generate": "node scripts/generate-maps.ts",
-    "docs": "node scripts/gen-docs.ts",
-    "proto:typecheck": "tsc --noEmit",
-    "proto:test": "node --test \"tests/*.test.ts\"",
-    "proto:build": "tsc --noEmit && vite build"
+    "build": "node scripts/run-workspaces.mjs build"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

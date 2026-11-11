@@ -159,7 +159,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/styles/tokens.css` (Fire orange, Frost cyan, Poison green, spacing, type sizes) and `src/components/Card.tsx`, which draws a `CardDef` (name, cost, type, tags, text) with SVG and CSS only.
   - Done when: A component test renders one sample card per tag and finds its name, cost, text, and tag color class.
 
-- [ ] **P0-C4 · Prototype kept as reference code** — Owner: ____ — Needs: P0-D1
+- [x] **P0-C4 · Prototype kept as reference code** — Owner: Justin Morneau — Needs: P0-D1
   - Do: Copy the `antonio-dev` prototype into `prototypes/dungeon-puzzle/` (its `src/engine`, `src/client`, `src/data`, `tests`, `scripts`, `Docs/Game Content.md`, and `Docs/Expansion Ideas.md`), outside the npm workspaces and ignored by the root lint, typecheck, and test scripts. Add a README there saying it is reference code for P2-A1, P2-C1, P2-C2, and O6, how to run it, and that nothing imports from it.
   - Done when: On a fresh clone the root `npm install && npm run lint && npm run typecheck && npm test` still exits 0, and the prototype runs with the commands in its README.
 

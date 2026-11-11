@@ -4,4 +4,4 @@ coverage/
 .env
 .claude/
 *.log
-src/data/parts/
+prototypes/dungeon-puzzle/src/data/parts/
