@@ -2,6 +2,7 @@
 // { error: { code, message, details? } }. Stack traces and internal messages never do.
 import type { ErrorRequestHandler, RequestHandler } from 'express';
 import type { ApiError as ApiErrorBody, ErrorCode } from '@daily-delve/shared';
+import { ApiError } from '../errors.ts';
 
 export function errorBody(code: ErrorCode, message: string, details?: unknown): ApiErrorBody {
   return details === undefined
@@ -23,6 +24,10 @@ function libraryStatus(err: unknown): number | null {
 
 // Express recognizes error middleware by its four parameters, so `_next` must stay.
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  if (err instanceof ApiError) {
+    res.status(err.status).json(errorBody(err.code, err.message, err.details));
+    return;
+  }
   const status = libraryStatus(err);
   if (status !== null) {
     // Raised by Express itself for a request it could not read: malformed JSON (400),

@@ -141,7 +141,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `packages/shared/src/api/types.ts` with every request, response, and error type in R5 plus an `ERROR_CODES` constant, exported from the package index.
   - Done when: Types compile and a reviewer from stream D confirms the names match R5 one to one.
 
-- [ ] **P0-B4 · Validation and error helpers** — Owner: ____ — Needs: P0-B1
+- [x] **P0-B4 · Validation and error helpers** — Owner: Tyler — Needs: P0-B1
   - Do: Add zod. Write `src/middleware/validate.ts` (schema failure gives 400 `VALIDATION` naming the field), an `ApiError` class, and an async route wrapper.
   - Done when: A test route given a bad body returns 400 in the R5 error format with the bad field named in `details`.
 
