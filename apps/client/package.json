@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@daily-delve/shared": "*",
+    "@fontsource/cinzel": "^5.3.0",
+    "@fontsource/cinzel-decorative": "^5.3.0",
+    "@fontsource/crimson-pro": "^5.3.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router": "^7.18.5"

@@ -1,4 +1,5 @@
 /* App shell layout. Colors, spacing, and type sizes come from tokens.css. */
+@import './fonts.css';
 @import './tokens.css';
 
 *,
@@ -10,10 +11,19 @@
 body {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--text-md);
-  line-height: 1.5;
+  font-size: var(--text-lg);
+  line-height: 1.4;
   color: var(--color-text);
   background: var(--color-bg);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
 }
 
 a {
@@ -23,46 +33,53 @@ a {
 .app__header {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  align-items: baseline;
+  gap: var(--space-5);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-ink);
+  border-bottom: 1px solid var(--color-gold);
 }
 
 .app__brand {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
-  font-weight: 700;
-  color: var(--color-gold);
+  font-size: var(--text-xl);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text);
 }
 
 .app__nav {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 
 .app__nav a {
-  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   text-decoration: none;
+  color: var(--color-text-muted);
 }
 
-.app__nav a:hover,
-.app__nav a.active {
+.app__nav a:hover {
   color: var(--color-text);
 }
 
 .app__nav a.active {
-  font-weight: 700;
+  color: var(--color-gold);
 }
 
 .app__main {
-  padding: var(--space-4);
+  padding: var(--space-5);
   max-width: 72rem;
   margin: 0 auto;
 }
 
 .placeholder__note {
+  font-style: italic;
   color: var(--color-text-muted);
 }

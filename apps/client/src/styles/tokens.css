@@ -1,35 +1,38 @@
 /*
  * Design tokens (task P0-C3). Every color, space, and type size in the client comes from
  * here, so the look can be changed in one place. Components use these variables and never
- * write raw values.
+ * write raw values. The palette is the card template's: ink, gold, and one bright and one
+ * deep color per tag.
  */
 :root {
   /* Tag colors. Each tag has a bright color for accents and a deep one for fills. */
-  --color-fire: #ff7a1a;
-  --color-fire-deep: #8f2d08;
-  --color-frost: #2fd6f0;
-  --color-frost-deep: #0b5a78;
-  --color-poison: #5fd13a;
-  --color-poison-deep: #1f6a1d;
+  --color-fire: #f59a2c;
+  --color-fire-deep: #e8572a;
+  --color-frost: #7fd3f0;
+  --color-frost-deep: #3a8fd0;
+  --color-poison: #9bd64a;
+  --color-poison-deep: #4e8a2a;
 
-  /* Surfaces and text. */
-  --color-bg: #14121c;
-  --color-surface: #1e1b2b;
-  --color-surface-raised: #2a2640;
-  --color-border: #3d3859;
-  --color-text: #f1ecdf;
-  --color-text-muted: #a9a3bd;
-  --color-ink: #1c1710;
-  --color-parchment: #efe3c4;
+  /* Ink: the dark surfaces, darkest first. */
+  --color-ink: #161427;
+  --color-ink-2: #221f38;
+  --color-ink-3: #2a2547;
+  --color-bg: #110f1e;
+  --color-surface: var(--color-ink-2);
+  --color-surface-raised: var(--color-ink-3);
+  --color-border: #3d3764;
 
-  /* Card frame. */
-  --color-frame: #17141f;
-  --color-gold: #d9a441;
-  --color-gold-bright: #ffd97a;
-  --color-gold-deep: #7d5a17;
+  /* Text. */
+  --color-text: #f4efe6;
+  --color-text-muted: #cdbfae;
+
+  /* Gold: frames, headings, numbers. */
+  --color-gold: #e8a33d;
+  --color-gold-bright: #ffe07a;
+  --color-gold-deep: #9a6217;
 
   /* Feedback. */
-  --color-danger: #e5484d;
+  --color-danger: #e2383a;
   --color-success: #46c46e;
 
   /* Spacing scale. */
@@ -49,13 +52,15 @@
   --text-xl: 1.5rem;
   --text-2xl: 2rem;
 
-  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: Georgia, 'Times New Roman', serif;
+  /* Typefaces: Cinzel for headings and labels, Crimson Pro for reading text. */
+  --font-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --font-title: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+  --font-body: 'Crimson Pro', Georgia, 'Times New Roman', serif;
 
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
 
-  /* Card size. Height follows from the 5:7 ratio. */
-  --card-width: 12rem;
+  /* Card width. Height follows from the template's 5:7 ratio. */
+  --card-width: 16rem;
 }
