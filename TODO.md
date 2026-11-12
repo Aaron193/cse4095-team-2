@@ -169,7 +169,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add root `package.json` (private, workspaces `packages/*` and `apps/*`), `tsconfig.base.json` (strict), `.nvmrc` (current Node LTS), `.gitignore`, `.editorconfig`, ESLint and Prettier configs, and `.prettierignore` containing `TODO.md`. Root scripts `lint`, `typecheck`, `test`, `build` run across workspaces. Leave the existing proposal, slides, and design document files where they are.
   - Done when: On a fresh clone `npm install && npm run lint && npm run typecheck && npm test` exits 0.
 
-- [ ] **P0-D2 · Continuous integration** — Owner: Tyler — Needs: P0-D1
+- [x] **P0-D2 · Continuous integration** — Owner: Tyler — Needs: P0-D1
   - Do: Add `.github/workflows/ci.yml` running `npm ci`, lint, typecheck, and test on every pull request and on pushes to `main`.
   - Done when: A pull request shows the check, and a deliberately failing test turns it red (shown in the pull request, then removed).
 
