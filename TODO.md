@@ -195,7 +195,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/engine/calc.ts`: `computeDamage` applying additive changes, then multiplicative (integer percent, floored), then caps and a floor of 0; and `applyDamage(unit, amount, { ignoreShield })`, which removes Shield before HP.
   - Done when: Table-driven tests cover the order of operations (base 4, plus 3, times 150 percent gives 10), Shield absorption, `ignoreShield`, and never going below 0.
 
-- [ ] **P1-A2 · Combat setup and drawing** — Owner: ____ — Needs: P0-A2, P0-A3, P0-A4
+- [x] **P1-A2 · Combat setup and drawing** — Owner: Aaron Mark — Needs: P0-A2, P0-A3, P0-A4
   - Do: Write `startCombat` in `src/engine/combat.ts`: build enemies from definitions, shuffle the deck with stream `shuffle:<nodeId>`, start turn 1 (draw `HAND_SIZE`, set energy, show intents). Drawing from an empty pile reshuffles the discard pile.
   - Done when: Tests show the same seed gives the same opening hand, a different node ID gives a different order, an empty draw pile reshuffles, and turn 1 has 5 cards and 3 energy.
 
