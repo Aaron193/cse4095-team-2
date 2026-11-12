@@ -281,7 +281,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P1 Stream D
 
-- [ ] **P1-D1 · Typed API client** — Owner: ____ — Needs: P0-B3, P0-C1
+- [x] **P1-D1 · Typed API client** — Owner: Aaron Mark — Needs: P0-B3, P0-C1
   - Do: Write `apps/client/src/api/client.ts` with one function per R5 endpoint, typed with the shared types, sending cookies, and throwing `ApiClientError { status, code, message, details }` on failure.
   - Done when: Unit tests with a mocked `fetch` cover a success and a failure for three endpoints, and every R5 endpoint has a function.
 
