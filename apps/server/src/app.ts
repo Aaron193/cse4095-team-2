@@ -2,12 +2,13 @@
 // supply an in-memory database and a fixed clock (TODO.md, Reference R1 and R5).
 import express from 'express';
 import type { Express } from 'express';
+import type { Knex } from 'knex';
 import { errorHandler, notFoundHandler } from './middleware/errors.ts';
 import { healthRouter } from './routes/health.ts';
 
 export interface AppDeps {
-  /** The database handle. Task P0-B2 makes this a Knex instance. */
-  db: unknown;
+  /** A migrated database: see src/db/knex.ts. */
+  db: Knex;
   /** The only way server code reads the time (R5, "The clock"). */
   now: () => Date;
 }

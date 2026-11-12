@@ -1,13 +1,23 @@
 import express from 'express';
+import type { Express } from 'express';
+import type { Knex } from 'knex';
 import request from 'supertest';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp } from '../src/app.ts';
 import { errorHandler } from '../src/middleware/errors.ts';
+import { createTestDb, fixedNow } from './helpers.ts';
 
-const app = createApp({ db: null, now: () => new Date('2026-11-12T12:00:00.000Z') });
+let db: Knex;
+let app: Express;
 
-afterEach(() => {
+beforeEach(async () => {
+  db = await createTestDb();
+  app = createApp({ db, now: fixedNow });
+});
+
+afterEach(async () => {
   vi.restoreAllMocks();
+  await db.destroy();
 });
 
 describe('GET /api/health', () => {

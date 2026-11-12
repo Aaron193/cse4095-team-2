@@ -133,7 +133,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Create `apps/server` per R1: `createApp({ db, now })` in `src/app.ts`, entry `src/index.ts`, `GET /api/health` returning `{ ok: true }`, a 404 handler and error middleware in the R5 error format, Vitest and supertest, `dev` script using `tsx watch`.
   - Done when: Tests show `GET /api/health` returns 200 and an unknown `/api` route returns 404 in the R5 error format.
 
-- [ ] **P0-B2 · Database connection and first migration** — Owner: ____ — Needs: P0-B1
+- [x] **P0-B2 · Database connection and first migration** — Owner: Tyler — Needs: P0-B1
   - Do: Add Knex in `src/db/knex.ts`: Postgres when `DATABASE_URL` is set, otherwise SQLite at `apps/server/data/dev.sqlite3` (gitignored), `:memory:` in tests, with `PRAGMA foreign_keys = ON` for SQLite. Write migration `001_init` creating the R6 tables. Run migrations on startup.
   - Done when: A test migrates an in-memory database, writes and reads one row per table, and shows a run with an unknown `user_id` is refused.
 
