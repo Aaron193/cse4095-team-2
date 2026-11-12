@@ -1,0 +1,9 @@
+/* The card template's typefaces, bundled from npm so nothing loads from another site. */
+@import '@fontsource/cinzel/latin-700.css';
+@import '@fontsource/cinzel/latin-900.css';
+@import '@fontsource/cinzel-decorative/latin-900.css';
+@import '@fontsource/crimson-pro/latin-400.css';
+@import '@fontsource/crimson-pro/latin-400-italic.css';
+@import '@fontsource/crimson-pro/latin-600.css';
+@import '@fontsource/crimson-pro/latin-600-italic.css';
+@import '@fontsource/crimson-pro/latin-700.css';

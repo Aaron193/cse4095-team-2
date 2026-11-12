@@ -5,3 +5,4 @@ coverage/
 .claude/
 *.log
 prototypes/dungeon-puzzle/src/data/parts/
+apps/server/data/

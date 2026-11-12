@@ -1,0 +1,341 @@
+/*
+ * The Card component. The card is one SVG drawn in the template's 1000 by 1400 box, so every
+ * size below is in those units and the whole card scales with --card-width.
+ * Colors come from tokens.css.
+ */
+.card {
+  /* The tag colors. Set per tag below; ribbon, gem, art, and trim all read these. */
+  --card-accent: var(--color-gold);
+  --card-accent-deep: var(--color-gold-deep);
+
+  display: block;
+  width: var(--card-width);
+  aspect-ratio: 5 / 7;
+  margin: 0;
+  filter: drop-shadow(0 var(--space-1) var(--space-2) rgb(0 0 0 / 50%));
+}
+
+.card--fire {
+  --card-accent: var(--color-fire);
+  --card-accent-deep: var(--color-fire-deep);
+}
+
+.card--frost {
+  --card-accent: var(--color-frost);
+  --card-accent-deep: var(--color-frost-deep);
+}
+
+.card--poison {
+  --card-accent: var(--color-poison);
+  --card-accent-deep: var(--color-poison-deep);
+}
+
+/* A card with two tags takes its accent from the first one. */
+.card--primary-fire {
+  --card-accent: var(--color-fire);
+  --card-accent-deep: var(--color-fire-deep);
+}
+
+.card--primary-frost {
+  --card-accent: var(--color-frost);
+  --card-accent-deep: var(--color-frost-deep);
+}
+
+.card--primary-poison {
+  --card-accent: var(--color-poison);
+  --card-accent-deep: var(--color-poison-deep);
+}
+
+.card--rare {
+  filter: drop-shadow(0 0 var(--space-2) var(--color-gold))
+    drop-shadow(0 var(--space-1) var(--space-2) rgb(0 0 0 / 50%));
+}
+
+.card__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Gradient stops. */
+.card__stop-gold-hi {
+  stop-color: var(--color-gold-bright);
+}
+
+.card__stop-gold {
+  stop-color: var(--color-gold);
+}
+
+.card__stop-gold-lo {
+  stop-color: var(--color-gold-deep);
+}
+
+.card__stop-accent {
+  stop-color: var(--card-accent);
+}
+
+.card__stop-accent-deep {
+  stop-color: var(--card-accent-deep);
+}
+
+.card__stop-ink {
+  stop-color: var(--color-ink);
+}
+
+.card__stop-ink-2 {
+  stop-color: var(--color-ink-2);
+}
+
+.card__stop-ink-3 {
+  stop-color: var(--color-ink-3);
+}
+
+.card__stop-light {
+  stop-color: var(--color-gold-bright);
+}
+
+/* Frame. */
+.card__body {
+  fill: var(--color-ink);
+}
+
+.card__trim {
+  fill: none;
+  stroke-width: 9;
+}
+
+.card__trim-accent {
+  fill: none;
+  stroke: var(--card-accent);
+  stroke-width: 2;
+  opacity: 0.85;
+}
+
+.card__ornament {
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.card__ornament-dot {
+  fill: var(--color-gold-bright);
+}
+
+/* Art: a placeholder scene lit by the tag's color. */
+.card__art-floor {
+  fill: var(--color-ink);
+  opacity: 0.55;
+}
+
+.card__art-glyph {
+  fill: var(--card-accent);
+}
+
+.card__art-glyph--core {
+  fill: var(--color-gold-bright);
+  opacity: 0.75;
+}
+
+.card__art-glyph--line {
+  fill: none;
+  stroke: var(--card-accent);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.card__art-shadow {
+  fill: var(--color-ink);
+  opacity: 0.6;
+}
+
+.card__art-spark {
+  fill: var(--card-accent);
+}
+
+/* Name banner. */
+.card__banner {
+  fill: var(--color-ink-2);
+  stroke-width: 4;
+}
+
+.card__banner-inner {
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-width: 1.5;
+  opacity: 0.6;
+}
+
+.card__name {
+  font-family: var(--font-title);
+  font-weight: 900;
+  text-anchor: middle;
+  letter-spacing: 2px;
+}
+
+.card__title {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-style: italic;
+  font-size: 31px;
+  text-anchor: middle;
+  fill: var(--color-text);
+}
+
+/* Cost gem. */
+.card__gem-ring {
+  stroke: var(--color-ink);
+  stroke-width: 3;
+}
+
+.card__gem-facet {
+  fill: none;
+  stroke: var(--color-gold-bright);
+  stroke-width: 2;
+  opacity: 0.45;
+}
+
+.card__cost {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 80px;
+  text-anchor: middle;
+  fill: var(--color-text);
+  stroke: var(--color-ink);
+  stroke-width: 6;
+  paint-order: stroke;
+}
+
+/* Type ribbon. */
+.card__ribbon-tail {
+  fill: var(--card-accent-deep);
+  filter: brightness(0.7);
+}
+
+.card__ribbon {
+  stroke: var(--color-gold-bright);
+  stroke-width: 2;
+}
+
+.card__ribbon-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 3px;
+  text-anchor: middle;
+  fill: var(--color-text);
+  stroke: var(--color-ink);
+  stroke-width: 3;
+  stroke-opacity: 0.35;
+  paint-order: stroke;
+}
+
+.card__tag {
+  fill: var(--color-gold-bright);
+}
+
+/* Rules panel. */
+.card__panel {
+  stroke-width: 3;
+}
+
+.card__panel-inner {
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-width: 1.5;
+  opacity: 0.5;
+}
+
+.card__rules {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.card__text {
+  margin: 0;
+  font-weight: 600;
+  font-size: 50px;
+  line-height: 1.24;
+  text-wrap: balance;
+}
+
+.card__text--medium {
+  font-size: 42px;
+}
+
+.card__text--small {
+  font-size: 35px;
+}
+
+.card__num {
+  font-weight: 700;
+  color: var(--color-gold-bright);
+}
+
+.card__kw {
+  font-weight: 700;
+  color: var(--card-accent);
+}
+
+.card__kw--fire {
+  color: var(--color-fire);
+}
+
+.card__kw--frost {
+  color: var(--color-frost);
+}
+
+.card__kw--poison {
+  color: var(--color-poison);
+}
+
+.card__divider-line {
+  stroke: var(--color-gold);
+  stroke-width: 2;
+  opacity: 0.7;
+}
+
+.card__divider-gem {
+  fill: var(--card-accent);
+}
+
+.card__flavor {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 31px;
+  text-anchor: middle;
+  fill: var(--color-text-muted);
+}
+
+/* HP heart. */
+.card__heart {
+  fill: var(--color-danger);
+  stroke-width: 6;
+  stroke-linejoin: round;
+}
+
+.card__hp {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 58px;
+  text-anchor: middle;
+  fill: var(--color-text);
+  stroke: var(--color-ink);
+  stroke-width: 5;
+  paint-order: stroke;
+}
+
+.card__hp-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 2px;
+  text-anchor: middle;
+  fill: var(--color-text);
+}

@@ -129,33 +129,33 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P0 Stream B
 
-- [ ] **P0-B1 · Server scaffold** — Owner: ____ — Needs: P0-D1
+- [x] **P0-B1 · Server scaffold** — Owner: Tyler — Needs: P0-D1
   - Do: Create `apps/server` per R1: `createApp({ db, now })` in `src/app.ts`, entry `src/index.ts`, `GET /api/health` returning `{ ok: true }`, a 404 handler and error middleware in the R5 error format, Vitest and supertest, `dev` script using `tsx watch`.
   - Done when: Tests show `GET /api/health` returns 200 and an unknown `/api` route returns 404 in the R5 error format.
 
-- [ ] **P0-B2 · Database connection and first migration** — Owner: ____ — Needs: P0-B1
+- [x] **P0-B2 · Database connection and first migration** — Owner: Tyler — Needs: P0-B1
   - Do: Add Knex in `src/db/knex.ts`: Postgres when `DATABASE_URL` is set, otherwise SQLite at `apps/server/data/dev.sqlite3` (gitignored), `:memory:` in tests, with `PRAGMA foreign_keys = ON` for SQLite. Write migration `001_init` creating the R6 tables. Run migrations on startup.
   - Done when: A test migrates an in-memory database, writes and reads one row per table, and shows a run with an unknown `user_id` is refused.
 
-- [ ] **P0-B3 · API contract as shared types** — Owner: ____ — Needs: P0-A1
+- [x] **P0-B3 · API contract as shared types** — Owner: Tyler — Needs: P0-A1
   - Do: Write `packages/shared/src/api/types.ts` with every request, response, and error type in R5 plus an `ERROR_CODES` constant, exported from the package index.
   - Done when: Types compile and a reviewer from stream D confirms the names match R5 one to one.
 
-- [ ] **P0-B4 · Validation and error helpers** — Owner: ____ — Needs: P0-B1
+- [x] **P0-B4 · Validation and error helpers** — Owner: Tyler — Needs: P0-B1
   - Do: Add zod. Write `src/middleware/validate.ts` (schema failure gives 400 `VALIDATION` naming the field), an `ApiError` class, and an async route wrapper.
   - Done when: A test route given a bad body returns 400 in the R5 error format with the bad field named in `details`.
 
 ### P0 Stream C
 
-- [ ] **P0-C1 · Client scaffold** — Owner: ____ — Needs: P0-D1
+- [x] **P0-C1 · Client scaffold** — Owner: Tyler — Needs: P0-D1
   - Do: Create `apps/client` per R1 with Vite, React, TypeScript, and react-router. Placeholder screens at `/`, `/login`, `/register`, `/play`, `/leaderboard`, `/profile`. Proxy `/api` to `http://localhost:3000`. Add Vitest, Testing Library, and jsdom.
   - Done when: `npm run dev -w apps/client` serves all six routes and one render test passes.
 
-- [ ] **P0-C2 · Screen plan** — Owner: ____ — Needs: none
+- [x] **P0-C2 · Screen plan** — Owner: Tyler — Needs: none
   - Do: Write `docs/screens.md`. For each screen (login and register, today's dungeon, combat, reward and deck, shrine, run summary, leaderboard, profile) give its route, the R4 state fields or R5 endpoints it reads, the actions it dispatches, and a text wireframe.
   - Done when: Every screen lists exact R4 field names or R5 endpoints, and stream D has approved the pull request.
 
-- [ ] **P0-C3 · Design tokens and Card component** — Owner: ____ — Needs: P0-C1, P0-A3
+- [x] **P0-C3 · Design tokens and Card component** — Owner: Tyler — Needs: P0-C1, P0-A3
   - Do: Write `src/styles/tokens.css` (Fire orange, Frost cyan, Poison green, spacing, type sizes) and `src/components/Card.tsx`, which draws a `CardDef` (name, cost, type, tags, text) with SVG and CSS only.
   - Done when: A component test renders one sample card per tag and finds its name, cost, text, and tag color class.
 
@@ -169,7 +169,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add root `package.json` (private, workspaces `packages/*` and `apps/*`), `tsconfig.base.json` (strict), `.nvmrc` (current Node LTS), `.gitignore`, `.editorconfig`, ESLint and Prettier configs, and `.prettierignore` containing `TODO.md`. Root scripts `lint`, `typecheck`, `test`, `build` run across workspaces. Leave the existing proposal, slides, and design document files where they are.
   - Done when: On a fresh clone `npm install && npm run lint && npm run typecheck && npm test` exits 0.
 
-- [ ] **P0-D2 · Continuous integration** — Owner: ____ — Needs: P0-D1
+- [ ] **P0-D2 · Continuous integration** — Owner: Tyler — Needs: P0-D1
   - Do: Add `.github/workflows/ci.yml` running `npm ci`, lint, typecheck, and test on every pull request and on pushes to `main`.
   - Done when: A pull request shows the check, and a deliberately failing test turns it red (shown in the pull request, then removed).
 
@@ -177,7 +177,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add `.github/pull_request_template.md` (task ID, tests added, TODO.md updated, engine version and fixtures if engine changed). Add `CLAUDE.md` and `AGENTS.md` that point agents to "Rules for every task" and R1, R2, R7 in this file. Protect `main`: one approval and green CI required.
   - Done when: A direct push to `main` is rejected, and a new pull request shows the template.
 
-- [ ] **P0-D4 · One-command dev and first determinism check** — Owner: ____ — Needs: P0-A2, P0-A3, P0-B1, P0-C1
+- [x] **P0-D4 · One-command dev and first determinism check** — Owner: Tyler — Needs: P0-A2, P0-A3, P0-B1, P0-C1
   - Do: Root `npm run dev` starts server and client together. Extend `GET /api/health` to the full R5 shape (`engineVersion`, `rngCheck`). The client home page computes the same five numbers in the browser and shows both lists.
   - Done when: `npm run dev` shows both lists on the home page and a client test asserts they are equal.
 

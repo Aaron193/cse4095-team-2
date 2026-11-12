@@ -12,6 +12,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "dev": "concurrently --kill-others-on-fail --names server,client --prefix-colors blue,green \"npm run dev -w apps/server\" \"npm run dev -w apps/client\"",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@types/node": "^22.10.0",
+    "concurrently": "^9.2.5",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.0.0",
