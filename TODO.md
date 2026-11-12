@@ -36,10 +36,10 @@ Filled in once by task P0-T1.
 
 | Stream | Scope | Person | Default reviewer |
 | --- | --- | --- | --- |
-| A | Shared engine, card and enemy data, engine tests | ____ | B |
+| A | Shared engine, card and enemy data, engine tests | Tyler Kazlauskas | B |
 | B | REST API, database, auth, run verification | Justin Morneau | A |
 | C | Game screens: map, combat, reward, shrine, summary | Antonio Ayala | D |
-| D | Auth, leaderboard and profile screens, deploy, CI, end-to-end tests, docs | ____ | C |
+| D | Auth, leaderboard and profile screens, deploy, CI, end-to-end tests, docs | Aaron Mark | C |
 
 ## How to update this file
 
@@ -93,7 +93,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P0 Team
 
-- [ ] **P0-T1 · Assign roles** — Owner: ____ — Needs: none
+- [x] **P0-T1 · Assign roles** — Owner: Justin Morneau — Needs: none
   - Do: Agree who takes streams A to D and fill in the Person column of the Roles table.
   - Done when: The Roles table on `main` has four names.
 
