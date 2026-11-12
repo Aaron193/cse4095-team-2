@@ -151,7 +151,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Create `apps/client` per R1 with Vite, React, TypeScript, and react-router. Placeholder screens at `/`, `/login`, `/register`, `/play`, `/leaderboard`, `/profile`. Proxy `/api` to `http://localhost:3000`. Add Vitest, Testing Library, and jsdom.
   - Done when: `npm run dev -w apps/client` serves all six routes and one render test passes.
 
-- [ ] **P0-C2 · Screen plan** — Owner: ____ — Needs: none
+- [x] **P0-C2 · Screen plan** — Owner: Tyler — Needs: none
   - Do: Write `docs/screens.md`. For each screen (login and register, today's dungeon, combat, reward and deck, shrine, run summary, leaderboard, profile) give its route, the R4 state fields or R5 endpoints it reads, the actions it dispatches, and a text wireframe.
   - Done when: Every screen lists exact R4 field names or R5 endpoints, and stream D has approved the pull request.
 
