@@ -137,7 +137,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add Knex in `src/db/knex.ts`: Postgres when `DATABASE_URL` is set, otherwise SQLite at `apps/server/data/dev.sqlite3` (gitignored), `:memory:` in tests, with `PRAGMA foreign_keys = ON` for SQLite. Write migration `001_init` creating the R6 tables. Run migrations on startup.
   - Done when: A test migrates an in-memory database, writes and reads one row per table, and shows a run with an unknown `user_id` is refused.
 
-- [ ] **P0-B3 · API contract as shared types** — Owner: ____ — Needs: P0-A1
+- [x] **P0-B3 · API contract as shared types** — Owner: Tyler — Needs: P0-A1
   - Do: Write `packages/shared/src/api/types.ts` with every request, response, and error type in R5 plus an `ERROR_CODES` constant, exported from the package index.
   - Done when: Types compile and a reviewer from stream D confirms the names match R5 one to one.
 
