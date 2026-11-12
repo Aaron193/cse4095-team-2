@@ -147,7 +147,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P0 Stream C
 
-- [ ] **P0-C1 · Client scaffold** — Owner: ____ — Needs: P0-D1
+- [x] **P0-C1 · Client scaffold** — Owner: Tyler — Needs: P0-D1
   - Do: Create `apps/client` per R1 with Vite, React, TypeScript, and react-router. Placeholder screens at `/`, `/login`, `/register`, `/play`, `/leaderboard`, `/profile`. Proxy `/api` to `http://localhost:3000`. Add Vitest, Testing Library, and jsdom.
   - Done when: `npm run dev -w apps/client` serves all six routes and one render test passes.
 
