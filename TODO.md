@@ -129,7 +129,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P0 Stream B
 
-- [ ] **P0-B1 · Server scaffold** — Owner: ____ — Needs: P0-D1
+- [x] **P0-B1 · Server scaffold** — Owner: Tyler — Needs: P0-D1
   - Do: Create `apps/server` per R1: `createApp({ db, now })` in `src/app.ts`, entry `src/index.ts`, `GET /api/health` returning `{ ok: true }`, a 404 handler and error middleware in the R5 error format, Vitest and supertest, `dev` script using `tsx watch`.
   - Done when: Tests show `GET /api/health` returns 200 and an unknown `/api` route returns 404 in the R5 error format.
 
