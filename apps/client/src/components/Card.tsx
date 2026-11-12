@@ -5,9 +5,14 @@
 // ribbon in the tag's color, and a translucent rules panel. The art here is a placeholder
 // scene lit in the tag's color; a character illustration replaces it card by card.
 //
-// The template's HP heart is left out: `CardDef` (TODO.md, Reference R4) has no HP.
+// Art comes from `art/index.ts`, by card id. A card with no illustration yet gets a
+// placeholder lit in its tag's color. Docs/card-template.md explains how to add a character.
+//
+// `CardDef` (TODO.md, Reference R4) has no HP or flavor text, so the template's HP heart and
+// flavor line are drawn only when those are passed in as props.
 import { useId } from 'react';
 import type { CardDef, Tag } from '@daily-delve/shared';
+import { CARD_ART } from './art/index.ts';
 import './Card.css';
 
 /** The CSS class that colors a card by tag, for example "card--fire". */
@@ -146,9 +151,11 @@ export interface CardProps {
   card: CardDef;
   /** A line of flavor text under the rules. `CardDef` has none, so it is passed separately. */
   flavor?: string;
+  /** Draws the HP heart in the bottom-right corner. `CardDef` has no HP, so it is passed in. */
+  hp?: number;
 }
 
-export function Card({ card, flavor }: CardProps) {
+export function Card({ card, flavor, hp }: CardProps) {
   // Gradients are referenced by id, and ids must be unique on a page that shows many cards.
   const uid = useId().replace(/[^a-zA-Z0-9]/g, '');
   const id = (name: string) => `card-${uid}-${name}`;
@@ -172,6 +179,7 @@ export function Card({ card, flavor }: CardProps) {
   const squeeze = typeLine.length > 24 ? { textLength: 500, lengthAdjust: 'spacingAndGlyphs' } : {};
 
   const rulesBottom = flavor ? 1196 : 1326;
+  const Art = CARD_ART[card.id];
 
   return (
     <article className={classes.join(' ')} aria-label={card.name} data-card-id={card.id}>
@@ -221,20 +229,26 @@ export function Card({ card, flavor }: CardProps) {
 
         <rect className="card__body" width="1000" height="1400" rx="40" />
 
-        {/* Art: full bleed behind the frame. */}
-        <g clipPath={url('window')} aria-hidden="true">
-          <rect x="26" y="26" width="948" height="1348" fill={url('sky')} />
-          <ellipse cx="500" cy="540" rx="520" ry="500" fill={url('light')} />
-          <rect className="card__art-floor" x="26" y="850" width="948" height="524" />
-          <ellipse className="card__art-shadow" cx="500" cy="880" rx="210" ry="30" />
-          {SPARKS.map(([x, y, r]) => (
-            <circle key={`${x}-${y}`} className="card__art-spark" cx={x} cy={y} r={r} />
-          ))}
-          {primary ? (
-            <g transform="translate(500 540) scale(9.4) translate(-50 -36)">
-              <TagGlyph tag={primary} />
-            </g>
-          ) : null}
+        {/* Art: full bleed behind the frame. A character scene, or the tag's placeholder. */}
+        <g className="card__art" clipPath={url('window')} aria-hidden="true">
+          {Art ? (
+            <Art uid={`card-${uid}`} />
+          ) : (
+            <>
+              <rect x="26" y="26" width="948" height="1348" fill={url('sky')} />
+              <ellipse cx="500" cy="540" rx="520" ry="500" fill={url('light')} />
+              <rect className="card__art-floor" x="26" y="850" width="948" height="524" />
+              <ellipse className="card__art-shadow" cx="500" cy="880" rx="210" ry="30" />
+              {SPARKS.map(([x, y, r]) => (
+                <circle key={`${x}-${y}`} className="card__art-spark" cx={x} cy={y} r={r} />
+              ))}
+              {primary ? (
+                <g transform="translate(500 540) scale(9.4) translate(-50 -36)">
+                  <TagGlyph tag={primary} />
+                </g>
+              ) : null}
+            </>
+          )}
           <rect x="26" y="26" width="948" height="1348" fill={url('vignette')} />
         </g>
 
@@ -311,6 +325,23 @@ export function Card({ card, flavor }: CardProps) {
             </text>
           </>
         ) : null}
+
+        {/* HP heart. */}
+        {hp === undefined ? null : (
+          <g>
+            <path
+              className="card__heart"
+              stroke={url('gold')}
+              d="M888 1346 C836 1310 818 1280 818 1256 C818 1232 836 1216 856 1216 C870 1216 882 1224 888 1236 C894 1224 906 1216 920 1216 C940 1216 958 1232 958 1256 C958 1280 940 1310 888 1346 Z"
+            />
+            <text className="card__hp" x="888" y="1296" aria-label={`${hp} HP`}>
+              {hp}
+            </text>
+            <text className="card__hp-label" x="888" y="1324" aria-hidden="true">
+              HP
+            </text>
+          </g>
+        )}
 
         {/* Type ribbon, over the top edge of the rules panel. */}
         <path className="card__ribbon-tail" d="M232 972 H190 L212 996 L190 1020 H232 Z" />

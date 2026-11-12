@@ -312,3 +312,30 @@
   text-anchor: middle;
   fill: var(--color-text-muted);
 }
+
+/* HP heart. */
+.card__heart {
+  fill: var(--color-danger);
+  stroke-width: 6;
+  stroke-linejoin: round;
+}
+
+.card__hp {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 58px;
+  text-anchor: middle;
+  fill: var(--color-text);
+  stroke: var(--color-ink);
+  stroke-width: 5;
+  paint-order: stroke;
+}
+
+.card__hp-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 2px;
+  text-anchor: middle;
+  fill: var(--color-text);
+}

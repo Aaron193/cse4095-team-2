@@ -146,9 +146,32 @@ describe('Card', () => {
     expect(container.querySelector('.card__divider-gem')).not.toBeNull();
   });
 
+  it('draws the HP heart only when HP is given', () => {
+    const { container, rerender } = render(<Card card={KIP} />);
+    expect(container.querySelector('.card__heart')).toBeNull();
+    rerender(<Card card={KIP} hp={5} />);
+    expect(screen.getByLabelText('5 HP')).toHaveTextContent('5');
+  });
+
+  it("draws a character's illustration when the card has one", () => {
+    const { container } = render(<Card card={KIP} />);
+    const art = container.querySelector('.card__art')!;
+    expect(art.querySelector('[id$="-art-character"]')).not.toBeNull();
+    expect(art.querySelector('.card__art-glyph')).toBeNull();
+  });
+
+  it('draws the tag placeholder for a card with no illustration yet', () => {
+    const card: CardDef = { ...KIP, id: 'no-art-yet', name: 'Bram, the Footsoldier' };
+    const { container } = render(<Card card={card} />);
+    const art = container.querySelector('.card__art')!;
+    expect(art.querySelector('[id$="-art-character"]')).toBeNull();
+    expect(art.querySelector('.card__art-glyph')).not.toBeNull();
+  });
+
   it('gives every card on a page its own gradient ids', () => {
     const { container } = render(
       <>
+        <Card card={KIP} />
         <Card card={KIP} />
         <Card card={BOG_WITCH} />
       </>,
