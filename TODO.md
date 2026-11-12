@@ -173,7 +173,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add `.github/workflows/ci.yml` running `npm ci`, lint, typecheck, and test on every pull request and on pushes to `main`.
   - Done when: A pull request shows the check, and a deliberately failing test turns it red (shown in the pull request, then removed).
 
-- [ ] **P0-D3 · Pull request template, agent instructions, branch protection** — Owner: Justin Morneau — Needs: P0-D1
+- [x] **P0-D3 · Pull request template, agent instructions, branch protection** — Owner: Justin Morneau — Needs: P0-D1
   - Do: Add `.github/pull_request_template.md` (task ID, tests added, TODO.md updated, engine version and fixtures if engine changed). Add `CLAUDE.md` and `AGENTS.md` that point agents to "Rules for every task" and R1, R2, R7 in this file. Protect `main`: one approval and green CI required.
   - Done when: A direct push to `main` is rejected, and a new pull request shows the template.
 
