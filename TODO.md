@@ -12,7 +12,7 @@ Demo: **Monday, December 7, 2026**. MVP complete: **Monday, November 30**.
 
 Edit only your own line. Keep the blank lines between entries.
 
-**Phase:** P0 Foundations (due Thu Nov 12)
+**Phase:** P1 Walking skeleton, deployed (due Mon Nov 16)
 
 **A (engine and cards):** P0-A1 to P0-A5 done, pending review. Blocked by: nothing
 
@@ -101,7 +101,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Read the ten lines marked `DECISION` in R3. For each, either keep it or edit it, then replace `DECISION` with `CONFIRMED`.
   - Done when: No line in R3 contains the word `DECISION`, in a pull request approved by all four members.
 
-- [ ] **P0-T3 · Phase 0 exit check** — Owner: ____ — Needs: P0-D4
+- [x] **P0-T3 · Phase 0 exit check** — Owner: Justin Morneau — Needs: P0-D4
   - Do: On a fresh clone run `npm install`, `npm test`, `npm run dev`. Update the Phase line in Status to P1.
   - Done when: The home page shows five seeded numbers from the browser equal to the five from `/api/health`, and CI is green on `main`.
 
