@@ -1,0 +1,174 @@
+/* The Card component. All values come from tokens.css. */
+.card {
+  /* Set per tag below; the frame, ribbon, and art all read these two. */
+  --card-accent: var(--color-gold);
+  --card-accent-deep: var(--color-gold-deep);
+  --card-trim: var(--color-gold);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--card-width);
+  aspect-ratio: 5 / 7;
+  margin: 0;
+  padding: var(--space-2);
+  border: 2px solid var(--card-trim);
+  border-radius: var(--radius-lg);
+  background: var(--color-frame);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  box-shadow: 0 0 0 1px var(--color-frame);
+}
+
+.card--fire {
+  --card-accent: var(--color-fire);
+  --card-accent-deep: var(--color-fire-deep);
+}
+
+.card--frost {
+  --card-accent: var(--color-frost);
+  --card-accent-deep: var(--color-frost-deep);
+}
+
+.card--poison {
+  --card-accent: var(--color-poison);
+  --card-accent-deep: var(--color-poison-deep);
+}
+
+/* A card with two tags takes its accent from the first one. */
+.card--primary-fire {
+  --card-accent: var(--color-fire);
+  --card-accent-deep: var(--color-fire-deep);
+}
+
+.card--primary-frost {
+  --card-accent: var(--color-frost);
+  --card-accent-deep: var(--color-frost-deep);
+}
+
+.card--primary-poison {
+  --card-accent: var(--color-poison);
+  --card-accent-deep: var(--color-poison-deep);
+}
+
+.card--rare {
+  --card-trim: var(--color-gold-bright);
+  box-shadow:
+    0 0 0 1px var(--color-frame),
+    0 0 var(--space-3) var(--color-gold);
+}
+
+.card__cost {
+  position: absolute;
+  top: calc(var(--space-2) * -1);
+  left: calc(var(--space-2) * -1);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  border: 2px solid var(--card-trim);
+  border-radius: 50%;
+  background: var(--card-accent-deep);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.card__name {
+  margin: 0;
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-5);
+  border: 1px solid var(--card-trim);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.card__art {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  margin: var(--space-1) 0;
+  background: var(--color-surface);
+  border: 1px solid var(--card-trim);
+  border-radius: var(--radius-sm);
+}
+
+.card__art-sky {
+  fill: var(--color-surface);
+}
+
+.card__art-glow {
+  fill: var(--card-accent-deep);
+  opacity: 0.7;
+}
+
+.card__art-glyph {
+  fill: var(--card-accent);
+}
+
+.card__art-glyph--line {
+  fill: none;
+  stroke: var(--card-accent);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.card__ribbon {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--card-accent);
+  color: var(--color-ink);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.card__tag--fire {
+  color: var(--color-fire-deep);
+}
+
+.card__tag--frost {
+  color: var(--color-frost-deep);
+}
+
+.card__tag--poison {
+  color: var(--color-poison-deep);
+}
+
+/* On a single-tag card the tag sits on its own color, so use ink for contrast. */
+.card__ribbon:not(.card__ribbon--multi) .card__tag {
+  color: var(--color-ink);
+}
+
+.card__ribbon--multi {
+  background: var(--color-parchment);
+}
+
+.card__text {
+  flex: 0 0 34%;
+  margin: var(--space-1) 0 0;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--card-trim);
+  border-radius: var(--radius-sm);
+  background: var(--color-parchment);
+  color: var(--color-ink);
+  font-size: var(--text-xs);
+  line-height: 1.3;
+  text-align: center;
+  overflow: hidden;
+}

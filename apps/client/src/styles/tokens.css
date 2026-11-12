@@ -1,0 +1,61 @@
+/*
+ * Design tokens (task P0-C3). Every color, space, and type size in the client comes from
+ * here, so the look can be changed in one place. Components use these variables and never
+ * write raw values.
+ */
+:root {
+  /* Tag colors. Each tag has a bright color for accents and a deep one for fills. */
+  --color-fire: #ff7a1a;
+  --color-fire-deep: #8f2d08;
+  --color-frost: #2fd6f0;
+  --color-frost-deep: #0b5a78;
+  --color-poison: #5fd13a;
+  --color-poison-deep: #1f6a1d;
+
+  /* Surfaces and text. */
+  --color-bg: #14121c;
+  --color-surface: #1e1b2b;
+  --color-surface-raised: #2a2640;
+  --color-border: #3d3859;
+  --color-text: #f1ecdf;
+  --color-text-muted: #a9a3bd;
+  --color-ink: #1c1710;
+  --color-parchment: #efe3c4;
+
+  /* Card frame. */
+  --color-frame: #17141f;
+  --color-gold: #d9a441;
+  --color-gold-bright: #ffd97a;
+  --color-gold-deep: #7d5a17;
+
+  /* Feedback. */
+  --color-danger: #e5484d;
+  --color-success: #46c46e;
+
+  /* Spacing scale. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* Type sizes. */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: Georgia, 'Times New Roman', serif;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* Card size. Height follows from the 5:7 ratio. */
+  --card-width: 12rem;
+}

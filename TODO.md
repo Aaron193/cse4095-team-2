@@ -155,7 +155,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `docs/screens.md`. For each screen (login and register, today's dungeon, combat, reward and deck, shrine, run summary, leaderboard, profile) give its route, the R4 state fields or R5 endpoints it reads, the actions it dispatches, and a text wireframe.
   - Done when: Every screen lists exact R4 field names or R5 endpoints, and stream D has approved the pull request.
 
-- [ ] **P0-C3 · Design tokens and Card component** — Owner: ____ — Needs: P0-C1, P0-A3
+- [x] **P0-C3 · Design tokens and Card component** — Owner: Tyler — Needs: P0-C1, P0-A3
   - Do: Write `src/styles/tokens.css` (Fire orange, Frost cyan, Poison green, spacing, type sizes) and `src/components/Card.tsx`, which draws a `CardDef` (name, cost, type, tags, text) with SVG and CSS only.
   - Done when: A component test renders one sample card per tag and finds its name, cost, text, and tag color class.
 
