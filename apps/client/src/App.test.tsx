@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from './App.tsx';
 
 function renderAt(path: string) {
@@ -11,6 +11,18 @@ function renderAt(path: string) {
     </MemoryRouter>,
   );
 }
+
+beforeEach(() => {
+  // The home screen asks the server for its health; these tests are about routing only.
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(() => new Promise<Response>(() => {})),
+  );
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 describe('App routes', () => {
   it.each([

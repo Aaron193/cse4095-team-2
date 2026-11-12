@@ -1,6 +1,7 @@
 import express from 'express';
 import type { Express } from 'express';
 import type { Knex } from 'knex';
+import { ENGINE_VERSION } from '@daily-delve/shared';
 import request from 'supertest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp } from '../src/app.ts';
@@ -21,10 +22,16 @@ afterEach(async () => {
 });
 
 describe('GET /api/health', () => {
-  it('returns 200 and ok', async () => {
+  it('returns the full R5 health shape', async () => {
     const res = await request(app).get('/api/health');
     expect(res.status).toBe(200);
-    expect(res.body).toMatchObject({ ok: true });
+    expect(res.body).toEqual({
+      ok: true,
+      engineVersion: ENGINE_VERSION,
+      // The committed known answers for createRng('selfcheck', 'health'), also asserted in
+      // packages/shared/test/rng.test.ts and by the client's home page test.
+      rngCheck: [444, 394, 59, 197, 499],
+    });
   });
 });
 

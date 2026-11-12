@@ -177,7 +177,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add `.github/pull_request_template.md` (task ID, tests added, TODO.md updated, engine version and fixtures if engine changed). Add `CLAUDE.md` and `AGENTS.md` that point agents to "Rules for every task" and R1, R2, R7 in this file. Protect `main`: one approval and green CI required.
   - Done when: A direct push to `main` is rejected, and a new pull request shows the template.
 
-- [ ] **P0-D4 · One-command dev and first determinism check** — Owner: ____ — Needs: P0-A2, P0-A3, P0-B1, P0-C1
+- [x] **P0-D4 · One-command dev and first determinism check** — Owner: Tyler — Needs: P0-A2, P0-A3, P0-B1, P0-C1
   - Do: Root `npm run dev` starts server and client together. Extend `GET /api/health` to the full R5 shape (`engineVersion`, `rngCheck`). The client home page computes the same five numbers in the browser and shows both lists.
   - Done when: `npm run dev` shows both lists on the home page and a client test asserts they are equal.
 
