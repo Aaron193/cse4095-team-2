@@ -191,7 +191,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P1 Stream A
 
-- [ ] **P1-A1 · Number pipeline** — Owner: ____ — Needs: P0-A4
+- [x] **P1-A1 · Number pipeline** — Owner: Aaron Mark — Needs: P0-A4
   - Do: Write `src/engine/calc.ts`: `computeDamage` applying additive changes, then multiplicative (integer percent, floored), then caps and a floor of 0; and `applyDamage(unit, amount, { ignoreShield })`, which removes Shield before HP.
   - Done when: Table-driven tests cover the order of operations (base 4, plus 3, times 150 percent gives 10), Shield absorption, `ignoreShield`, and never going below 0.
 
