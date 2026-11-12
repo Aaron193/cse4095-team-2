@@ -199,7 +199,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `startCombat` in `src/engine/combat.ts`: build enemies from definitions, shuffle the deck with stream `shuffle:<nodeId>`, start turn 1 (draw `HAND_SIZE`, set energy, show intents). Drawing from an empty pile reshuffles the discard pile.
   - Done when: Tests show the same seed gives the same opening hand, a different node ID gives a different order, an empty draw pile reshuffles, and turn 1 has 5 cards and 3 energy.
 
-- [ ] **P1-A3 · Play a card** — Owner: ____ — Needs: P1-A1, P1-A2
+- [x] **P1-A3 · Play a card** — Owner: Aaron Mark — Needs: P1-A1, P1-A2
   - Do: Implement the `playCard` action with effect kinds `damage`, `shield`, `draw`, `energy`: check the hand index, cost, and target; pay energy; resolve effects in listed order; discard the card. The fight is won the moment the last enemy reaches 0 HP.
   - Done when: Tests cover each effect, and each illegal case (bad index, too costly, dead or missing target) returns `ok: false` with code `ILLEGAL_ACTION` and an unchanged state.
 

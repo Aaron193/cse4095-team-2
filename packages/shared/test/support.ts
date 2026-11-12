@@ -1,7 +1,8 @@
 // Shared builders for engine rule tests. The rules read cards and enemies through a `Defs`
 // table, so these tests use small hand-made content whose numbers never change with balance.
 import { ENGINE_VERSION } from '@daily-delve/shared';
-import type { CardDef, Dungeon, EnemyDef, RunState } from '@daily-delve/shared';
+import type { CardDef, CombatState, Dungeon, EnemyDef, RunState } from '@daily-delve/shared';
+import { startCombat } from '../src/engine/combat.ts';
 import type { Defs } from '../src/engine/defs.ts';
 
 function card(def: Omit<CardDef, 'rarity' | 'text'> & Partial<CardDef>): CardDef {
@@ -283,4 +284,34 @@ export function deepFreeze<T>(value: T): T {
     for (const key of Object.keys(value)) deepFreeze((value as Record<string, unknown>)[key]);
   }
   return value;
+}
+
+export interface FightOptions {
+  /** The site the fight is at: 'n0' is a fight, 'n1' is the boss. */
+  nodeId?: 'n0' | 'n1';
+  /** Enemy ids at that site. */
+  encounter?: string[];
+  /** Replaces the opening hand, draw pile, or other combat fields after turn 1 starts. */
+  combat?: Partial<CombatState>;
+  /** Replaces run fields after the fight starts (for example `hp`). */
+  run?: Partial<RunState>;
+}
+
+/** A run in combat at turn 1, with the hand and piles set exactly as a test needs them. */
+export function fight(options: FightOptions = {}): RunState {
+  const nodeId = options.nodeId ?? 'n0';
+  const encounter = options.encounter ?? ['dummy'];
+  const state = makeRun({ dungeon: testDungeon({ [nodeId]: encounter }) });
+  state.pos = { x: nodeId === 'n0' ? 3 : 5, y: 1 };
+  startCombat(state, nodeId, TEST_DEFS);
+  const combat = state.combat as CombatState;
+  Object.assign(combat, options.combat ?? {});
+  Object.assign(state, options.run ?? {});
+  return state;
+}
+
+/** The fight in a state that must be in combat. */
+export function combatOf(state: RunState): CombatState {
+  if (!state.combat) throw new Error(`expected a fight, but the phase is ${state.phase}`);
+  return state.combat;
 }

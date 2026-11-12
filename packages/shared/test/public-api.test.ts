@@ -162,8 +162,8 @@ const simResults: SimResult[] = [
 ];
 
 describe('engine public API (R4)', () => {
-  it('exports ENGINE_VERSION 0.2.0', () => {
-    expect(ENGINE_VERSION).toBe('0.2.0');
+  it('exports ENGINE_VERSION 0.3.0', () => {
+    expect(ENGINE_VERSION).toBe('0.3.0');
   });
 
   it('exports the content tables', () => {
@@ -171,17 +171,29 @@ describe('engine public API (R4)', () => {
     expect(typeof ENEMIES).toBe('object');
   });
 
+  // Functions whose tasks are not done yet. Each task removes its line here.
   it.each([
     ['generateDungeon', () => generateDungeon('seed')],
     ['createRun', () => createRun('seed')],
     ['createTestFight', () => createTestFight('seed')],
     ['legalActions', () => legalActions(state)],
-    ['applyAction', () => applyAction(state, actions[3]!)],
     ['simulate', () => simulate('seed', actions)],
     ['summarize', () => summarize(state)],
     ['hashState', () => hashState(state)],
   ])('exports %s as a stub that throws "not implemented"', (name, call) => {
     expect(call).toThrow(`not implemented: ${name}`);
+  });
+
+  it('exports applyAction, which refuses actions in an ended run (P1-A3)', () => {
+    const ended: RunState = { ...state, phase: 'ended', outcome: 'lost' };
+    expect(applyAction(ended, { type: 'endTurn' })).toEqual({
+      ok: false,
+      error: { code: 'RUN_ENDED', message: expect.any(String) },
+    });
+    expect(applyAction(state, { type: 'move', dir: 'N' })).toEqual({
+      ok: false,
+      error: { code: 'ILLEGAL_ACTION', message: expect.any(String) },
+    });
   });
 
   it('accepts sample values for every R4 type as plain JSON', () => {
