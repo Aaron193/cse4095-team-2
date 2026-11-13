@@ -1,6 +1,6 @@
 // The run: the public entry points that turn a seed and a list of actions into game states
 // (TODO.md, Reference R4).
-import { playCard } from './combat.ts';
+import { endTurn, playCard } from './combat.ts';
 import { DEFS } from './defs.ts';
 import type { Defs } from './defs.ts';
 import { notImplemented } from './notImplemented.ts';
@@ -49,7 +49,7 @@ function dispatch(state: RunState, action: Action, defs: Defs): EngineError | nu
       return playCard(state, action.handIndex, action.target, defs);
     case 'endTurn':
       if (state.phase !== 'combat') return wrongPhase(action.type, state);
-      return notImplemented('endTurn', 'P1-A4');
+      return endTurn(state, defs);
     case 'move':
       if (state.phase !== 'map') return wrongPhase(action.type, state);
       return notImplemented('move', 'P2-A3');

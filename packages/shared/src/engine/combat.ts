@@ -8,10 +8,12 @@ import { addCapped, applyDamage, computeDamage } from './calc.ts';
 import {
   ENERGY_CAP,
   ENERGY_PER_TURN,
+  FIGHT_TURN_CAP,
   HAND_SIZE,
   MAX_HAND,
   SHIELD_CAP,
   SHIELD_PERSISTS,
+  STATUS_CAP,
 } from './content/balance.ts';
 import { cardDef, enemyDef } from './defs.ts';
 import type { Defs } from './defs.ts';
@@ -54,12 +56,17 @@ export function createEnemy(def: EnemyDef): EnemyState {
   };
 }
 
-/** The intent an enemy is showing: from its phase 2 cycle once it has entered phase 2. */
-export function currentIntent(enemy: EnemyState, def: EnemyDef): Intent {
+/** The intents an enemy cycles through: its phase 2 cycle once it has entered phase 2. */
+export function intentCycle(enemy: EnemyState, def: EnemyDef): Intent[] {
   const intents = enemy.phase === 2 && def.phase2 ? def.phase2.intents : def.intents;
-  const intent = intents[enemy.intentIndex % intents.length];
-  if (!intent) throw new Error(`Enemy "${def.id}" has no intents`);
-  return intent;
+  if (intents.length === 0) throw new Error(`Enemy "${def.id}" has no intents`);
+  return intents;
+}
+
+/** The intent an enemy is showing. `intentIndex` always stays inside its cycle. */
+export function currentIntent(enemy: EnemyState, def: EnemyDef): Intent {
+  const intents = intentCycle(enemy, def);
+  return intents[enemy.intentIndex % intents.length] as Intent;
 }
 
 /**
@@ -273,3 +280,82 @@ export function loseRun(state: RunState): void {
   state.phase = 'ended';
   state.outcome = 'lost';
 }
+
+/**
+ * Ends the player's turn and plays out the rest of it, in R3's order:
+ *   3. enemy phase: each living enemy, in index order, loses its Shield (unless
+ *      SHIELD_PERSISTS) and carries out the intent it was showing;
+ *   4. end of turn: the hand is discarded, statuses tick on the player and then on each
+ *      enemy in index order, and every enemy shows its next intent;
+ *   then the next turn starts (step 1), unless this was turn FIGHT_TURN_CAP, which loses.
+ * The run is lost the moment the player reaches 0 HP.
+ */
+export function endTurn(state: RunState, defs: Defs): EngineError | null {
+  const combat = activeCombat(state);
+
+  for (const enemy of combat.enemies) {
+    if (enemy.hp <= 0) continue;
+    if (!SHIELD_PERSISTS) enemy.shield = 0;
+    actOnIntent(state, enemy, currentIntent(enemy, enemyDef(defs, enemy.defId)));
+    if (state.phase !== 'combat') return null;
+  }
+
+  combat.discardPile.push(...combat.hand);
+  combat.hand = [];
+
+  tickStatuses(state);
+  if (state.phase !== 'combat') return null;
+
+  for (const enemy of combat.enemies) {
+    if (enemy.hp <= 0) continue;
+    const cycle = intentCycle(enemy, enemyDef(defs, enemy.defId));
+    enemy.intentIndex = (enemy.intentIndex + 1) % cycle.length;
+  }
+
+  if (combat.turn >= FIGHT_TURN_CAP) {
+    loseRun(state);
+    return null;
+  }
+  startTurn(state);
+  return null;
+}
+
+/** One enemy carries out one intent. */
+function actOnIntent(state: RunState, enemy: EnemyState, intent: Intent): void {
+  const combat = activeCombat(state);
+  switch (intent.kind) {
+    case 'attack': {
+      const amount = computeDamage({ base: intent.damage, add: [enemy.strength] });
+      for (let hit = 0; hit < intent.hits; hit++) {
+        hitPlayer(state, amount, false);
+        if (state.phase !== 'combat') return;
+      }
+      return;
+    }
+    case 'block':
+      enemy.shield = addCapped(enemy.shield, intent.amount, SHIELD_CAP);
+      return;
+    case 'buff':
+      enemy.strength += intent.strength;
+      return;
+    case 'debuff': {
+      const statuses = combat.player.statuses;
+      statuses[intent.status] = addCapped(statuses[intent.status], intent.amount, STATUS_CAP);
+      return;
+    }
+  }
+}
+
+/** Damage to the player: Shield first unless `ignoreShield`. At 0 HP the run is lost. */
+function hitPlayer(state: RunState, amount: number, ignoreShield: boolean): void {
+  const combat = activeCombat(state);
+  const result = applyDamage({ hp: state.hp, shield: combat.player.shield }, amount, {
+    ignoreShield,
+  });
+  state.hp = result.hp;
+  combat.player.shield = result.shield;
+  if (state.hp <= 0) loseRun(state);
+}
+
+/** End-of-turn status ticks. The tick rules for Burn, Poison, and Chill are task P1-A5. */
+function tickStatuses(_state: RunState): void {}

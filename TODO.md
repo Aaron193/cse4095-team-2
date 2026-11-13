@@ -203,7 +203,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Implement the `playCard` action with effect kinds `damage`, `shield`, `draw`, `energy`: check the hand index, cost, and target; pay energy; resolve effects in listed order; discard the card. The fight is won the moment the last enemy reaches 0 HP.
   - Done when: Tests cover each effect, and each illegal case (bad index, too costly, dead or missing target) returns `ok: false` with code `ILLEGAL_ACTION` and an unchanged state.
 
-- [ ] **P1-A4 · End turn and enemy phase** — Owner: ____ — Needs: P1-A3
+- [x] **P1-A4 · End turn and enemy phase** — Owner: Aaron Mark — Needs: P1-A3
   - Do: Implement `endTurn` in the R3 order: enemies act in index order on their shown intents, the hand is discarded, statuses tick, Shield expires per R3, intents advance, the next turn starts. Player death ends the run as lost. Reaching `FIGHT_TURN_CAP` ends the run as lost.
   - Done when: A scripted three-turn fight matches expected HP and Shield after every turn, and tests cover death and the turn cap.
 
