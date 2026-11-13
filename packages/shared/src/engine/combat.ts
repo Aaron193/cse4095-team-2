@@ -27,6 +27,7 @@ import type { Defs } from './defs.ts';
 import { notImplemented } from './notImplemented.ts';
 import { createRng, shuffle } from './rng.ts';
 import type {
+  Action,
   CardDef,
   CombatState,
   Effect,
@@ -162,6 +163,28 @@ export function needsTarget(card: CardDef): boolean {
       effect.kind === 'shatter' ||
       ((effect.kind === 'damage' || effect.kind === 'applyStatus') && effect.target === 'enemy'),
   );
+}
+
+/**
+ * Every action the player can take in this fight: each card that can be paid for, once for
+ * each living enemy if it needs a target and once with no target otherwise, in hand order,
+ * and last `endTurn`. playCard accepts exactly these.
+ */
+export function combatActions(combat: CombatState, defs: Defs): Action[] {
+  const actions: Action[] = [];
+  combat.hand.forEach((cardId, handIndex) => {
+    const card = cardDef(defs, cardId);
+    if (card.cost > combat.energy) return;
+    if (!needsTarget(card)) {
+      actions.push({ type: 'playCard', handIndex });
+      return;
+    }
+    combat.enemies.forEach((enemy, target) => {
+      if (enemy.hp > 0) actions.push({ type: 'playCard', handIndex, target });
+    });
+  });
+  actions.push({ type: 'endTurn' });
+  return actions;
 }
 
 export function allEnemiesDefeated(combat: CombatState): boolean {

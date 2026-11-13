@@ -219,7 +219,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `content/cards.ts` with 10 cards (for each tag: a basic attack, a status applier, and a skill; plus one tag-synergy attack) and `STARTER_DECK`. Write `content/enemies.ts` with 2 normal enemies using three-step intent cycles. Export `createTestFight(seed)`, a run already in combat against one enemy.
   - Done when: A content test checks every card (cost 0 to 3, at least one tag, known effect kinds, non-empty text), and a scripted test wins the test fight with legal actions only.
 
-- [ ] **P1-A8 · Legal actions in combat and purity test** — Owner: ____ — Needs: P1-A7, P1-B7
+- [x] **P1-A8 · Legal actions in combat and purity test** — Owner: Aaron Mark — Needs: P1-A7, P1-B7
   - Do: Implement `legalActions` for the combat phase (each playable card with each valid target, plus `endTurn`). Add a property test that random-walks the test fight for 50 seeds with deep-frozen input states.
   - Done when: The test passes in under 5 seconds, no input state is mutated, and replaying the recorded actions gives the same `hashState`.
 

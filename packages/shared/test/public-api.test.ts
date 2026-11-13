@@ -175,7 +175,6 @@ describe('engine public API (R4)', () => {
   it.each([
     ['generateDungeon', () => generateDungeon('seed')],
     ['createRun', () => createRun('seed')],
-    ['legalActions', () => legalActions(state)],
     ['simulate', () => simulate('seed', actions)],
     ['summarize', () => summarize(state)],
   ])('exports %s as a stub that throws "not implemented"', (name, call) => {
@@ -187,6 +186,11 @@ describe('engine public API (R4)', () => {
     expect(fight.phase).toBe('combat');
     expect(fight.combat?.turn).toBe(1);
     expect(fight.engineVersion).toBe(ENGINE_VERSION);
+  });
+
+  it('exports legalActions, which lists endTurn in combat and nothing once ended (P1-A8)', () => {
+    expect(legalActions(createTestFight('seed'))).toContainEqual({ type: 'endTurn' });
+    expect(legalActions({ ...state, phase: 'ended', outcome: 'won' })).toEqual([]);
   });
 
   it('exports hashState, 16 hex digits that ignore key order (P1-B7)', () => {

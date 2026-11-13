@@ -1,6 +1,6 @@
 // The run: the public entry points that turn a seed and a list of actions into game states
 // (TODO.md, Reference R4).
-import { endTurn, playCard, startCombat } from './combat.ts';
+import { activeCombat, combatActions, endTurn, playCard, startCombat } from './combat.ts';
 import { TEST_FIGHT_ENEMIES } from './content/enemies.ts';
 import { DEFS } from './defs.ts';
 import type { Defs } from './defs.ts';
@@ -40,8 +40,24 @@ export function createTestFight(seed: string): RunState {
 }
 
 /** Every action that `applyAction` would accept in this state. */
-export function legalActions(_state: RunState): Action[] {
-  return notImplemented('legalActions', 'P1-A8');
+export function legalActions(state: RunState): Action[] {
+  return legalActionsWith(state, DEFS);
+}
+
+/** `legalActions` with the content tables passed in, as for `applyActionWith`. */
+export function legalActionsWith(state: RunState, defs: Defs): Action[] {
+  switch (state.phase) {
+    case 'ended':
+      return [];
+    case 'combat':
+      return combatActions(activeCombat(state), defs);
+    case 'map':
+      return notImplemented('legalActions in the map phase', 'P2-A3');
+    case 'reward':
+      return notImplemented('legalActions in the reward phase', 'P2-A4');
+    case 'shrine':
+      return notImplemented('legalActions in the shrine phase', 'P2-A5');
+  }
 }
 
 /** Applies one action. Never changes `state`; returns a new state or an error. */
