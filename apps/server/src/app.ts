@@ -8,6 +8,7 @@ import { resolveConfig } from './config.ts';
 import type { AppConfig } from './config.ts';
 import type { AppContext } from './context.ts';
 import { errorHandler, notFoundHandler } from './middleware/errors.ts';
+import { authRateLimit, jsonBody, securityHeaders } from './middleware/security.ts';
 import { sessionMiddleware } from './middleware/session.ts';
 import { authRouter } from './routes/auth.ts';
 import { healthRouter } from './routes/health.ts';
@@ -30,7 +31,11 @@ export function createApp(deps: AppDeps): Express {
   // In production the app runs behind the host's proxy. Trusting its X-Forwarded-* headers
   // makes req.secure true over HTTPS, which the Secure session cookie needs.
   if (ctx.config.production) app.set('trust proxy', 1);
-  app.use(express.json());
+  // Headers first, so every response carries them, errors included. The rate limit comes
+  // before the body is parsed and the session is read, so a refused request costs neither.
+  app.use(securityHeaders());
+  app.use('/api/auth', authRateLimit(ctx.config.authRateLimit));
+  app.use(jsonBody());
   app.use('/api', sessionMiddleware(ctx));
 
   app.use('/api', healthRouter());

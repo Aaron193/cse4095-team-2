@@ -41,11 +41,12 @@ export function testClock(start: Date = FIXED_NOW) {
   };
 }
 
-/** The configuration ordinary tests run with: cheap password hashing. */
+/** The configuration ordinary tests run with: cheap password hashing, no rate limit in reach. */
 export const testConfig: AppConfig = {
   production: false,
   sessionSecret: 'test-session-secret',
   bcryptCost: 4,
+  authRateLimit: 1000,
 };
 
 export interface TestAppOptions {

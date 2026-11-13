@@ -241,7 +241,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Implement `GET /api/me` per R5.
   - Done when: Tests show 200 with the user when logged in and 401 when not.
 
-- [ ] **P1-B5 · Security middleware** — Owner: ____ — Needs: P0-B1
+- [x] **P1-B5 · Security middleware** — Owner: Aaron Mark — Needs: P0-B1
   - Do: Add helmet, a 100 KB JSON body limit, and a rate limit of 10 requests a minute per address on `/api/auth/*` (limit configurable so tests can set it).
   - Done when: Tests show the request over the limit returns 429 `RATE_LIMITED` and an oversized body returns an R5-format error.
 

@@ -8,6 +8,8 @@ export interface AppConfig {
   sessionSecret: string;
   /** bcrypt cost for password hashes: 10 by default; tests use 4, the lowest bcrypt allows. */
   bcryptCost: number;
+  /** Requests per minute per client address on /api/auth/*: 10 by default. */
+  authRateLimit: number;
 }
 
 /**
@@ -18,6 +20,7 @@ export const DEVELOPMENT_CONFIG: Readonly<AppConfig> = Object.freeze({
   production: false,
   sessionSecret: 'development-only-session-secret',
   bcryptCost: 10,
+  authRateLimit: 10,
 });
 
 const REQUIRED_IN_PRODUCTION = ['SESSION_SECRET'] as const;
@@ -47,5 +50,6 @@ export function resolveConfig(overrides: Partial<AppConfig> = {}): AppConfig {
     production: overrides.production ?? DEVELOPMENT_CONFIG.production,
     sessionSecret: overrides.sessionSecret ?? DEVELOPMENT_CONFIG.sessionSecret,
     bcryptCost: overrides.bcryptCost ?? DEVELOPMENT_CONFIG.bcryptCost,
+    authRateLimit: overrides.authRateLimit ?? DEVELOPMENT_CONFIG.authRateLimit,
   };
 }

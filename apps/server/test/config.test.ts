@@ -8,6 +8,7 @@ describe('loadConfig', () => {
     expect(DEVELOPMENT_CONFIG.production).toBe(false);
     expect(DEVELOPMENT_CONFIG.sessionSecret).toMatch(/development/);
     expect(DEVELOPMENT_CONFIG.bcryptCost).toBe(10);
+    expect(DEVELOPMENT_CONFIG.authRateLimit).toBe(10);
   });
 
   it('takes the secrets from the environment when they are set', () => {
