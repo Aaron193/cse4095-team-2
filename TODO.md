@@ -289,7 +289,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add MSW handlers for every R5 endpoint backed by in-memory data, switched on in dev by `VITE_USE_MOCKS=1` and used in component tests.
   - Done when: With the server stopped and mocks on, register, login, and leaderboard calls from the client succeed.
 
-- [ ] **P1-D3 · Login and register screens** — Owner: ____ — Needs: P1-D1, P1-D2
+- [x] **P1-D3 · Login and register screens** — Owner: Aaron Mark — Needs: P1-D1, P1-D2
   - Do: Add an auth context and the `/login` and `/register` forms with the R5 limits checked in the browser and server errors shown. On success go to `/`.
   - Done when: Component tests cover a successful register, a taken username, and a failed login.
 

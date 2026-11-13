@@ -75,4 +75,160 @@
 
   /* Card width. Height follows from the template's 5:7 ratio. */
   --card-width: 16rem;
+
+  /*
+   * App shell, buttons, and form fields (tasks P1-D3 and P1-D4). Derived colors are mixed
+   * from the palette above, so they follow it if it changes.
+   */
+  --color-abyss: #0b0a15;
+  --color-border-strong: #5b528c;
+  --color-gold-hairline: color-mix(in srgb, var(--color-gold) 38%, transparent);
+  --color-gold-faint: color-mix(in srgb, var(--color-gold) 12%, transparent);
+  --color-gold-ember: color-mix(in srgb, var(--color-gold) 72%, var(--color-fire-deep));
+  /* Error text and outlines: the danger red, lightened to read on ink (over 6:1). */
+  --color-danger-bright: #ff7b72;
+  --color-danger-faint: color-mix(in srgb, var(--color-danger) 14%, transparent);
+  --color-danger-line: color-mix(in srgb, var(--color-danger-bright) 45%, transparent);
+  --color-ink-veil: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  --color-text-veil: color-mix(in srgb, var(--color-text) 7%, transparent);
+  --color-ember: color-mix(in srgb, var(--color-gold-bright) 80%, var(--color-fire));
+  --color-ember-dim: color-mix(in srgb, var(--color-fire) 65%, transparent);
+  --color-shadow: rgb(3 2 10 / 55%);
+  --color-shadow-deep: rgb(3 2 10 / 82%);
+
+  --text-3xl: 2.5rem;
+
+  /* Letter spacing for capitals in Cinzel: labels, buttons, the brand. */
+  --tracking-caps: 0.12em;
+  --tracking-caps-wide: 0.18em;
+
+  --radius-pill: 999px;
+
+  /* Heights of buttons and inputs. */
+  --control-sm: 2rem;
+  --control-md: 2.75rem;
+  --control-lg: 3.25rem;
+
+  --header-height: 3.75rem;
+  --panel-width: 26rem;
+  --page-width: 72rem;
+
+  /* Keyboard focus: a bright gold ring outside the element. Inputs add a soft glow too. */
+  --focus-ring: 2px solid var(--color-gold-bright);
+  --focus-ring-offset: 3px;
+  --focus-glow: 0 0 0 4px color-mix(in srgb, var(--color-gold) 28%, transparent);
+  --focus-glow-danger: 0 0 0 4px color-mix(in srgb, var(--color-danger-bright) 24%, transparent);
+
+  --shadow-text: 0 2px 0 var(--color-shadow);
+  /* Dark letters pressed into gold. */
+  --shadow-text-engraved: 0 1px 0 color-mix(in srgb, white 38%, transparent);
+  --shadow-inset: inset 0 2px 5px var(--color-shadow);
+  --shadow-glow-gold: 0 0 18px -4px color-mix(in srgb, var(--color-gold) 45%, transparent);
+  --shadow-panel:
+    inset 0 1px 0 color-mix(in srgb, var(--color-gold-bright) 14%, transparent),
+    0 0 0 1px var(--color-abyss), 0 32px 64px -24px var(--color-shadow-deep),
+    0 12px 28px -12px var(--color-shadow);
+  --shadow-header:
+    0 1px 0 color-mix(in srgb, var(--color-gold) 22%, transparent),
+    0 12px 32px -12px var(--color-shadow-deep);
+  /* The gold button: a bevel, a dark rim, and a warm glow beneath (the concept's END TURN). */
+  --shadow-button-gold:
+    inset 0 1px 0 color-mix(in srgb, white 55%, transparent),
+    inset 0 -2px 0 color-mix(in srgb, var(--color-gold-deep) 55%, transparent),
+    0 0 0 1px var(--color-ink),
+    0 8px 20px -8px color-mix(in srgb, var(--color-gold) 55%, transparent);
+  --shadow-button-gold-hover:
+    inset 0 1px 0 color-mix(in srgb, white 65%, transparent),
+    inset 0 -2px 0 color-mix(in srgb, var(--color-gold-deep) 55%, transparent),
+    0 0 0 1px var(--color-ink),
+    0 12px 28px -8px color-mix(in srgb, var(--color-gold) 70%, transparent);
+  --shadow-button-pressed:
+    inset 0 2px 4px color-mix(in srgb, var(--color-gold-deep) 70%, transparent),
+    0 0 0 1px var(--color-ink);
+
+  --gradient-gold: linear-gradient(
+    180deg,
+    var(--color-gold-bright) 0%,
+    color-mix(in srgb, var(--color-gold-bright) 45%, var(--color-gold)) 38%,
+    var(--color-gold) 72%,
+    var(--color-gold-ember) 100%
+  );
+  --gradient-gold-text: linear-gradient(
+    180deg,
+    var(--color-gold-bright) 20%,
+    var(--color-gold) 62%,
+    var(--color-gold-ember) 100%
+  );
+  --gradient-hairline: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold-hairline) 22%,
+    var(--color-gold-hairline) 78%,
+    transparent
+  );
+  --gradient-header: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-ink-2) 92%, transparent),
+    color-mix(in srgb, var(--color-ink) 92%, transparent)
+  );
+  /* A panel lit from above, like torchlight on stone. */
+  --gradient-panel:
+    radial-gradient(
+      120% 55% at 50% 0%,
+      color-mix(in srgb, var(--color-gold) 10%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(180deg, var(--color-ink-3) 0%, var(--color-ink-2) 42%, var(--color-ink) 100%);
+  /* Behind the login and register panel: moonlight above, a torch on each side, warm floor. */
+  --gradient-backdrop:
+    radial-gradient(
+      70rem 32rem at 50% -10rem,
+      color-mix(in srgb, var(--color-ink-3) 95%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      5rem 7rem at 7% 58%,
+      color-mix(in srgb, var(--color-gold-bright) 12%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      5rem 7rem at 93% 58%,
+      color-mix(in srgb, var(--color-gold-bright) 12%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      26rem 34rem at 7% 60%,
+      color-mix(in srgb, var(--color-fire) 22%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      26rem 34rem at 93% 60%,
+      color-mix(in srgb, var(--color-fire) 22%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      54rem 24rem at 50% 116%,
+      color-mix(in srgb, var(--color-fire-deep) 26%, transparent),
+      transparent 72%
+    ),
+    linear-gradient(180deg, var(--color-ink) 0%, var(--color-bg) 50%, var(--color-abyss) 100%);
+  --gradient-vignette: radial-gradient(
+    ellipse 120% 90% at 50% 45%,
+    transparent 55%,
+    color-mix(in srgb, var(--color-abyss) 75%, transparent) 100%
+  );
+
+  /* Motion. Zeroed below for people who ask for less of it. */
+  --duration-fast: 140ms;
+  --duration-base: 240ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --lift: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --lift: 0px;
+  }
 }

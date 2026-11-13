@@ -1,0 +1,157 @@
+/* The Button component. Colors, sizes, shadows, and timings come from tokens.css. */
+.btn {
+  --btn-tracking: var(--tracking-caps-wide);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-md);
+  padding: 0 var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--btn-tracking);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    filter var(--duration-fast) var(--ease-out);
+}
+
+/* Letter spacing also follows the last letter; pull it back so the label sits centered. */
+.btn__label {
+  margin-inline-end: calc(var(--btn-tracking) * -1);
+}
+
+.btn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.btn:not(:disabled):hover {
+  transform: translateY(var(--lift));
+}
+
+.btn:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Primary: the gold END TURN button. */
+.btn--primary {
+  color: var(--color-ink);
+  background: var(--gradient-gold);
+  border-color: var(--color-gold-bright);
+  box-shadow: var(--shadow-button-gold);
+  text-shadow: var(--shadow-text-engraved);
+}
+
+.btn--primary:not(:disabled):hover {
+  box-shadow: var(--shadow-button-gold-hover);
+  filter: brightness(1.06) saturate(1.06);
+}
+
+.btn--primary:not(:disabled):active {
+  box-shadow: var(--shadow-button-pressed);
+  filter: brightness(0.97);
+}
+
+/* Secondary: a gold outline on ink. */
+.btn--secondary {
+  color: var(--color-gold-bright);
+  background: var(--color-ink-veil);
+  border-color: var(--color-gold);
+}
+
+.btn--secondary:not(:disabled):hover {
+  background: var(--color-gold-faint);
+  border-color: var(--color-gold-bright);
+  box-shadow: var(--shadow-glow-gold);
+}
+
+.btn--secondary:not(:disabled):active {
+  background: var(--color-gold-hairline);
+  box-shadow: none;
+}
+
+/* Ghost: quiet text for less important actions. */
+.btn--ghost {
+  color: var(--color-text-muted);
+  background: transparent;
+}
+
+.btn--ghost:not(:disabled):hover {
+  color: var(--color-text);
+  background: var(--color-text-veil);
+}
+
+.btn--sm {
+  --btn-tracking: var(--tracking-caps);
+
+  min-height: var(--control-sm);
+  padding: 0 var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.btn--lg {
+  min-height: var(--control-lg);
+  padding: 0 var(--space-6);
+  font-size: var(--text-md);
+}
+
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  filter: saturate(0.5);
+  box-shadow: none;
+}
+
+/* While loading the button is disabled, but it is busy rather than unavailable. */
+.btn--loading:disabled {
+  cursor: progress;
+  opacity: 0.9;
+  filter: none;
+}
+
+.btn--primary.btn--loading {
+  box-shadow: var(--shadow-button-gold);
+}
+
+.btn__spinner {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: btn-spin 0.7s linear infinite;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn__spinner {
+    animation-duration: 1.8s;
+  }
+}

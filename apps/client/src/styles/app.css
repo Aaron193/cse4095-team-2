@@ -8,6 +8,11 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Native controls and scrollbars drawn dark. */
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -15,6 +20,13 @@ body {
   line-height: 1.4;
   color: var(--color-text);
   background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  color: var(--color-text);
+  background: var(--color-gold-hairline);
 }
 
 h1,
@@ -28,6 +40,20 @@ h3 {
 
 a {
   color: var(--color-gold-bright);
+}
+
+a:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* The page fills the window: header on top, the screen below it. */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .app__header {
@@ -73,10 +99,18 @@ a {
   color: var(--color-gold);
 }
 
+/* Full width, so a screen can paint edge to edge. Text screens center themselves. */
 .app__main {
-  padding: var(--space-5);
-  max-width: 72rem;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.placeholder {
+  width: 100%;
+  max-width: var(--page-width);
   margin: 0 auto;
+  padding: var(--space-5);
 }
 
 .placeholder__note {
