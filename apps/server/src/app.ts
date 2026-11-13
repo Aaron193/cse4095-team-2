@@ -11,6 +11,7 @@ import { errorHandler, notFoundHandler } from './middleware/errors.ts';
 import { sessionMiddleware } from './middleware/session.ts';
 import { authRouter } from './routes/auth.ts';
 import { healthRouter } from './routes/health.ts';
+import { meRouter } from './routes/me.ts';
 
 export interface AppDeps {
   /** A migrated database: see src/db/knex.ts. */
@@ -34,6 +35,7 @@ export function createApp(deps: AppDeps): Express {
 
   app.use('/api', healthRouter());
   app.use('/api', authRouter(ctx));
+  app.use('/api', meRouter(ctx));
 
   // Anything else under /api is unknown. Non-/api paths are left for the client (P1-D5).
   app.use('/api', notFoundHandler);

@@ -34,7 +34,7 @@ export function sessionMiddleware({ db, now, config }: AppContext): RequestHandl
   });
 }
 
-function unauthenticated(): ApiError {
+export function unauthenticated(): ApiError {
   return new ApiError(401, 'UNAUTHENTICATED', 'You must be logged in');
 }
 
@@ -43,6 +43,13 @@ export const requireAuth: RequestHandler = (req, _res, next) => {
   if (typeof req.session.userId === 'string') next();
   else next(unauthenticated());
 };
+
+/** The logged-in user's ID. Throws 401 UNAUTHENTICATED when the session has none. */
+export function sessionUserId(req: Request): string {
+  const { userId } = req.session;
+  if (typeof userId !== 'string') throw unauthenticated();
+  return userId;
+}
 
 /**
  * Logs the request in as `userId`. The session gets a new ID first, so an ID planted before

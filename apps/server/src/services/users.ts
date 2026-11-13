@@ -77,3 +77,9 @@ export async function verifyCredentials(
   }
   return (await bcrypt.compare(password, row.password_hash)) ? mapUser(row) : null;
 }
+
+/** The user with this ID, or null when there is none (task P1-B4). */
+export async function findUserById({ db }: AppContext, id: string): Promise<User | null> {
+  const row = await db<UserRow>('users').where({ id }).first();
+  return row ? mapUser(row) : null;
+}

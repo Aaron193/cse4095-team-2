@@ -237,7 +237,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Implement `POST /api/auth/login` and `POST /api/auth/logout` per R5. Wrong username and wrong password give the same 401 `INVALID_CREDENTIALS`.
   - Done when: Tests cover login success, both failure cases, and that a protected route returns 401 after logout.
 
-- [ ] **P1-B4 · Current user** — Owner: ____ — Needs: P1-B3
+- [x] **P1-B4 · Current user** — Owner: Aaron Mark — Needs: P1-B3
   - Do: Implement `GET /api/me` per R5.
   - Done when: Tests show 200 with the user when logged in and 401 when not.
 
