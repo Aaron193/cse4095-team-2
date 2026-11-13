@@ -1,0 +1,305 @@
+/* The login and register screens. Colors, sizes, shadows, and timings come from tokens.css. */
+
+/* The backdrop: the gate to the dungeon at night, darkened so the panel stands out, with the
+   gate itself kept to the right of the panel on wide screens. */
+.auth-screen {
+  position: relative;
+  isolation: isolate;
+  flex: 1 0 auto;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6) var(--space-4);
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse 34rem 40rem at 50% 50%,
+      color-mix(in srgb, var(--color-abyss) 55%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-abyss) 50%, transparent) 0%,
+      color-mix(in srgb, var(--color-abyss) 30%, transparent) 45%,
+      color-mix(in srgb, var(--color-abyss) 70%, transparent) 100%
+    ),
+    url('../assets/backgrounds/dungeon-gate.webp') 62% 50% / cover no-repeat,
+    var(--color-bg);
+}
+
+.auth-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--gradient-vignette);
+  pointer-events: none;
+}
+
+/* Sparks drifting up from the torches. Still for people who ask for less motion. The fade
+   is on this still box, around each torch; the sparks move inside it. */
+.auth-screen__embers {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.7;
+  -webkit-mask-image:
+    radial-gradient(30rem 44rem at 7% 78%, black 0%, transparent 70%),
+    radial-gradient(30rem 44rem at 93% 78%, black 0%, transparent 70%);
+  mask-image:
+    radial-gradient(30rem 44rem at 7% 78%, black 0%, transparent 70%),
+    radial-gradient(30rem 44rem at 93% 78%, black 0%, transparent 70%);
+}
+
+.auth-screen__embers::before {
+  /* One full rise is the tile's height, so the loop has no seam. */
+  --ember-rise: 780px;
+
+  content: '';
+  position: absolute;
+  inset: 0 0 calc(var(--ember-rise) * -1);
+  background-image:
+    radial-gradient(circle at 8% 12%, var(--color-ember) 0 1.2px, transparent 2.2px),
+    radial-gradient(circle at 31% 47%, var(--color-ember) 0 0.7px, transparent 1.5px),
+    radial-gradient(circle at 54% 8%, var(--color-ember-dim) 0 1.6px, transparent 2.6px),
+    radial-gradient(circle at 77% 33%, var(--color-ember) 0 1.2px, transparent 2.2px),
+    radial-gradient(circle at 92% 71%, var(--color-ember) 0 0.7px, transparent 1.5px),
+    radial-gradient(circle at 18% 84%, var(--color-ember-dim) 0 1.6px, transparent 2.6px),
+    radial-gradient(circle at 46% 63%, var(--color-ember) 0 1.2px, transparent 2.2px),
+    radial-gradient(circle at 66% 92%, var(--color-ember) 0 0.7px, transparent 1.5px),
+    radial-gradient(circle at 39% 22%, var(--color-ember) 0 0.7px, transparent 1.5px),
+    radial-gradient(circle at 86% 6%, var(--color-ember-dim) 0 1.6px, transparent 2.6px),
+    radial-gradient(circle at 4% 55%, var(--color-ember) 0 0.7px, transparent 1.5px),
+    radial-gradient(circle at 61% 41%, var(--color-ember-dim) 0 1.6px, transparent 2.6px);
+  background-size: 520px var(--ember-rise);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .auth-screen__embers::before {
+    animation: auth-embers-rise 48s linear infinite;
+  }
+}
+
+@keyframes auth-embers-rise {
+  to {
+    transform: translateY(calc(var(--ember-rise) * -1));
+  }
+}
+
+.auth-panel {
+  position: relative;
+  width: min(100%, var(--panel-width));
+  padding: var(--space-6) var(--space-5) var(--space-5);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius-lg);
+  background: var(--gradient-panel);
+  box-shadow: var(--shadow-panel);
+}
+
+/* The inner hairline, a few pixels inside the gold border. */
+.auth-panel::before {
+  content: '';
+  position: absolute;
+  inset: var(--space-1);
+  border: 1px solid var(--color-gold-hairline);
+  border-radius: calc(var(--radius-lg) - var(--space-1));
+  pointer-events: none;
+}
+
+.auth-panel__corner {
+  position: absolute;
+  width: var(--space-5);
+  height: var(--space-5);
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.auth-panel__corner circle {
+  fill: var(--color-gold-bright);
+  stroke: none;
+}
+
+.auth-panel__corner--top-left {
+  top: var(--space-2);
+  left: var(--space-2);
+}
+
+.auth-panel__corner--top-right {
+  top: var(--space-2);
+  right: var(--space-2);
+  transform: scaleX(-1);
+}
+
+.auth-panel__corner--bottom-left {
+  bottom: var(--space-2);
+  left: var(--space-2);
+  transform: scaleY(-1);
+}
+
+.auth-panel__corner--bottom-right {
+  right: var(--space-2);
+  bottom: var(--space-2);
+  transform: scale(-1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .auth-panel {
+    animation: auth-panel-in 420ms var(--ease-out) both;
+  }
+}
+
+@keyframes auth-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-3)) scale(0.985);
+  }
+}
+
+.auth-panel__header {
+  margin-bottom: var(--space-5);
+  text-align: center;
+}
+
+.auth-panel__ornament {
+  width: 11rem;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto var(--space-3);
+}
+
+.auth-panel__title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: var(--text-2xl);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: 0.03em;
+  color: var(--color-gold);
+  background: var(--gradient-gold-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(var(--shadow-text));
+}
+
+/* Forced-colors mode drops backgrounds, which would leave gradient text invisible. */
+@media (forced-colors: active) {
+  .auth-panel__title {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+.auth-panel__subtitle {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-md);
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  text-wrap: balance;
+}
+
+.auth-form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.auth-form__submit {
+  margin-top: var(--space-2);
+}
+
+.auth-form__alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-danger-line);
+  border-radius: var(--radius-md);
+  background: var(--color-danger-faint);
+  animation: auth-alert-in var(--duration-base) var(--ease-out);
+}
+
+@keyframes auth-alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--space-1) * -1));
+  }
+}
+
+.auth-form__alert-icon {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  fill: none;
+  stroke: var(--color-danger-bright);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.auth-form__alert-mark {
+  stroke-width: 2.2;
+}
+
+.auth-form__alert-text {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-text);
+}
+
+.auth-panel__rule {
+  height: 1px;
+  margin: var(--space-5) 0 var(--space-4);
+  background: var(--gradient-hairline);
+}
+
+.auth-panel__footer {
+  text-align: center;
+}
+
+/* "No account? Register" and "Have an account? Log in". */
+.auth-switch {
+  margin: 0;
+  font-size: var(--text-md);
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.auth-switch__link {
+  margin-left: var(--space-2);
+  padding-bottom: 0.15em;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-gold-bright);
+  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+  transition: background-size var(--duration-base) var(--ease-out);
+}
+
+.auth-switch__link:hover {
+  background-size: 100% 1px;
+}
+
+@media (min-width: 30rem) {
+  .auth-screen {
+    padding: var(--space-7) var(--space-5);
+  }
+
+  .auth-panel {
+    padding: var(--space-7) var(--space-6) var(--space-6);
+  }
+
+  .auth-panel__title {
+    font-size: var(--text-3xl);
+  }
+}

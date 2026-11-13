@@ -1,9 +1,10 @@
 # Daily Delve card template (v3: in-app)
 
 Every card is drawn by one React component, `apps/client/src/components/Card.tsx`, as a single
-inline SVG in a **1000×1400** box. There are no image files and no build step: the card is
-SVG and CSS only, it scales to any size through `--card-width`, and it draws the same in every
-browser.
+inline SVG in a **1000×1400** box. There is no build step: the frame and text are SVG and
+CSS only, the card scales to any size through `--card-width`, and it draws the same in every
+browser. The art is an SVG scene or, for some characters, a painting (see
+[Painted characters](#painted-characters)).
 
 v2 of this template rendered each card to a PNG with `build.py` and `render.py`. The frame
 geometry, palette, typefaces, and lighting recipe below are the same as v2; what changed is
@@ -25,6 +26,8 @@ npm test -w apps/client        # Card.test.tsx and art/art.test.tsx
 | `src/components/art/kit.tsx`       | The lighting recipe (`LitScene`) and shared scenery (`BrickWall`, `Cobbles`, `NightArch`, `Flame`, `Embers`, `Eye`) |
 | `src/components/art/<Name>Art.tsx` | One character's illustration                                                                                        |
 | `src/components/art/index.ts`      | `CARD_ART`: which illustration each card id uses                                                                    |
+| `src/components/art/paintings.ts`  | `CARD_PAINTINGS`: which painting each card id uses, for cards with no SVG scene                                     |
+| `src/assets/cards/<id>.webp`       | The paintings, 640×960 WebP                                                                                         |
 | `src/styles/tokens.css`            | The palette, typefaces, and `--card-width`                                                                          |
 | `src/styles/fonts.css`             | Cinzel, Cinzel Decorative, and Crimson Pro, bundled from npm                                                        |
 
@@ -94,7 +97,7 @@ template are props of the component, drawn only when given:
 that fills the card behind the frame, with no empty background, and the character's element
 is the key light.
 
-Three characters are drawn so far, one per tag, and they set the style for the rest:
+Three characters are drawn as SVG scenes, one per tag, and they set the style for the rest:
 
 | Card id     | File              | Scene                                                                           | Key light                      |
 | ----------- | ----------------- | ------------------------------------------------------------------------------- | ------------------------------ |
@@ -102,9 +105,24 @@ Three characters are drawn so far, one per tag, and they set the style for the r
 | `halvard`   | `HalvardArt.tsx`  | Bearded gatekeeper behind an ice tower shield, on a frozen rampart              | The frost crystal on his staff |
 | `bog-witch` | `BogWitchArt.tsx` | Hunched witch in a crooked hat stirring a cauldron in a swamp                   | The cauldron, from below       |
 
-A card whose id is not in `CARD_ART` still draws: it gets a placeholder (its tag's symbol in a
-glow) until its character exists. That keeps a new card from blocking on its art, but a
+The other seven starter cards are [painted](#painted-characters). A card whose id is in
+neither `CARD_ART` nor `CARD_PAINTINGS` still draws: it gets a placeholder (its tag's symbol in
+a glow) until its character exists. That keeps a new card from blocking on its art, but a
 placeholder is not finished art.
+
+### Painted characters
+
+`brother-ash`, `bryn`, `nix`, `pyra`, `rook`, `sera`, and `vex` use a painting instead of an
+SVG scene. Each painting was made with an image model, given a full-size render of `KipArt` as
+the style reference and a prompt that follows the rules below (one character, a full scene,
+the tag's color as the key light, the character's feet above y≈930). `Card.tsx` places it as
+an `<image>` in the art window with `preserveAspectRatio="xMidYMid slice"`, under the same
+vignette and frame as an SVG scene.
+
+To add or replace one: save a 2:3 image as `src/assets/cards/<id>.webp` (640×960, quality
+about 85, under 150 KB), import it in `src/components/art/paintings.ts` under the card's id,
+and check it at full size and at hand size. An id in `CARD_ART` wins over a painting, so
+drawing a card as SVG later needs no change here beyond removing the painting.
 
 ### Style rules
 

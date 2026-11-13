@@ -5,13 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@daily-delve/shared": "*",
+    "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.11.1",
     "express": "^5.3.0",
+    "express-rate-limit": "^8.7.2",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
     "knex": "^3.3.0",
     "pg": "^8.23.1",
     "tsx": "^4.23.15",
@@ -19,6 +24,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
     "@types/supertest": "^6.0.3",
     "supertest": "^7.3.2"
   }

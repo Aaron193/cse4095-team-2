@@ -56,10 +56,25 @@ describe('DeterminismCheck', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('engine versions differ');
   });
 
-  it('says so when the server cannot be reached', async () => {
+  it('says so when the server answers with an error', async () => {
     mockHealth({ error: { code: 'INTERNAL', message: 'x' } }, 500);
     render(<DeterminismCheck />);
-    expect(await screen.findByRole('alert')).toHaveTextContent('Could not reach the server');
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Could not reach the server (500 INTERNAL)',
+    );
     expect(screen.getByLabelText('Browser numbers')).toHaveTextContent('444, 394, 59, 197, 499');
+  });
+
+  it('says so when the server cannot be reached', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new TypeError('Failed to fetch');
+      }),
+    );
+    render(<DeterminismCheck />);
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Could not reach the server (no answer)',
+    );
   });
 });
