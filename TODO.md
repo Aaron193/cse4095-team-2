@@ -259,7 +259,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/game/useGame.ts` holding `{ seed, actions, state }`. `dispatch(action)` calls `applyAction`; on success it appends the action and replaces the state; on failure it reports the error and changes nothing. The UI never computes game results itself.
   - Done when: Unit tests with an injected fake engine cover a successful action and an illegal one.
 
-- [ ] **P1-C2 · Enemy component** — Owner: ____ — Needs: P0-C3
+- [x] **P1-C2 · Enemy component** — Owner: Aaron Mark — Needs: P0-C3
   - Do: Write `src/components/Enemy.tsx` showing name, HP bar, Shield, status badges, and the intent with its number. Add a hand-written `CombatState` fixture at `src/game/fixtures/combat.json` matching R4.
   - Done when: A component test finds HP, the text "Attack 6", and each status badge from the fixture.
 

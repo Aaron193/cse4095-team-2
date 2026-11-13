@@ -35,6 +35,18 @@
   --color-danger: #e2383a;
   --color-success: #46c46e;
 
+  /* Combat: HP, Shield, strength, and the energy orb. */
+  --color-hp: #d8343c;
+  --color-hp-bright: #ff6b5e;
+  --color-hp-deep: #7d1622;
+  --color-hp-rim: #5a2230;
+  --color-hp-lag: #ffd27a;
+  --color-shield: #9fd0ff;
+  --color-shield-deep: #2f6fb3;
+  --color-shield-glow: rgb(120 190 255 / 55%);
+  --color-strength: #ffb347;
+  --color-energy-core: #fff6c9;
+
   /* Spacing scale. */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
