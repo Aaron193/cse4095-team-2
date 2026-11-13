@@ -4,6 +4,7 @@
 import express from 'express';
 import type { Express } from 'express';
 import type { Knex } from 'knex';
+import { clientRouter } from './client.ts';
 import { resolveConfig } from './config.ts';
 import type { AppConfig } from './config.ts';
 import type { AppContext } from './context.ts';
@@ -22,6 +23,11 @@ export interface AppDeps {
   now: () => Date;
   /** Missing fields fall back to the development defaults in src/config.ts. */
   config?: Partial<AppConfig>;
+  /**
+   * A client build (apps/client/dist) to serve at every non-/api path, as in production.
+   * Left out in development, where Vite serves the client, and in API tests.
+   */
+  clientDir?: string | undefined;
 }
 
 export function createApp(deps: AppDeps): Express {
@@ -44,8 +50,9 @@ export function createApp(deps: AppDeps): Express {
   app.use('/api', meRouter(ctx));
   app.use('/api', dungeonsRouter(ctx));
 
-  // Anything else under /api is unknown. Non-/api paths are left for the client (P1-D5).
+  // Anything else under /api is unknown. Every other path belongs to the client.
   app.use('/api', notFoundHandler);
+  if (deps.clientDir) app.use(clientRouter(deps.clientDir));
   app.use(errorHandler);
   return app;
 }

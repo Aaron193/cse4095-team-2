@@ -297,7 +297,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add navigation (Today, Leaderboard, Profile, Log out, display name). Restore the session with `GET /api/me` on load. Send logged-out visitors of `/play` and `/profile` to `/login`.
   - Done when: Tests cover the redirect and a restored session after reload.
 
-- [ ] **P1-D5 · One-process production build** — Owner: ____ — Needs: P0-B1, P0-C1
+- [x] **P1-D5 · One-process production build** — Owner: Aaron Mark — Needs: P0-B1, P0-C1
   - Do: Make Express serve `apps/client/dist` and return `index.html` for any non-`/api` path. Root `npm run build` builds the client. Root `npm start` runs migrations, then the server with `tsx`.
   - Done when: `npm run build && npm start` serves the app and the API from one port locally.
 
