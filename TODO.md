@@ -255,7 +255,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P1 Stream C
 
-- [ ] **P1-C1 · Game store** — Owner: ____ — Needs: P0-A3, P0-C1
+- [x] **P1-C1 · Game store** — Owner: Aaron Mark — Needs: P0-A3, P0-C1
   - Do: Write `src/game/useGame.ts` holding `{ seed, actions, state }`. `dispatch(action)` calls `applyAction`; on success it appends the action and replaces the state; on failure it reports the error and changes nothing. The UI never computes game results itself.
   - Done when: Unit tests with an injected fake engine cover a successful action and an illegal one.
 
