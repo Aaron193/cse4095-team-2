@@ -215,7 +215,9 @@ export function playCard(
     resolveEffect(state, effect, aim);
     if (state.phase !== 'combat') return null;
   }
-  combat.discardPile.push(cardId);
+  // R3, Tag synergy: a card counts toward the cards played after it this turn, not itself.
+  for (const tag of card.tags) combat.tagsPlayedThisTurn[tag] += 1;
+  (card.exhaust ? combat.exhaustPile : combat.discardPile).push(cardId);
   return null;
 }
 
@@ -246,11 +248,28 @@ function resolveEffect(state: RunState, effect: Effect, aim: number | null): voi
   }
 }
 
-/** A damage effect: every hit goes through computeDamage, then Shield, then HP. */
+/**
+ * The `perTagPlayed` bonus a damage effect would add to each hit now: `bonus` for each card
+ * with its tag played earlier this turn (R3, Tag synergy).
+ */
+export function tagBonus(combat: CombatState, effect: DamageEffect): number {
+  const synergy = effect.perTagPlayed;
+  return synergy ? synergy.bonus * combat.tagsPlayedThisTurn[synergy.tag] : 0;
+}
+
+/**
+ * A damage effect: every hit goes through computeDamage (the tag bonus, then minus the
+ * player's Chill), then Shield, then HP. A tag bonus above 0 is one combo trigger for the
+ * effect, however many hits or enemies it reaches (R3, Score).
+ */
 function dealCardDamage(state: RunState, effect: DamageEffect, aim: number | null): void {
   const combat = activeCombat(state);
-  // Chill: each attack hit by the player deals that much less (R3, Statuses).
-  const amount = computeDamage({ base: effect.amount, add: [-combat.player.statuses.Chill] });
+  const bonus = tagBonus(combat, effect);
+  if (bonus > 0) state.stats.comboTriggers += 1;
+  const amount = computeDamage({
+    base: effect.amount,
+    add: [bonus, -combat.player.statuses.Chill],
+  });
   const hits = effect.hits ?? 1;
   for (let hit = 0; hit < hits; hit++) {
     for (let index = 0; index < combat.enemies.length; index++) {
@@ -291,13 +310,14 @@ function applyStatusEffect(state: RunState, effect: StatusEffect, aim: number | 
 /**
  * Shatter: removes all Chill from the chosen enemy and deals `perStack` damage for each stack
  * removed, as one hit that Shield absorbs. It is not an attack hit, so the player's own Chill
- * does not reduce it. With no Chill to remove it does nothing.
+ * does not reduce it. With no Chill to remove it does nothing; removing any is a combo trigger.
  */
 function shatterTarget(state: RunState, effect: ShatterEffect, aim: number | null): void {
   const enemy = aim === null ? undefined : activeCombat(state).enemies[aim];
   if (!enemy || enemy.hp <= 0 || enemy.statuses.Chill === 0) return;
   const stacks = enemy.statuses.Chill;
   enemy.statuses.Chill = 0;
+  state.stats.comboTriggers += 1;
   hitEnemy(state, enemy, shatterDamage(effect.perStack, stacks), false);
 }
 

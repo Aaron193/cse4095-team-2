@@ -211,7 +211,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Implement effect kinds `applyStatus` and `shatter` and the tick rules in R3, for enemies and for the player, capped at `STATUS_CAP`.
   - Done when: Tests cover each status's tick and decay, Chill lowering attack damage, Shatter removing Chill and dealing damage per stack, and the cap.
 
-- [ ] **P1-A6 · Tag synergy and Exhaust** — Owner: ____ — Needs: P1-A5
+- [x] **P1-A6 · Tag synergy and Exhaust** — Owner: Aaron Mark — Needs: P1-A5
   - Do: Track `tagsPlayedThisTurn` (reset each turn; a card does not count itself). Apply `perTagPlayed` as an additive bonus through `computeDamage`. Cards with `exhaust` go to the exhaust pile. Increment `stats.comboTriggers` per R3.
   - Done when: Tests show the second Fire card with "+3 per Fire card played" deals base plus 3 while the first deals base, an exhausted card never returns in a reshuffle, and `comboTriggers` counts both trigger kinds.
 

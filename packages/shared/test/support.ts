@@ -182,6 +182,31 @@ export const TEST_CARDS: Record<string, CardDef> = {
     effects: [{ kind: 'energy', amount: 1 }],
     exhaust: true,
   }),
+  // Two hits on every enemy, "+1 per Fire card played".
+  flameFan: card({
+    id: 'flameFan',
+    name: 'Flame Fan',
+    type: 'Attack',
+    tags: ['Fire'],
+    cost: 0,
+    effects: [
+      {
+        kind: 'damage',
+        amount: 2,
+        target: 'allEnemies',
+        hits: 2,
+        perTagPlayed: { tag: 'Fire', bonus: 1 },
+      },
+    ],
+  }),
+  fireAndIce: card({
+    id: 'fireAndIce',
+    name: 'Fire and Ice',
+    type: 'Skill',
+    tags: ['Fire', 'Frost'],
+    cost: 0,
+    effects: [{ kind: 'shield', amount: 1 }],
+  }),
 };
 
 export const TEST_ENEMIES: Record<string, EnemyDef> = {
