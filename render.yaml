@@ -1,0 +1,48 @@
+# Render Blueprint (task P1-D6; TODO.md, Reference R1): one free web service and one free
+# Postgres database. The service builds the client, then `npm start` migrates the database
+# and serves the app and the API on one port (P1-D5). It deploys from main, and only once
+# CI has passed on the commit.
+#
+# Create the database on or after Nov 13, 2026: a free Render Postgres database expires 30
+# days after it is created, and a workspace can have only one. Write the expiry date in
+# README.md, "Deployment".
+services:
+  - type: web
+    name: daily-delve
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    autoDeployTrigger: checksPass
+    # NODE_ENV=production (below) makes npm skip devDependencies, and the client build needs
+    # them (Vite, the React plugin, TypeScript types).
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      # The same major version as .nvmrc and CI.
+      - key: NODE_VERSION
+        value: '24'
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: daily-delve-db
+          property: connectionString
+      # Made once, when the Blueprint is first applied. SEED_SECRET keys every daily dungeon,
+      # so it must never change while runs are on the leaderboard.
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: SEED_SECRET
+        generateValue: true
+
+databases:
+  - name: daily-delve-db
+    plan: free
+    region: oregon
+    databaseName: daily_delve
+    user: daily_delve
+    # The version the Postgres CI job tests against (.github/workflows/ci.yml).
+    postgresMajorVersion: '16'
+    # No connections from outside Render: the web service reaches it over the private network.
+    ipAllowList: []
