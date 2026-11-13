@@ -45,6 +45,7 @@ export function testClock(start: Date = FIXED_NOW) {
 export const testConfig: AppConfig = {
   production: false,
   sessionSecret: 'test-session-secret',
+  seedSecret: 'test-seed-secret',
   bcryptCost: 4,
   authRateLimit: 1000,
 };

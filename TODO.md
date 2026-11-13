@@ -245,7 +245,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add helmet, a 100 KB JSON body limit, and a rate limit of 10 requests a minute per address on `/api/auth/*` (limit configurable so tests can set it).
   - Done when: Tests show the request over the limit returns 429 `RATE_LIMITED` and an oversized body returns an R5-format error.
 
-- [ ] **P1-B6 · Daily dungeon endpoint** — Owner: ____ — Needs: P0-B2, P0-B3
+- [x] **P1-B6 · Daily dungeon endpoint** — Owner: Aaron Mark — Needs: P0-B2, P0-B3
   - Do: Write `getOrCreateDungeon(date)` and `GET /api/dungeons/today` per R5. Seed is the first 16 hex characters of HMAC-SHA256 of the date keyed by `SEED_SECRET`. The date comes from the injected `now()`. Insert-if-absent must be safe when two requests arrive together. `officialRun` is `null` until P2-B4.
   - Done when: Tests show two calls on one day return the same seed, advancing the clock a day returns a new date and seed, and parallel first requests create exactly one row.
 

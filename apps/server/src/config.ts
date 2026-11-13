@@ -6,6 +6,8 @@ export interface AppConfig {
   production: boolean;
   /** SESSION_SECRET: signs the session cookie. */
   sessionSecret: string;
+  /** SEED_SECRET: keys the HMAC that makes each day's dungeon seed. */
+  seedSecret: string;
   /** bcrypt cost for password hashes: 10 by default; tests use 4, the lowest bcrypt allows. */
   bcryptCost: number;
   /** Requests per minute per client address on /api/auth/*: 10 by default. */
@@ -13,22 +15,23 @@ export interface AppConfig {
 }
 
 /**
- * The values used when nothing else is given. The secrets are fixed so that development
- * sessions survive a restart, and named so that they are never mistaken for real ones.
+ * The values used when nothing else is given. The secrets are fixed, so development sessions
+ * and seeds stay the same across restarts, and named so they are never mistaken for real ones.
  */
 export const DEVELOPMENT_CONFIG: Readonly<AppConfig> = Object.freeze({
   production: false,
   sessionSecret: 'development-only-session-secret',
+  seedSecret: 'development-only-seed-secret',
   bcryptCost: 10,
   authRateLimit: 10,
 });
 
-const REQUIRED_IN_PRODUCTION = ['SESSION_SECRET'] as const;
+const REQUIRED_IN_PRODUCTION = ['SESSION_SECRET', 'SEED_SECRET'] as const;
 
 /**
  * Reads the configuration from the environment.
- * Throws when NODE_ENV is 'production' and SESSION_SECRET is missing; fixed, clearly-named
- * development defaults otherwise.
+ * Throws when NODE_ENV is 'production' and SESSION_SECRET or SEED_SECRET is missing; fixed,
+ * clearly-named development defaults otherwise.
  */
 export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {
   const production = env.NODE_ENV === 'production';
@@ -41,6 +44,7 @@ export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {
   return resolveConfig({
     production,
     sessionSecret: env.SESSION_SECRET || undefined,
+    seedSecret: env.SEED_SECRET || undefined,
   });
 }
 
@@ -49,6 +53,7 @@ export function resolveConfig(overrides: Partial<AppConfig> = {}): AppConfig {
   return {
     production: overrides.production ?? DEVELOPMENT_CONFIG.production,
     sessionSecret: overrides.sessionSecret ?? DEVELOPMENT_CONFIG.sessionSecret,
+    seedSecret: overrides.seedSecret ?? DEVELOPMENT_CONFIG.seedSecret,
     bcryptCost: overrides.bcryptCost ?? DEVELOPMENT_CONFIG.bcryptCost,
     authRateLimit: overrides.authRateLimit ?? DEVELOPMENT_CONFIG.authRateLimit,
   };
