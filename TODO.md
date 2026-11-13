@@ -225,7 +225,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P1 Stream B
 
-- [ ] **P1-B1 · Sessions** — Owner: ____ — Needs: P0-B2
+- [x] **P1-B1 · Sessions** — Owner: Aaron Mark — Needs: P0-B2
   - Do: Add `express-session` with a Knex-backed store (table `sessions`). Cookie `dd.sid`: httpOnly, SameSite Lax, Secure in production, 7 days. Set `trust proxy` in production. Write `requireAuth`, which returns 401 `UNAUTHENTICATED`.
   - Done when: Tests show a protected route returns 401 without a cookie and 200 with one, and the session still works after the app object is re-created on the same database.
 
