@@ -1,6 +1,7 @@
 /* The login and register screens. Colors, sizes, shadows, and timings come from tokens.css. */
 
-/* The backdrop. A background illustration can go behind the gradient later. */
+/* The backdrop: the gate to the dungeon at night, darkened so the panel stands out, with the
+   gate itself kept to the right of the panel on wide screens. */
 .auth-screen {
   position: relative;
   isolation: isolate;
@@ -9,7 +10,20 @@
   place-items: center;
   padding: var(--space-6) var(--space-4);
   overflow: hidden;
-  background: var(--gradient-backdrop);
+  background:
+    radial-gradient(
+      ellipse 34rem 40rem at 50% 50%,
+      color-mix(in srgb, var(--color-abyss) 55%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-abyss) 50%, transparent) 0%,
+      color-mix(in srgb, var(--color-abyss) 30%, transparent) 45%,
+      color-mix(in srgb, var(--color-abyss) 70%, transparent) 100%
+    ),
+    url('../assets/backgrounds/dungeon-gate.webp') 62% 50% / cover no-repeat,
+    var(--color-bg);
 }
 
 .auth-screen::before {
