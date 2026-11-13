@@ -285,7 +285,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `apps/client/src/api/client.ts` with one function per R5 endpoint, typed with the shared types, sending cookies, and throwing `ApiClientError { status, code, message, details }` on failure.
   - Done when: Unit tests with a mocked `fetch` cover a success and a failure for three endpoints, and every R5 endpoint has a function.
 
-- [ ] **P1-D2 · Mock API** — Owner: ____ — Needs: P1-D1
+- [x] **P1-D2 · Mock API** — Owner: Aaron Mark — Needs: P1-D1
   - Do: Add MSW handlers for every R5 endpoint backed by in-memory data, switched on in dev by `VITE_USE_MOCKS=1` and used in component tests.
   - Done when: With the server stopped and mocks on, register, login, and leaderboard calls from the client succeed.
 
