@@ -3,17 +3,24 @@
   --card-width: var(--hand-card-width, clamp(8.5rem, 10.5vw, 12rem));
   --fan-turn: 3.2deg;
   --fan-drop: 0.35rem;
+  /* How much farther a selected card keeps each neighbour away. */
+  --selected-gap: calc(var(--card-width) * 0.13);
+  /* Extra width the fan needs: room for a selected card's gaps (set below). */
+  --grow: 0px;
   /* Each side's margin: a small overlap, or as much more (up to 40% of a card) as it takes
-     for --count cards to fit the width the hand is given (its container, see Combat). */
+     for --count cards, plus --grow, to fit the width the hand is given (its container, see
+     Combat). So on a narrow screen the other cards close up instead of the fan growing. */
   --fit: clamp(
     calc(var(--card-width) * -0.4),
-    calc(((100cqw - 2 * var(--space-4)) / var(--count, 5) - var(--card-width)) / 2),
+    calc(((100cqw - 2 * var(--space-4) - var(--grow)) / var(--count, 5) - var(--card-width)) / 2),
     calc(var(--card-width) * -0.09)
   );
 
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  /* A card's height (cards are 5:7) even once every card is played, so the board stays put. */
+  min-height: calc(var(--card-width) * 7 / 5);
   margin: 0;
   padding: 0 var(--space-4);
   list-style: none;
@@ -69,12 +76,16 @@
 }
 
 /* A card waiting for a target stays raised and glows until it is played or put back. */
+.hand:has(.hand__slot--selected) {
+  --grow: calc(2 * var(--selected-gap));
+}
+
 .hand__slot--selected,
 .hand__slot--selected:hover,
 .hand__slot--selected:focus-within {
   z-index: 30 !important;
   transform: translateY(-0.75rem) rotate(0deg) scale(1.07);
-  margin-inline: calc(var(--fit) + var(--card-width) * 0.13);
+  margin-inline: calc(var(--fit) + var(--selected-gap));
 }
 
 .hand__slot--selected .hand__card {
