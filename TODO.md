@@ -305,7 +305,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add `render.yaml`: one free web service, one free Postgres, `DATABASE_URL` wired in, generated `SESSION_SECRET` and `SEED_SECRET`, health check `/api/health`, deploy from `main` after CI passes. Create the database on or after Nov 13 (free Render Postgres expires 30 days after creation). Put the URL and the expiry date in the README.
   - Done when: The public URL serves the app, `/api/health` is OK, and a registered user still exists after a manual redeploy.
 
-- [ ] **P1-D7 · Postgres job in CI** — Owner: ____ — Needs: P0-B2, P0-D2
+- [x] **P1-D7 · Postgres job in CI** — Owner: Aaron Mark — Needs: P0-B2, P0-D2
   - Do: Add a second CI job that runs the `apps/server` tests against a Postgres service container with `DATABASE_URL` set.
   - Done when: The SQLite job and the Postgres job are both green on `main`.
 
