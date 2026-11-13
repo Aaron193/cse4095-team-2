@@ -1,8 +1,11 @@
-// The Phase 1 test fight at /play/test-fight (task P1-C5): the combat screen on the real
-// engine, started with createTestFight.
+// The Phase 1 test fight at /play/test-fight (tasks P1-C5 and P1-C6): the combat screen on
+// the real engine, started with createTestFight, and Victory or Defeat when it ends.
 import { useState } from 'react';
+import { FightEndOverlay } from '../components/FightEndOverlay.tsx';
+import { ButtonLink } from '../components/ui/ButtonLink.tsx';
 import { TEST_FIGHT_ENGINE, useGame } from '../game/useGame.ts';
 import type { GameEngine } from '../game/useGame.ts';
+import { ROUTES } from '../routes.ts';
 import { CombatScreen } from './CombatScreen.tsx';
 
 /** Eight random hex digits. The engine never sees where a seed came from. */
@@ -28,5 +31,16 @@ export function TestFightScreen({
 }: TestFightScreenProps) {
   const [firstSeed] = useState(() => seed ?? newSeed());
   const game = useGame(firstSeed, engine);
-  return <CombatScreen game={game} subtitle={`Test fight · seed ${game.seed}`} />;
+  return (
+    <>
+      <CombatScreen game={game} subtitle={`Test fight · seed ${game.seed}`} />
+      {game.state.phase === 'ended' ? (
+        <FightEndOverlay state={game.state} onRestart={() => game.restart(newSeed())}>
+          <ButtonLink to={ROUTES.home} variant="ghost" size="sm">
+            Back to Today
+          </ButtonLink>
+        </FightEndOverlay>
+      ) : null}
+    </>
+  );
 }

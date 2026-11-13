@@ -275,7 +275,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Assemble the combat screen at `/play/test-fight` on the real engine using `createTestFight`.
   - Done when: A fight can be played to its end with the mouse alone, and a test plays one card and sees the enemy's HP fall.
 
-- [ ] **P1-C6 · Fight end overlay** — Owner: ____ — Needs: P1-C5
+- [x] **P1-C6 · Fight end overlay** — Owner: Aaron Mark — Needs: P1-C5
   - Do: Show Victory or Defeat when the test fight ends, with a button that restarts it on a new seed.
   - Done when: A test drives a fixture state to each outcome and finds the matching overlay.
 
