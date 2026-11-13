@@ -263,7 +263,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/components/Enemy.tsx` showing name, HP bar, Shield, status badges, and the intent with its number. Add a hand-written `CombatState` fixture at `src/game/fixtures/combat.json` matching R4.
   - Done when: A component test finds HP, the text "Attack 6", and each status badge from the fixture.
 
-- [ ] **P1-C3 · Player panel** — Owner: ____ — Needs: P0-C3
+- [x] **P1-C3 · Player panel** — Owner: Aaron Mark — Needs: P0-C3
   - Do: Write `src/components/PlayerPanel.tsx` showing HP, Shield, statuses, energy, draw, discard, and exhaust pile counts, and an End Turn button that dispatches `{ type: 'endTurn' }`.
   - Done when: A component test finds every value from the fixture and sees the dispatch on click.
 
