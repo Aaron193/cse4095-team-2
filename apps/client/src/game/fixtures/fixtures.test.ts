@@ -4,7 +4,8 @@ import { fixtureCombat, fixtureRun } from './index.ts';
 
 /** The key paths of a JSON value, with array items collapsed to [] so lists of any length match. */
 function shape(value: unknown, path = ''): string[] {
-  if (Array.isArray(value)) return value.length === 0 ? [`${path}[]`] : shape(value[0], `${path}[]`);
+  if (Array.isArray(value))
+    return value.length === 0 ? [`${path}[]`] : shape(value[0], `${path}[]`);
   if (value !== null && typeof value === 'object') {
     return Object.entries(value).flatMap(([key, item]) => shape(item, `${path}.${key}`));
   }
@@ -23,7 +24,12 @@ describe('the combat fixture', () => {
 
   it('names only real cards and enemies', () => {
     const combat = fixtureCombat();
-    const cards = [...combat.hand, ...combat.drawPile, ...combat.discardPile, ...combat.exhaustPile];
+    const cards = [
+      ...combat.hand,
+      ...combat.drawPile,
+      ...combat.discardPile,
+      ...combat.exhaustPile,
+    ];
     for (const id of cards) expect(CARDS).toHaveProperty([id]);
     for (const enemy of combat.enemies) expect(ENEMIES).toHaveProperty([enemy.defId]);
   });

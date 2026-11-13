@@ -16,7 +16,9 @@ export function shownIntent(enemy: EnemyState): Intent | null {
 export function intentLabel(intent: Intent): string {
   switch (intent.kind) {
     case 'attack':
-      return intent.hits > 1 ? `Attack ${intent.damage} x${intent.hits}` : `Attack ${intent.damage}`;
+      return intent.hits > 1
+        ? `Attack ${intent.damage} x${intent.hits}`
+        : `Attack ${intent.damage}`;
     case 'block':
       return `Block ${intent.amount}`;
     case 'buff':
