@@ -1,0 +1,30 @@
+/* The LoadingState component. Colors, sizes, and timings come from tokens.css. */
+.loading-state {
+  flex: 1 0 auto;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-7) var(--space-5);
+  text-align: center;
+  /* Hidden for the first moments of the wait, then fades in. */
+  animation: loading-state-in var(--duration-slow) var(--ease-out) var(--delay-quiet) both;
+}
+
+@keyframes loading-state-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.loading-state__ornament {
+  width: 8rem;
+  height: auto;
+}
+
+.loading-state__label {
+  margin: 0;
+  font-size: var(--text-md);
+  font-style: italic;
+  color: var(--color-text-muted);
+}

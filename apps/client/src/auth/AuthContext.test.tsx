@@ -1,10 +1,17 @@
-// The auth context (task P1-D3), against the mock API (src/mocks).
-import type { User } from '@daily-delve/shared';
-import { act, renderHook } from '@testing-library/react';
+// The auth context (tasks P1-D3 and P1-D4), against the mock API (src/mocks).
+import type { User, UserResponse } from '@daily-delve/shared';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it, onTestFinished, vi } from 'vitest';
 import { ApiClientError } from '../api/client.ts';
-import { DEMO_USERNAME, MOCK_PASSWORD, findUser, sessionUser } from '../mocks/data.ts';
+import {
+  DEMO_USERNAME,
+  MOCK_PASSWORD,
+  findUser,
+  logInAs,
+  publicUser,
+  sessionUser,
+} from '../mocks/data.ts';
 import { server } from '../mocks/server.ts';
 import { AuthProvider, useAuth } from './AuthContext.tsx';
 
@@ -73,6 +80,59 @@ describe('AuthProvider', () => {
       await result.current.logout();
     });
     expect(result.current.user).toBeNull();
+  });
+});
+
+describe('AuthProvider session restore', () => {
+  it('is loading until GET /api/me answers, and logged out on 401', async () => {
+    const { result } = renderAuth();
+    expect(result.current.status).toBe('loading');
+    expect(result.current.user).toBeNull();
+
+    await waitFor(() => expect(result.current.status).toBe('ready'));
+    expect(result.current.user).toBeNull();
+  });
+
+  it('restores the user the session belongs to', async () => {
+    logInAs('nightjar');
+    const { result } = renderAuth();
+    await waitFor(() => expect(result.current.status).toBe('ready'));
+    expect(result.current.user).toMatchObject({ username: 'nightjar', displayName: 'Nightjar' });
+  });
+
+  it('counts a session check that fails as logged out', async () => {
+    server.use(http.get('/api/me', () => HttpResponse.error()));
+    const { result } = renderAuth();
+    await waitFor(() => expect(result.current.status).toBe('ready'));
+    expect(result.current.user).toBeNull();
+  });
+
+  it('keeps a login made while the session check was on its way', async () => {
+    // The old session belongs to nightjar, but its answer comes only after a new login.
+    let answer!: () => void;
+    const held = new Promise<void>((resolve) => {
+      answer = resolve;
+    });
+    const nightjar = publicUser(logInAs('nightjar'));
+    server.use(
+      http.get('/api/me', async () => {
+        await held;
+        return HttpResponse.json<UserResponse>({ user: nightjar });
+      }),
+    );
+    const { result } = renderAuth();
+
+    await act(async () => {
+      await result.current.login({ username: DEMO_USERNAME, password: MOCK_PASSWORD });
+    });
+    expect(result.current.status).toBe('ready');
+
+    await act(async () => {
+      answer();
+      // Let the late answer arrive, if it were going to be used.
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    });
+    expect(result.current.user).toMatchObject({ username: DEMO_USERNAME });
   });
 });
 

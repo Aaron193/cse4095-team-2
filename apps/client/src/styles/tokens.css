@@ -84,6 +84,8 @@
   --color-border-strong: #5b528c;
   --color-gold-hairline: color-mix(in srgb, var(--color-gold) 38%, transparent);
   --color-gold-faint: color-mix(in srgb, var(--color-gold) 12%, transparent);
+  /* The thin line along the bottom of the header. */
+  --color-gold-line: color-mix(in srgb, var(--color-gold) 70%, transparent);
   --color-gold-ember: color-mix(in srgb, var(--color-gold) 72%, var(--color-fire-deep));
   /* Error text and outlines: the danger red, lightened to read on ink (over 6:1). */
   --color-danger-bright: #ff7b72;
@@ -110,6 +112,9 @@
   --control-lg: 3.25rem;
 
   --header-height: 3.75rem;
+  /* On narrow screens the header has two rows: brand and account, then the links. */
+  --header-height-compact: 3.25rem;
+  --nav-height-compact: 2.75rem;
   --panel-width: 26rem;
   --page-width: 72rem;
 
@@ -120,6 +125,8 @@
   --focus-glow-danger: 0 0 0 4px color-mix(in srgb, var(--color-danger-bright) 24%, transparent);
 
   --shadow-text: 0 2px 0 var(--color-shadow);
+  --shadow-text-glow:
+    0 2px 0 var(--color-shadow), 0 0 18px color-mix(in srgb, var(--color-gold) 45%, transparent);
   /* Dark letters pressed into gold. */
   --shadow-text-engraved: 0 1px 0 color-mix(in srgb, white 38%, transparent);
   --shadow-inset: inset 0 2px 5px var(--color-shadow);
@@ -142,6 +149,11 @@
     inset 0 -2px 0 color-mix(in srgb, var(--color-gold-deep) 55%, transparent),
     0 0 0 1px var(--color-ink),
     0 12px 28px -8px color-mix(in srgb, var(--color-gold) 70%, transparent);
+  /* A small gold disc, like a card's cost: a bevel and a dark rim. */
+  --shadow-badge-gold:
+    inset 0 1px 0 color-mix(in srgb, white 55%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--color-gold-deep) 60%, transparent),
+    0 0 0 1px var(--color-ink);
   --shadow-button-pressed:
     inset 0 2px 4px color-mix(in srgb, var(--color-gold-deep) 70%, transparent),
     0 0 0 1px var(--color-ink);
@@ -164,6 +176,14 @@
     transparent,
     var(--color-gold-hairline) 22%,
     var(--color-gold-hairline) 78%,
+    transparent
+  );
+  /* The bar under the current page's link in the header. */
+  --gradient-nav-mark: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold-bright) 18%,
+    var(--color-gold-bright) 82%,
     transparent
   );
   --gradient-header: linear-gradient(
@@ -212,6 +232,8 @@
       transparent 72%
     ),
     linear-gradient(180deg, var(--color-ink) 0%, var(--color-bg) 50%, var(--color-abyss) 100%);
+  /* Frosts what scrolls under the header. */
+  --backdrop-blur: blur(12px) saturate(1.2);
   --gradient-vignette: radial-gradient(
     ellipse 120% 90% at 50% 45%,
     transparent 55%,
@@ -221,6 +243,9 @@
   /* Motion. Zeroed below for people who ask for less of it. */
   --duration-fast: 140ms;
   --duration-base: 240ms;
+  --duration-slow: 480ms;
+  /* How long a wait goes unshown before a loading state appears. */
+  --delay-quiet: 300ms;
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --lift: -2px;
 }
@@ -229,6 +254,7 @@
   :root {
     --duration-fast: 0ms;
     --duration-base: 0ms;
+    --duration-slow: 0ms;
     --lift: 0px;
   }
 }

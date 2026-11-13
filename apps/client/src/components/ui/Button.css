@@ -97,6 +97,15 @@
   background: var(--color-text-veil);
 }
 
+/* A ButtonLink to the page already shown: lit, but quieter than a hover. */
+.btn--ghost[aria-current='page'] {
+  color: var(--color-gold-bright);
+}
+
+.btn--secondary[aria-current='page'] {
+  background: var(--color-gold-faint);
+}
+
 .btn--sm {
   --btn-tracking: var(--tracking-caps);
 

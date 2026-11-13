@@ -293,7 +293,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add an auth context and the `/login` and `/register` forms with the R5 limits checked in the browser and server errors shown. On success go to `/`.
   - Done when: Component tests cover a successful register, a taken username, and a failed login.
 
-- [ ] **P1-D4 · App shell and protected routes** — Owner: ____ — Needs: P1-D3
+- [x] **P1-D4 · App shell and protected routes** — Owner: Aaron Mark — Needs: P1-D3
   - Do: Add navigation (Today, Leaderboard, Profile, Log out, display name). Restore the session with `GET /api/me` on load. Send logged-out visitors of `/play` and `/profile` to `/login`.
   - Done when: Tests cover the redirect and a restored session after reload.
 

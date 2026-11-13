@@ -40,16 +40,17 @@ export function AuthPanel({ title, subtitle, children, footer }: AuthPanelProps)
       <div className="auth-screen__embers" aria-hidden="true" />
       <section className="auth-panel" aria-labelledby={titleId}>
         <PanelCorners />
-        <header className="auth-panel__header">
+        {/* Plain boxes, not <header> and <footer>: the app shell has the page's banner. */}
+        <div className="auth-panel__header">
           <Ornament className="auth-panel__ornament" />
           <h1 id={titleId} className="auth-panel__title">
             {title}
           </h1>
           <p className="auth-panel__subtitle">{subtitle}</p>
-        </header>
+        </div>
         {children}
         <div className="auth-panel__rule" aria-hidden="true" />
-        <footer className="auth-panel__footer">{footer}</footer>
+        <div className="auth-panel__footer">{footer}</div>
       </section>
     </div>
   );
