@@ -15,16 +15,17 @@ export const ENEMIES: Record<string, EnemyDef> = {
       { kind: 'debuff', status: 'Chill', amount: 3 },
     ],
   },
-  // A volley, a careful aim that lasts the whole fight, then a heavy shot.
+  // One arrow, then a careful aim that lasts the whole fight, then a volley of three that
+  // the aim makes worse every time around.
   'bone-archer': {
     id: 'bone-archer',
     name: 'Bone Archer',
     tier: 'normal',
     maxHp: 56,
     intents: [
-      { kind: 'attack', damage: 4, hits: 2 },
-      { kind: 'buff', strength: 3 },
-      { kind: 'attack', damage: 11, hits: 1 },
+      { kind: 'attack', damage: 6, hits: 1 },
+      { kind: 'buff', strength: 2 },
+      { kind: 'attack', damage: 3, hits: 3 },
     ],
   },
 };
