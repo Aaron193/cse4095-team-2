@@ -267,7 +267,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/components/PlayerPanel.tsx` showing HP, Shield, statuses, energy, draw, discard, and exhaust pile counts, and an End Turn button that dispatches `{ type: 'endTurn' }`.
   - Done when: A component test finds every value from the fixture and sees the dispatch on click.
 
-- [ ] **P1-C4 · Hand and card play** — Owner: ____ — Needs: P0-C3, P1-C1
+- [x] **P1-C4 · Hand and card play** — Owner: Aaron Mark — Needs: P0-C3, P1-C1
   - Do: Write `src/components/Hand.tsx`. Cards that cost more than current energy are disabled. Clicking a card selects it; a card that needs a target is played by then clicking an enemy; other cards play at once.
   - Done when: Component tests cover a targeted play, an untargeted play, and a disabled card that dispatches nothing.
 

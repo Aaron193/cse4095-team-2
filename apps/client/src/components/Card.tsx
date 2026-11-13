@@ -1,18 +1,21 @@
-// Draws one card from its definition, with SVG and CSS only: no image files (task P0-C3).
+// Draws one card from its definition as one SVG (task P0-C3). The frame and text are SVG and
+// CSS only; the art is an SVG scene or, for some characters, a painted image.
 //
 // The layout is the team's card template, in its 1000 by 1400 box: full-bleed art behind a
 // gold-trimmed ink frame, a hex cost gem top left, the name banner across the top, a type
 // ribbon in the tag's color, and a translucent rules panel. The art here is a placeholder
 // scene lit in the tag's color; a character illustration replaces it card by card.
 //
-// Art comes from `art/index.ts`, by card id. A card with no illustration yet gets a
-// placeholder lit in its tag's color. Docs/card-template.md explains how to add a character.
+// Art comes from `art/index.ts` (SVG scenes) or `art/paintings.ts` (painted WebP images), by
+// card id. A card with neither gets a placeholder lit in its tag's color.
+// Docs/card-template.md explains how to add a character.
 //
 // `CardDef` (TODO.md, Reference R4) has no HP or flavor text, so the template's HP heart and
 // flavor line are drawn only when those are passed in as props.
 import { useId } from 'react';
 import type { CardDef, Tag } from '@daily-delve/shared';
 import { CARD_ART } from './art/index.ts';
+import { CARD_PAINTINGS } from './art/paintings.ts';
 import './Card.css';
 
 /** The CSS class that colors a card by tag, for example "card--fire". */
@@ -180,6 +183,7 @@ export function Card({ card, flavor, hp }: CardProps) {
 
   const rulesBottom = flavor ? 1196 : 1326;
   const Art = CARD_ART[card.id];
+  const painting = Art ? undefined : CARD_PAINTINGS[card.id];
 
   return (
     <article className={classes.join(' ')} aria-label={card.name} data-card-id={card.id}>
@@ -229,10 +233,21 @@ export function Card({ card, flavor, hp }: CardProps) {
 
         <rect className="card__body" width="1000" height="1400" rx="40" />
 
-        {/* Art: full bleed behind the frame. A character scene, or the tag's placeholder. */}
+        {/* Art: full bleed behind the frame. A character scene, a painting, or the tag's
+            placeholder. */}
         <g className="card__art" clipPath={url('window')} aria-hidden="true">
           {Art ? (
             <Art uid={`card-${uid}`} />
+          ) : painting ? (
+            <image
+              className="card__painting"
+              href={painting}
+              x="26"
+              y="26"
+              width="948"
+              height="1348"
+              preserveAspectRatio="xMidYMid slice"
+            />
           ) : (
             <>
               <rect x="26" y="26" width="948" height="1348" fill={url('sky')} />
