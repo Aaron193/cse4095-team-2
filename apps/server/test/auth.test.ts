@@ -1,4 +1,5 @@
 // The auth routes (TODO.md, Reference R5). Task P1-B2: POST /api/auth/register.
+// Task P1-B3: POST /api/auth/login and POST /api/auth/logout.
 import bcrypt from 'bcryptjs';
 import type { Express } from 'express';
 import type { Knex } from 'knex';
@@ -193,5 +194,112 @@ describe('POST /api/auth/register', () => {
       const res = await register({ ...valid, ...change });
       expect(res.status).toBe(201);
     });
+  });
+});
+
+function login(body: object, cookie?: string) {
+  const req = request(app).post('/api/auth/login');
+  if (cookie) req.set('Cookie', cookie);
+  return req.send(body);
+}
+
+function logout(cookie?: string) {
+  const req = request(app).post('/api/auth/logout');
+  if (cookie) req.set('Cookie', cookie);
+  return req;
+}
+
+describe('POST /api/auth/login', () => {
+  it('answers 200 with the user and starts a session for them', async () => {
+    const { user } = await registerUser(app);
+    const res = await login(TEST_USER);
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ user });
+    expect(res.text).not.toMatch(/hash|password/i);
+
+    const cookie = sessionCookie(res);
+    const sessions = await db('sessions')
+      .where({ sid: sessionId(cookie) })
+      .select('user_id');
+    expect(sessions).toEqual([{ user_id: user.id }]);
+    expect((await logout(cookie)).status).toBe(204); // the session is a logged-in one
+  });
+
+  it('compares usernames without regard to case', async () => {
+    await registerUser(app, { username: 'Tyler', password: 'password1' });
+    expect((await login({ username: 'TYLER', password: 'password1' })).status).toBe(200);
+  });
+
+  it('gives the session a new ID, so an ID from before the login is worthless', async () => {
+    const { cookie: before } = await registerUser(app);
+    const after = sessionCookie(await login(TEST_USER, before));
+    expect(after).not.toBe(before);
+    expect((await logout(before)).status).toBe(401);
+    expect((await logout(after)).status).toBe(204);
+  });
+
+  it('gives a wrong password and an unknown username the same 401 INVALID_CREDENTIALS', async () => {
+    await registerUser(app);
+    const wrongPassword = await login({ username: TEST_USER.username, password: 'wrong password' });
+    const unknownUser = await login({ username: 'nobody', password: TEST_USER.password });
+
+    for (const res of [wrongPassword, unknownUser]) {
+      expect(res.status).toBe(401);
+      expect(res.body).toEqual({
+        error: { code: 'INVALID_CREDENTIALS', message: expect.any(String) },
+      });
+      expect(res.get('Set-Cookie')).toBeUndefined();
+    }
+    expect(unknownUser.body).toEqual(wrongPassword.body);
+    expect(await db('sessions').select('sid')).toHaveLength(1); // only the registration's
+  });
+
+  it('still runs one bcrypt comparison for an unknown username, to take as long', async () => {
+    const compare = vi.spyOn(bcrypt, 'compare');
+    await login({ username: 'nobody', password: 'password1' });
+    expect(compare).toHaveBeenCalledOnce();
+    expect(compare.mock.calls[0]![0]).toBe('password1');
+  });
+
+  it.each([
+    ['username', { password: 'password1' }],
+    ['username', { username: '', password: 'password1' }],
+    ['username', { username: 42, password: 'password1' }],
+    ['password', { username: 'tyler' }],
+    ['password', { username: 'tyler', password: '' }],
+  ])('refuses a request without a usable %s: 400 VALIDATION naming it', async (field, body) => {
+    const res = await login(body);
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('VALIDATION');
+    expect(fieldPaths(res.body)).toEqual([field]);
+  });
+});
+
+describe('POST /api/auth/logout', () => {
+  it('needs a session: 401 UNAUTHENTICATED without one', async () => {
+    const res = await logout();
+    expect(res.status).toBe(401);
+    expect(res.body).toEqual({ error: { code: 'UNAUTHENTICATED', message: expect.any(String) } });
+  });
+
+  it('answers 204, deletes the session, and clears the cookie', async () => {
+    const { cookie } = await registerUser(app);
+    const res = await logout(cookie);
+    expect(res.status).toBe(204);
+    expect(res.text).toBe('');
+    expect(await db('sessions').select('sid')).toEqual([]);
+
+    const cleared = res.get('Set-Cookie')?.find((h) => h.startsWith('dd.sid='));
+    expect(cleared).toMatch(/^dd\.sid=;/);
+    expect(cleared).toMatch(/Expires=Thu, 01 Jan 1970/);
+    expect(cleared).toMatch(/Path=\//);
+  });
+
+  it('leaves protected routes answering 401 to the old cookie', async () => {
+    const { cookie } = await registerUser(app);
+    await logout(cookie);
+    const res = await logout(cookie);
+    expect(res.status).toBe(401);
+    expect(res.body.error.code).toBe('UNAUTHENTICATED');
   });
 });

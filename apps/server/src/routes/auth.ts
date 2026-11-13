@@ -1,12 +1,14 @@
-// Accounts and sessions (TODO.md, Reference R5): POST /auth/register (task P1-B2).
+// Accounts and sessions (TODO.md, Reference R5): POST /auth/register (task P1-B2),
+// POST /auth/login and POST /auth/logout (task P1-B3).
 import { Router } from 'express';
 import { z } from 'zod';
 import type { UserResponse } from '@daily-delve/shared';
 import type { AppContext } from '../context.ts';
+import { ApiError } from '../errors.ts';
 import { asyncHandler } from '../middleware/asyncHandler.ts';
-import { startSession } from '../middleware/session.ts';
+import { endSession, requireAuth, startSession } from '../middleware/session.ts';
 import { validateBody } from '../middleware/validate.ts';
-import { createUser } from '../services/users.ts';
+import { createUser, verifyCredentials } from '../services/users.ts';
 
 // The R5 limits, shared by every route that takes these fields.
 
@@ -35,6 +37,13 @@ const registerBody = z.strictObject({
   displayName: displayNameField.optional(),
 });
 
+// Login checks only that both fields are there. The limits are rules for new accounts, and
+// anything that breaks them simply matches no account.
+const loginBody = z.strictObject({
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(1, 'Password is required'),
+});
+
 export function authRouter(ctx: AppContext): Router {
   const router = Router();
 
@@ -46,6 +55,29 @@ export function authRouter(ctx: AppContext): Router {
       await startSession(req, user.id);
       const body: UserResponse = { user };
       res.status(201).json(body);
+    }),
+  );
+
+  router.post(
+    '/auth/login',
+    validateBody(loginBody),
+    asyncHandler(async (req, res) => {
+      const { username, password } = req.body as z.infer<typeof loginBody>;
+      const user = await verifyCredentials(ctx, username, password);
+      // One answer for an unknown username and a wrong password, so neither is revealed.
+      if (!user) throw new ApiError(401, 'INVALID_CREDENTIALS', 'Wrong username or password');
+      await startSession(req, user.id);
+      const body: UserResponse = { user };
+      res.json(body);
+    }),
+  );
+
+  router.post(
+    '/auth/logout',
+    requireAuth,
+    asyncHandler(async (req, res) => {
+      await endSession(req, res, ctx.config);
+      res.status(204).end();
     }),
   );
 

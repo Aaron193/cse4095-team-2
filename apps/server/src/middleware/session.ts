@@ -2,7 +2,7 @@
 // the database store in src/db/sessionStore.ts, plus requireAuth for routes that need a
 // logged-in user.
 import session from 'express-session';
-import type { Request, RequestHandler } from 'express';
+import type { Request, RequestHandler, Response } from 'express';
 import type { AppConfig } from '../config.ts';
 import type { AppContext } from '../context.ts';
 import { KnexSessionStore } from '../db/sessionStore.ts';
@@ -56,4 +56,12 @@ export async function startSession(req: Request, userId: string): Promise<void> 
   await new Promise<void>((resolve, reject) => {
     req.session.save((err: unknown) => (err ? reject(err) : resolve()));
   });
+}
+
+/** Logs the request out: the session is deleted from the store and the cookie cleared. */
+export async function endSession(req: Request, res: Response, config: AppConfig): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    req.session.destroy((err: unknown) => (err ? reject(err) : resolve()));
+  });
+  res.clearCookie(SESSION_COOKIE, sessionCookieOptions(config));
 }

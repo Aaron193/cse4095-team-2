@@ -233,7 +233,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Implement `POST /api/auth/register` per R5: validate, lowercase the username, hash with bcryptjs (cost from config, low in tests), default the display name to the username, start a session.
   - Done when: Tests cover success (201, cookie set, no password hash in the response), a taken username in different letter case (409), and each validation limit (400).
 
-- [ ] **P1-B3 · Login and logout** — Owner: ____ — Needs: P1-B2
+- [x] **P1-B3 · Login and logout** — Owner: Aaron Mark — Needs: P1-B2
   - Do: Implement `POST /api/auth/login` and `POST /api/auth/logout` per R5. Wrong username and wrong password give the same 401 `INVALID_CREDENTIALS`.
   - Done when: Tests cover login success, both failure cases, and that a protected route returns 401 after logout.
 

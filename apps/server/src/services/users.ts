@@ -46,3 +46,34 @@ export async function createUser({ db, now, config }: AppContext, input: NewUser
   }
   return mapUser(row);
 }
+
+// A hash of a password nobody has, one per bcrypt cost, made the first time it is needed.
+const dummyHashes = new Map<number, Promise<string>>();
+
+function dummyHash(cost: number): Promise<string> {
+  let hash = dummyHashes.get(cost);
+  if (!hash) {
+    hash = bcrypt.hash('no account has this password', cost);
+    hash.catch(() => dummyHashes.delete(cost));
+    dummyHashes.set(cost, hash);
+  }
+  return hash;
+}
+
+/**
+ * The user with this username (in any letter case) and password, or null (task P1-B3).
+ * An unknown username still costs one bcrypt comparison, against a dummy hash, so that it
+ * takes about as long as a wrong password and the timing does not reveal which it was.
+ */
+export async function verifyCredentials(
+  { db, config }: AppContext,
+  username: string,
+  password: string,
+): Promise<User | null> {
+  const row = await db<UserRow>('users').where({ username: username.toLowerCase() }).first();
+  if (!row) {
+    await bcrypt.compare(password, await dummyHash(config.bcryptCost));
+    return null;
+  }
+  return (await bcrypt.compare(password, row.password_hash)) ? mapUser(row) : null;
+}
