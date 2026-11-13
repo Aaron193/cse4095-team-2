@@ -215,7 +215,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Track `tagsPlayedThisTurn` (reset each turn; a card does not count itself). Apply `perTagPlayed` as an additive bonus through `computeDamage`. Cards with `exhaust` go to the exhaust pile. Increment `stats.comboTriggers` per R3.
   - Done when: Tests show the second Fire card with "+3 per Fire card played" deals base plus 3 while the first deals base, an exhausted card never returns in a reshuffle, and `comboTriggers` counts both trigger kinds.
 
-- [ ] **P1-A7 · First ten cards, two enemies, test fight** — Owner: ____ — Needs: P1-A6
+- [x] **P1-A7 · First ten cards, two enemies, test fight** — Owner: Aaron Mark — Needs: P1-A6
   - Do: Write `content/cards.ts` with 10 cards (for each tag: a basic attack, a status applier, and a skill; plus one tag-synergy attack) and `STARTER_DECK`. Write `content/enemies.ts` with 2 normal enemies using three-step intent cycles. Export `createTestFight(seed)`, a run already in combat against one enemy.
   - Done when: A content test checks every card (cost 0 to 3, at least one tag, known effect kinds, non-empty text), and a scripted test wins the test fight with legal actions only.
 

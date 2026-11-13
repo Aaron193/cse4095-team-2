@@ -1,10 +1,35 @@
-// Copying a run state (R2 rule 6: applyAction copies the state, changes the copy, and returns it).
+// Making and copying run states (R2 rule 6: applyAction copies the state, changes the copy,
+// and returns it).
 //
 // The copy is deep for everything an action can change. `dungeon` is shared between the two
 // states: it is fixed for the whole run (opened gates are kept in `openedGates`, not in the
 // tiles), and no rule code ever writes to it. Tests deep-freeze their input states, so a
 // write to the shared dungeon would throw.
-import type { CombatState, RunState, Statuses } from './types.ts';
+import { PLAYER_MAX_HP } from './content/balance.ts';
+import { STARTER_DECK } from './content/cards.ts';
+import type { CombatState, Dungeon, RunState, Statuses } from './types.ts';
+import { ENGINE_VERSION } from './version.ts';
+
+/** A run standing on the start tile of `dungeon`, at full HP with the starter deck (R3, Run). */
+export function newRun(seed: string, dungeon: Dungeon): RunState {
+  return {
+    engineVersion: ENGINE_VERSION,
+    seed,
+    phase: 'map',
+    outcome: null,
+    dungeon,
+    pos: { x: dungeon.start.x, y: dungeon.start.y },
+    cleared: [],
+    openedGates: [],
+    nodesCleared: 0,
+    hp: PLAYER_MAX_HP,
+    maxHp: PLAYER_MAX_HP,
+    deck: STARTER_DECK.slice(),
+    combat: null,
+    rewardOffers: null,
+    stats: { turns: 0, comboTriggers: 0, steps: 0 },
+  };
+}
 
 function copyStatuses(statuses: Statuses): Statuses {
   return { Burn: statuses.Burn, Chill: statuses.Chill, Poison: statuses.Poison };

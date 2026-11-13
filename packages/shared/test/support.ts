@@ -362,7 +362,9 @@ export function playId(state: RunState, cardId: string, target?: number): RunSta
   if (handIndex === -1) throw new Error(`${cardId} is not in the hand`);
   return act(
     state,
-    target === undefined ? { type: 'playCard', handIndex } : { type: 'playCard', handIndex, target },
+    target === undefined
+      ? { type: 'playCard', handIndex }
+      : { type: 'playCard', handIndex, target },
   );
 }
 

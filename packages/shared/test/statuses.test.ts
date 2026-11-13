@@ -189,7 +189,10 @@ describe('Shatter', () => {
   });
 
   it('follows a Chill card in the same turn', () => {
-    let state = fight({ encounter: ['dummy', 'dummy'], combat: { hand: ['frostNova', 'shatter'] } });
+    let state = fight({
+      encounter: ['dummy', 'dummy'],
+      combat: { hand: ['frostNova', 'shatter'] },
+    });
     state = playId(state, 'frostNova');
     state = playId(state, 'shatter', 1);
     expect(combatOf(state).enemies.map((e) => [e.hp, e.statuses.Chill])).toEqual([

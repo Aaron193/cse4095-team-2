@@ -175,13 +175,19 @@ describe('engine public API (R4)', () => {
   it.each([
     ['generateDungeon', () => generateDungeon('seed')],
     ['createRun', () => createRun('seed')],
-    ['createTestFight', () => createTestFight('seed')],
     ['legalActions', () => legalActions(state)],
     ['simulate', () => simulate('seed', actions)],
     ['summarize', () => summarize(state)],
     ['hashState', () => hashState(state)],
   ])('exports %s as a stub that throws "not implemented"', (name, call) => {
     expect(call).toThrow(`not implemented: ${name}`);
+  });
+
+  it('exports createTestFight, a run in combat at turn 1 (P1-A7)', () => {
+    const fight = createTestFight('seed');
+    expect(fight.phase).toBe('combat');
+    expect(fight.combat?.turn).toBe(1);
+    expect(fight.engineVersion).toBe(ENGINE_VERSION);
   });
 
   it('exports applyAction, which refuses actions in an ended run (P1-A3)', () => {

@@ -121,7 +121,10 @@ describe('Exhaust', () => {
 
 describe('combo triggers (stats.comboTriggers)', () => {
   it('counts each tag bonus above 0 that is applied', () => {
-    let state = fight({ encounter: ['pacifist'], combat: { hand: ['kindle', 'kindle', 'kindle'] } });
+    let state = fight({
+      encounter: ['pacifist'],
+      combat: { hand: ['kindle', 'kindle', 'kindle'] },
+    });
     state = playId(state, 'kindle', 0); // no Fire card before it: bonus 0
     expect(state.stats.comboTriggers).toBe(0);
     state = playId(state, 'kindle', 0);
