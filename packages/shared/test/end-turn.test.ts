@@ -1,5 +1,4 @@
 // End turn and the enemy phase (task P1-A4).
-import type { Action, RunState } from '@daily-delve/shared';
 import { describe, expect, it } from 'vitest';
 import {
   ENERGY_PER_TURN,
@@ -9,27 +8,7 @@ import {
   STATUS_CAP,
 } from '../src/engine/content/balance.ts';
 import { applyActionWith } from '../src/engine/run.ts';
-import { combatOf, deepFreeze, fight, TEST_DEFS } from './support.ts';
-
-function act(state: RunState, action: Action): RunState {
-  const result = applyActionWith(deepFreeze(state), action, TEST_DEFS);
-  if (!result.ok) throw new Error(`expected a legal action: ${result.error.message}`);
-  return result.state;
-}
-
-/** Plays the first card in the hand with this id. */
-function playId(state: RunState, cardId: string, target?: number): RunState {
-  const handIndex = combatOf(state).hand.indexOf(cardId);
-  if (handIndex === -1) throw new Error(`${cardId} is not in the hand`);
-  return act(
-    state,
-    target === undefined
-      ? { type: 'playCard', handIndex }
-      : { type: 'playCard', handIndex, target },
-  );
-}
-
-const endTurn = (state: RunState) => act(state, { type: 'endTurn' });
+import { combatOf, endTurn, fight, playId, TEST_DEFS } from './support.ts';
 
 describe('endTurn: a scripted three-turn fight', () => {
   // The numbers below assume Shield expires at the start of its owner's next turn (R3,
@@ -171,13 +150,13 @@ describe('endTurn: order of play', () => {
   });
 
   it('a debuff intent gives the player that status, capped at STATUS_CAP', () => {
+    // The hexer's Chill 2 lands in the enemy phase; Chill then falls by 1 at end of turn.
     const start = fight({ encounter: ['hexer'], combat: { hand: [] } });
-    expect(combatOf(endTurn(start)).player.statuses.Chill).toBeGreaterThan(0);
+    expect(combatOf(endTurn(start)).player.statuses.Chill).toBe(2 - 1);
 
     const nearCap = fight({ encounter: ['hexer'], combat: { hand: [] } });
-    combatOf(nearCap).player.statuses.Chill = STATUS_CAP;
-    const after = endTurn(nearCap);
-    expect(combatOf(after).player.statuses.Chill).toBeLessThanOrEqual(STATUS_CAP);
+    combatOf(nearCap).player.statuses.Chill = STATUS_CAP - 1;
+    expect(combatOf(endTurn(nearCap)).player.statuses.Chill).toBe(STATUS_CAP - 1);
   });
 });
 

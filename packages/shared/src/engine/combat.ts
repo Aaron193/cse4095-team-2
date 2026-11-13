@@ -4,7 +4,14 @@
 // (run.ts) makes that copy before calling in, so a caller's state is never changed (R2 rule 6).
 // The deck is shuffled, and the discard pile reshuffled, with the stream shuffle:<nodeId>,
 // whose state lives in `combat.rng` (R2 rule 4).
-import { addCapped, applyDamage, computeDamage } from './calc.ts';
+import {
+  addCapped,
+  applyDamage,
+  burnAfterTick,
+  computeDamage,
+  decayByOne,
+  shatterDamage,
+} from './calc.ts';
 import {
   ENERGY_CAP,
   ENERGY_PER_TURN,
@@ -28,10 +35,13 @@ import type {
   EngineError,
   Intent,
   RunState,
+  StatusId,
   Statuses,
 } from './types.ts';
 
 type DamageEffect = Extract<Effect, { kind: 'damage' }>;
+type StatusEffect = Extract<Effect, { kind: 'applyStatus' }>;
+type ShatterEffect = Extract<Effect, { kind: 'shatter' }>;
 
 /** The stream that shuffles the deck in the fight at `nodeId`. */
 export function shuffleStream(nodeId: string): string {
@@ -226,8 +236,11 @@ function resolveEffect(state: RunState, effect: Effect, aim: number | null): voi
       combat.energy = addCapped(combat.energy, effect.amount, ENERGY_CAP);
       return;
     case 'applyStatus':
+      applyStatusEffect(state, effect, aim);
+      return;
     case 'shatter':
-      return notImplemented(`effect ${effect.kind}`, 'P1-A5');
+      shatterTarget(state, effect, aim);
+      return;
     case 'power':
       return notImplemented('effect power', 'P3-A1');
   }
@@ -236,22 +249,56 @@ function resolveEffect(state: RunState, effect: Effect, aim: number | null): voi
 /** A damage effect: every hit goes through computeDamage, then Shield, then HP. */
 function dealCardDamage(state: RunState, effect: DamageEffect, aim: number | null): void {
   const combat = activeCombat(state);
-  const amount = computeDamage({ base: effect.amount });
+  // Chill: each attack hit by the player deals that much less (R3, Statuses).
+  const amount = computeDamage({ base: effect.amount, add: [-combat.player.statuses.Chill] });
   const hits = effect.hits ?? 1;
   for (let hit = 0; hit < hits; hit++) {
     for (let index = 0; index < combat.enemies.length; index++) {
       if (effect.target === 'enemy' && index !== aim) continue;
       const enemy = combat.enemies[index] as EnemyState;
       if (enemy.hp <= 0) continue;
-      const result = applyDamage(enemy, amount);
-      enemy.hp = result.hp;
-      enemy.shield = result.shield;
-      if (allEnemiesDefeated(combat)) {
-        winFight(state);
-        return;
-      }
+      hitEnemy(state, enemy, amount, false);
+      if (state.phase !== 'combat') return;
     }
   }
+}
+
+/** Damage to one enemy: Shield first unless `ignoreShield`. The last enemy down wins the fight. */
+function hitEnemy(state: RunState, enemy: EnemyState, amount: number, ignoreShield: boolean): void {
+  const result = applyDamage(enemy, amount, { ignoreShield });
+  enemy.hp = result.hp;
+  enemy.shield = result.shield;
+  if (allEnemiesDefeated(activeCombat(state))) winFight(state);
+}
+
+function addStatus(statuses: Statuses, status: StatusId, amount: number): void {
+  statuses[status] = addCapped(statuses[status], amount, STATUS_CAP);
+}
+
+/** applyStatus: on the chosen enemy, on every living enemy, or on the player. */
+function applyStatusEffect(state: RunState, effect: StatusEffect, aim: number | null): void {
+  const combat = activeCombat(state);
+  if (effect.target === 'self') {
+    addStatus(combat.player.statuses, effect.status, effect.amount);
+    return;
+  }
+  combat.enemies.forEach((enemy, index) => {
+    if (enemy.hp <= 0 || (effect.target === 'enemy' && index !== aim)) return;
+    addStatus(enemy.statuses, effect.status, effect.amount);
+  });
+}
+
+/**
+ * Shatter: removes all Chill from the chosen enemy and deals `perStack` damage for each stack
+ * removed, as one hit that Shield absorbs. It is not an attack hit, so the player's own Chill
+ * does not reduce it. With no Chill to remove it does nothing.
+ */
+function shatterTarget(state: RunState, effect: ShatterEffect, aim: number | null): void {
+  const enemy = aim === null ? undefined : activeCombat(state).enemies[aim];
+  if (!enemy || enemy.hp <= 0 || enemy.statuses.Chill === 0) return;
+  const stacks = enemy.statuses.Chill;
+  enemy.statuses.Chill = 0;
+  hitEnemy(state, enemy, shatterDamage(effect.perStack, stacks), false);
 }
 
 /**
@@ -325,7 +372,10 @@ function actOnIntent(state: RunState, enemy: EnemyState, intent: Intent): void {
   const combat = activeCombat(state);
   switch (intent.kind) {
     case 'attack': {
-      const amount = computeDamage({ base: intent.damage, add: [enemy.strength] });
+      const amount = computeDamage({
+        base: intent.damage,
+        add: [enemy.strength, -enemy.statuses.Chill],
+      });
       for (let hit = 0; hit < intent.hits; hit++) {
         hitPlayer(state, amount, false);
         if (state.phase !== 'combat') return;
@@ -338,11 +388,9 @@ function actOnIntent(state: RunState, enemy: EnemyState, intent: Intent): void {
     case 'buff':
       enemy.strength += intent.strength;
       return;
-    case 'debuff': {
-      const statuses = combat.player.statuses;
-      statuses[intent.status] = addCapped(statuses[intent.status], intent.amount, STATUS_CAP);
+    case 'debuff':
+      addStatus(combat.player.statuses, intent.status, intent.amount);
       return;
-    }
   }
 }
 
@@ -357,5 +405,41 @@ function hitPlayer(state: RunState, amount: number, ignoreShield: boolean): void
   if (state.hp <= 0) loseRun(state);
 }
 
-/** End-of-turn status ticks. The tick rules for Burn, Poison, and Chill are task P1-A5. */
-function tickStatuses(_state: RunState): void {}
+/**
+ * End-of-turn status ticks, on the player first and then on each living enemy in index order
+ * (R3, Statuses). On each unit: Burn deals its stacks as damage that Shield absorbs, then
+ * halves (rounded down); Poison takes its stacks from HP, ignoring Shield, then falls by 1;
+ * Chill falls by 1. The run is lost the moment the player reaches 0 HP, and the fight is won
+ * the moment the last enemy does.
+ */
+function tickStatuses(state: RunState): void {
+  const combat = activeCombat(state);
+  const mine = combat.player.statuses;
+  if (mine.Burn > 0) {
+    hitPlayer(state, mine.Burn, false);
+    mine.Burn = burnAfterTick(mine.Burn);
+    if (state.phase !== 'combat') return;
+  }
+  if (mine.Poison > 0) {
+    hitPlayer(state, mine.Poison, true);
+    mine.Poison = decayByOne(mine.Poison);
+    if (state.phase !== 'combat') return;
+  }
+  mine.Chill = decayByOne(mine.Chill);
+
+  for (const enemy of combat.enemies) {
+    if (enemy.hp <= 0) continue;
+    const theirs = enemy.statuses;
+    if (theirs.Burn > 0) {
+      hitEnemy(state, enemy, theirs.Burn, false);
+      theirs.Burn = burnAfterTick(theirs.Burn);
+      if (state.phase !== 'combat') return;
+    }
+    if (theirs.Poison > 0 && enemy.hp > 0) {
+      hitEnemy(state, enemy, theirs.Poison, true);
+      theirs.Poison = decayByOne(theirs.Poison);
+      if (state.phase !== 'combat') return;
+    }
+    theirs.Chill = decayByOne(theirs.Chill);
+  }
+}

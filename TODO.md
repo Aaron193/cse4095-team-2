@@ -207,7 +207,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Implement `endTurn` in the R3 order: enemies act in index order on their shown intents, the hand is discarded, statuses tick, Shield expires per R3, intents advance, the next turn starts. Player death ends the run as lost. Reaching `FIGHT_TURN_CAP` ends the run as lost.
   - Done when: A scripted three-turn fight matches expected HP and Shield after every turn, and tests cover death and the turn cap.
 
-- [ ] **P1-A5 · Burn, Chill, Poison, and Shatter** — Owner: ____ — Needs: P1-A4
+- [x] **P1-A5 · Burn, Chill, Poison, and Shatter** — Owner: Aaron Mark — Needs: P1-A4
   - Do: Implement effect kinds `applyStatus` and `shatter` and the tick rules in R3, for enemies and for the player, capped at `STATUS_CAP`.
   - Done when: Tests cover each status's tick and decay, Chill lowering attack damage, Shatter removing Chill and dealing damage per stack, and the cap.
 

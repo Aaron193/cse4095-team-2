@@ -1,9 +1,17 @@
 // Shared builders for engine rule tests. The rules read cards and enemies through a `Defs`
 // table, so these tests use small hand-made content whose numbers never change with balance.
 import { ENGINE_VERSION } from '@daily-delve/shared';
-import type { CardDef, CombatState, Dungeon, EnemyDef, RunState } from '@daily-delve/shared';
+import type {
+  Action,
+  CardDef,
+  CombatState,
+  Dungeon,
+  EnemyDef,
+  RunState,
+} from '@daily-delve/shared';
 import { startCombat } from '../src/engine/combat.ts';
 import type { Defs } from '../src/engine/defs.ts';
+import { applyActionWith } from '../src/engine/run.ts';
 
 function card(def: Omit<CardDef, 'rarity' | 'text'> & Partial<CardDef>): CardDef {
   return { rarity: 'common', text: def.name, ...def };
@@ -314,4 +322,25 @@ export function fight(options: FightOptions = {}): RunState {
 export function combatOf(state: RunState): CombatState {
   if (!state.combat) throw new Error(`expected a fight, but the phase is ${state.phase}`);
   return state.combat;
+}
+
+/** Applies a legal action with the test content, checking it never writes to `state`. */
+export function act(state: RunState, action: Action): RunState {
+  const result = applyActionWith(deepFreeze(state), action, TEST_DEFS);
+  if (!result.ok) throw new Error(`expected a legal action: ${result.error.message}`);
+  return result.state;
+}
+
+/** Plays the first card in the hand with this id. */
+export function playId(state: RunState, cardId: string, target?: number): RunState {
+  const handIndex = combatOf(state).hand.indexOf(cardId);
+  if (handIndex === -1) throw new Error(`${cardId} is not in the hand`);
+  return act(
+    state,
+    target === undefined ? { type: 'playCard', handIndex } : { type: 'playCard', handIndex, target },
+  );
+}
+
+export function endTurn(state: RunState): RunState {
+  return act(state, { type: 'endTurn' });
 }
