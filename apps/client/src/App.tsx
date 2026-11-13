@@ -10,6 +10,7 @@ import { NotFoundScreen } from './screens/NotFoundScreen.tsx';
 import { PlayScreen } from './screens/PlayScreen.tsx';
 import { ProfileScreen } from './screens/ProfileScreen.tsx';
 import { RegisterScreen } from './screens/RegisterScreen.tsx';
+import { TestFightScreen } from './screens/TestFightScreen.tsx';
 
 /** The app shell (task P1-D4): the header over every screen, and the routes. */
 export function App() {
@@ -28,8 +29,7 @@ export function App() {
             <Route element={<RequireAuth />}>
               <Route path={ROUTES.play}>
                 <Route index element={<PlayScreen />} />
-                {/* More pages under /play go here, for example
-                    <Route path="test-fight" element={<TestFightScreen />} /> (task P1-C5). */}
+                <Route path="test-fight" element={<TestFightScreen />} />
                 <Route path="*" element={<NotFoundScreen />} />
               </Route>
               <Route path={ROUTES.profile} element={<ProfileScreen />} />

@@ -271,7 +271,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `src/components/Hand.tsx`. Cards that cost more than current energy are disabled. Clicking a card selects it; a card that needs a target is played by then clicking an enemy; other cards play at once.
   - Done when: Component tests cover a targeted play, an untargeted play, and a disabled card that dispatches nothing.
 
-- [ ] **P1-C5 · Combat screen** — Owner: ____ — Needs: P1-A7, P1-C2, P1-C3, P1-C4
+- [x] **P1-C5 · Combat screen** — Owner: Aaron Mark — Needs: P1-A7, P1-C2, P1-C3, P1-C4
   - Do: Assemble the combat screen at `/play/test-fight` on the real engine using `createTestFight`.
   - Done when: A fight can be played to its end with the mouse alone, and a test plays one card and sees the enemy's HP fall.
 

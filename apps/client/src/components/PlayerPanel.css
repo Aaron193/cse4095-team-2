@@ -15,8 +15,6 @@
 
 .player__figure {
   position: relative;
-  display: grid;
-  place-items: end center;
   width: 100%;
   height: var(--figure-height, clamp(12rem, 34vh, 21rem));
 }
@@ -51,11 +49,10 @@
   animation: lantern-flicker 3.2s ease-in-out infinite;
 }
 
+/* The portrait fills the figure's box, kept whole and standing on its bottom edge. */
 .player__body {
-  position: relative;
-  display: grid;
-  place-items: end center;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   animation: player-breathe 3.8s ease-in-out infinite;
   transform-origin: 50% 100%;
 }
@@ -67,10 +64,12 @@
 }
 
 .player__art {
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  object-position: 50% 100%;
   user-select: none;
   filter: drop-shadow(0 10px 18px rgb(0 0 0 / 55%));
 }
@@ -115,11 +114,15 @@
   }
 }
 
+/* As tall as a name, an HP bar, and a row of badges, with or without the badges, so the
+   Delver's HP bar lines up with the enemies' (Enemy.css). */
 .player__plate {
   display: grid;
+  align-content: start;
   justify-items: center;
   gap: var(--space-2);
   width: min(100%, 15rem);
+  min-height: 5.75rem;
   margin-top: var(--space-4);
 }
 
@@ -136,6 +139,8 @@
 }
 
 /* The energy orb and the draw pile, bottom left. */
+/* The padding is room for the orb's label, which hangs below the orb; the draw pile drops
+   by as much, so both labels share a baseline. */
 .player-panel__energy {
   grid-area: energy;
   display: flex;
@@ -144,6 +149,11 @@
   align-self: end;
   justify-self: start;
   margin: 0;
+  padding-bottom: 1.5rem;
+}
+
+.player-panel__energy .pile {
+  margin-bottom: -1.5rem;
 }
 
 .energy {

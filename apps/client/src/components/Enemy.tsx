@@ -70,7 +70,7 @@ export function Enemy({ enemy, index, targetable = false, onTarget }: EnemyProps
         <Pops pops={pops} />
       </div>
       <div className="enemy__plate">
-        <h3 className="enemy__name">{name}</h3>
+        <h2 className="enemy__name">{name}</h2>
         <HealthBar hp={enemy.hp} maxHp={enemy.maxHp} shield={enemy.shield} label={`${name} HP`} />
         <StatusBadges statuses={enemy.statuses} strength={enemy.strength} />
         {defeated ? <p className="enemy__defeated">Defeated</p> : null}

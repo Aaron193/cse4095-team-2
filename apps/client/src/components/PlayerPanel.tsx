@@ -57,7 +57,7 @@ export function PlayerPanel({
           <Pops pops={pops} />
         </div>
         <div className="player__plate">
-          <h3 className="player__name">The Delver</h3>
+          <h2 className="player__name">The Delver</h2>
           <HealthBar hp={hp} maxHp={maxHp} shield={player.shield} label="Your HP" />
           <StatusBadges statuses={player.statuses} />
         </div>

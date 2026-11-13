@@ -65,6 +65,21 @@ describe('App routes', () => {
     expect(await findHeading(name)).toBeInTheDocument();
   });
 
+  it('/play/test-fight renders the test fight for a logged-in player', async () => {
+    logInAs(DEMO_USERNAME);
+    renderAt('/play/test-fight');
+    expect(await findHeading('The Sunken Halls')).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: 'Your hand' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'End Turn' })).toBeEnabled();
+  });
+
+  it.each(['/', '/play'])('%s links to the test fight', async (path) => {
+    logInAs(DEMO_USERNAME);
+    renderAt(path);
+    const link = await screen.findByRole('link', { name: 'Play the test fight' });
+    expect(link).toHaveAttribute('href', '/play/test-fight');
+  });
+
   it('renders a not-found screen for an unknown path', async () => {
     renderAt('/no-such-page');
     expect(await findHeading('Page not found')).toBeInTheDocument();

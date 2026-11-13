@@ -33,7 +33,7 @@ export function Hand({ hand, plays, selected, onCardClick }: HandProps) {
   const keys = handKeys(hand);
   const middle = (hand.length - 1) / 2;
   return (
-    <ol className="hand" aria-label="Your hand">
+    <ol className="hand" aria-label="Your hand" style={{ '--count': hand.length } as CSSProperties}>
       {hand.map((cardId, handIndex) => {
         const card = CARDS[cardId];
         if (!card) return null;
