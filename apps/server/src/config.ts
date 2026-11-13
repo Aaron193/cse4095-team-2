@@ -6,6 +6,8 @@ export interface AppConfig {
   production: boolean;
   /** SESSION_SECRET: signs the session cookie. */
   sessionSecret: string;
+  /** bcrypt cost for password hashes: 10 by default; tests use 4, the lowest bcrypt allows. */
+  bcryptCost: number;
 }
 
 /**
@@ -15,6 +17,7 @@ export interface AppConfig {
 export const DEVELOPMENT_CONFIG: Readonly<AppConfig> = Object.freeze({
   production: false,
   sessionSecret: 'development-only-session-secret',
+  bcryptCost: 10,
 });
 
 const REQUIRED_IN_PRODUCTION = ['SESSION_SECRET'] as const;
@@ -43,5 +46,6 @@ export function resolveConfig(overrides: Partial<AppConfig> = {}): AppConfig {
   return {
     production: overrides.production ?? DEVELOPMENT_CONFIG.production,
     sessionSecret: overrides.sessionSecret ?? DEVELOPMENT_CONFIG.sessionSecret,
+    bcryptCost: overrides.bcryptCost ?? DEVELOPMENT_CONFIG.bcryptCost,
   };
 }

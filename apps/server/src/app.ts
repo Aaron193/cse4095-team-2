@@ -9,6 +9,7 @@ import type { AppConfig } from './config.ts';
 import type { AppContext } from './context.ts';
 import { errorHandler, notFoundHandler } from './middleware/errors.ts';
 import { sessionMiddleware } from './middleware/session.ts';
+import { authRouter } from './routes/auth.ts';
 import { healthRouter } from './routes/health.ts';
 
 export interface AppDeps {
@@ -32,6 +33,7 @@ export function createApp(deps: AppDeps): Express {
   app.use('/api', sessionMiddleware(ctx));
 
   app.use('/api', healthRouter());
+  app.use('/api', authRouter(ctx));
 
   // Anything else under /api is unknown. Non-/api paths are left for the client (P1-D5).
   app.use('/api', notFoundHandler);

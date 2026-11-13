@@ -229,7 +229,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add `express-session` with a Knex-backed store (table `sessions`). Cookie `dd.sid`: httpOnly, SameSite Lax, Secure in production, 7 days. Set `trust proxy` in production. Write `requireAuth`, which returns 401 `UNAUTHENTICATED`.
   - Done when: Tests show a protected route returns 401 without a cookie and 200 with one, and the session still works after the app object is re-created on the same database.
 
-- [ ] **P1-B2 · Register** — Owner: ____ — Needs: P1-B1, P0-B3, P0-B4
+- [x] **P1-B2 · Register** — Owner: Aaron Mark — Needs: P1-B1, P0-B3, P0-B4
   - Do: Implement `POST /api/auth/register` per R5: validate, lowercase the username, hash with bcryptjs (cost from config, low in tests), default the display name to the username, start a session.
   - Done when: Tests cover success (201, cookie set, no password hash in the response), a taken username in different letter case (409), and each validation limit (400).
 

@@ -1,5 +1,9 @@
+import type { Express } from 'express';
 import type { Knex } from 'knex';
+import type { RegisterRequest, User } from '@daily-delve/shared';
+import request from 'supertest';
 import type { Response } from 'supertest';
+import { createApp } from '../src/app.ts';
 import type { AppConfig } from '../src/config.ts';
 import { createDb, MEMORY_SQLITE, runMigrations } from '../src/db/knex.ts';
 import { SESSION_COOKIE } from '../src/middleware/session.ts';
@@ -37,15 +41,43 @@ export function testClock(start: Date = FIXED_NOW) {
   };
 }
 
-/** The configuration ordinary tests run with. */
+/** The configuration ordinary tests run with: cheap password hashing. */
 export const testConfig: AppConfig = {
   production: false,
   sessionSecret: 'test-session-secret',
+  bcryptCost: 4,
 };
+
+export interface TestAppOptions {
+  now?: () => Date;
+  /** Changes to testConfig. */
+  config?: Partial<AppConfig>;
+}
+
+/** The real app on `db`, with testConfig and the fixed clock unless told otherwise. */
+export function createTestApp(db: Knex, options: TestAppOptions = {}): Express {
+  return createApp({
+    db,
+    now: options.now ?? fixedNow,
+    config: { ...testConfig, ...options.config },
+  });
+}
 
 /** The `dd.sid=...` pair from a response's Set-Cookie header, ready to send back as Cookie. */
 export function sessionCookie(res: Response): string {
   const cookie = res.get('Set-Cookie')?.find((header) => header.startsWith(`${SESSION_COOKIE}=`));
   if (!cookie) throw new Error(`The response set no ${SESSION_COOKIE} cookie`);
   return cookie.split(';')[0]!;
+}
+
+export const TEST_USER: RegisterRequest = { username: 'tyler', password: 'correct horse' };
+
+/** Registers a user through the API and returns it with its session cookie. */
+export async function registerUser(
+  app: Express,
+  body: RegisterRequest = TEST_USER,
+): Promise<{ user: User; cookie: string }> {
+  const res = await request(app).post('/api/auth/register').send(body);
+  if (res.status !== 201) throw new Error(`register answered ${res.status}: ${res.text}`);
+  return { user: res.body.user as User, cookie: sessionCookie(res) };
 }
