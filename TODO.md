@@ -249,7 +249,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Write `getOrCreateDungeon(date)` and `GET /api/dungeons/today` per R5. Seed is the first 16 hex characters of HMAC-SHA256 of the date keyed by `SEED_SECRET`. The date comes from the injected `now()`. Insert-if-absent must be safe when two requests arrive together. `officialRun` is `null` until P2-B4.
   - Done when: Tests show two calls on one day return the same seed, advancing the clock a day returns a new date and seed, and parallel first requests create exactly one row.
 
-- [ ] **P1-B7 · State hashing** — Owner: ____ — Needs: P0-A3
+- [x] **P1-B7 · State hashing** — Owner: Aaron Mark — Needs: P0-A3
   - Do: In `packages/shared/src/engine/hash.ts` write `canonicalJson(value)` (keys sorted, no whitespace) and `hashState(state)` (a pure-TypeScript integer hash of the canonical JSON, returned as hex).
   - Done when: Tests show key order does not change the hash, changing one field does, and a committed sample object gives a committed hash.
 
