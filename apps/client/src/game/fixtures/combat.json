@@ -1,0 +1,38 @@
+{
+  "nodeId": "n0",
+  "turn": 3,
+  "energy": 2,
+  "hand": ["kip", "nix", "pyra", "halvard", "brother-ash"],
+  "drawPile": ["vex", "rook", "bryn"],
+  "discardPile": ["bog-witch"],
+  "exhaustPile": ["sera"],
+  "enemies": [
+    {
+      "defId": "bone-archer",
+      "hp": 31,
+      "maxHp": 56,
+      "shield": 5,
+      "statuses": { "Burn": 2, "Chill": 1, "Poison": 3 },
+      "strength": 2,
+      "intentIndex": 0,
+      "phase": 1
+    },
+    {
+      "defId": "gel-slime",
+      "hp": 44,
+      "maxHp": 70,
+      "shield": 0,
+      "statuses": { "Burn": 0, "Chill": 0, "Poison": 0 },
+      "strength": 0,
+      "intentIndex": 1,
+      "phase": 1
+    }
+  ],
+  "player": {
+    "shield": 4,
+    "statuses": { "Burn": 0, "Chill": 2, "Poison": 1 },
+    "powers": []
+  },
+  "tagsPlayedThisTurn": { "Fire": 0, "Frost": 0, "Poison": 0 },
+  "rng": { "a": 1831565813, "b": 2654435769, "c": 3266489909, "d": 668265263 }
+}

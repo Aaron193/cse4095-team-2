@@ -13,6 +13,7 @@
   },
   "scripts": {
     "dev": "concurrently --kill-others-on-fail --names server,client --prefix-colors blue,green \"npm run dev -w apps/server\" \"npm run dev -w apps/client\"",
+    "start": "npm run start -w apps/server",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

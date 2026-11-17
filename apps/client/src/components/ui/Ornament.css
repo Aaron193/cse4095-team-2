@@ -1,0 +1,70 @@
+/* The Ornament component, drawn in a 160 by 24 box. Colors come from tokens.css. */
+.ornament {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 0 6px var(--color-gold-hairline));
+}
+
+.ornament__stop-gold {
+  stop-color: var(--color-gold);
+}
+
+.ornament__stop-fade {
+  stop-color: var(--color-gold);
+  stop-opacity: 0;
+}
+
+.ornament__stop-fire {
+  stop-color: var(--color-fire-deep);
+}
+
+.ornament__stop-core {
+  stop-color: var(--color-gold-bright);
+}
+
+.ornament__line {
+  fill: none;
+  stroke-width: 1;
+}
+
+.ornament__gem {
+  fill: var(--color-gold);
+}
+
+.ornament__frame {
+  fill: var(--color-ink);
+  stroke: var(--color-gold);
+  stroke-width: 1.2;
+}
+
+.ornament__core {
+  fill: var(--color-gold-bright);
+  opacity: 0.9;
+}
+
+/* A slow candle flicker, only for people who have not asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .ornament__flame {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: ornament-flicker 3.2s ease-in-out infinite;
+  }
+}
+
+@keyframes ornament-flicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  40% {
+    opacity: 0.86;
+    transform: scale(0.95, 0.97);
+  }
+
+  70% {
+    opacity: 0.95;
+    transform: scale(1.02, 0.99);
+  }
+}

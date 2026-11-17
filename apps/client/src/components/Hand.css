@@ -1,0 +1,125 @@
+/* The hand: a fan of cards along the bottom of the combat screen. */
+.hand {
+  --card-width: var(--hand-card-width, clamp(8.5rem, 10.5vw, 12rem));
+  --fan-turn: 3.2deg;
+  --fan-drop: 0.35rem;
+  /* How much farther a selected card keeps each neighbour away. */
+  --selected-gap: calc(var(--card-width) * 0.13);
+  /* Extra width the fan needs: room for a selected card's gaps (set below). */
+  --grow: 0px;
+  /* Each side's margin: a small overlap, or as much more (up to 40% of a card) as it takes
+     for --count cards, plus --grow, to fit the width the hand is given (its container, see
+     Combat). So on a narrow screen the other cards close up instead of the fan growing. */
+  --fit: clamp(
+    calc(var(--card-width) * -0.4),
+    calc(((100cqw - 2 * var(--space-4) - var(--grow)) / var(--count, 5) - var(--card-width)) / 2),
+    calc(var(--card-width) * -0.09)
+  );
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  /* A card's height (cards are 5:7) even once every card is played, so the board stays put. */
+  min-height: calc(var(--card-width) * 7 / 5);
+  margin: 0;
+  padding: 0 var(--space-4);
+  list-style: none;
+}
+
+.hand__slot {
+  position: relative;
+  flex: none;
+  width: var(--card-width);
+  margin-inline: var(--fit);
+  transform: translateY(calc(var(--offset-abs) * var(--offset-abs) * var(--fan-drop)))
+    rotate(calc(var(--offset) * var(--fan-turn)));
+  transform-origin: 50% 120%;
+  transition:
+    transform 0.22s cubic-bezier(0.2, 0.8, 0.3, 1.2),
+    filter 0.2s ease,
+    margin 0.22s ease;
+}
+
+.hand__card {
+  pointer-events: none;
+  transition: filter 0.2s ease;
+}
+
+/* The whole card is the button; it sits over the card so the card's own SVG stays plain. */
+.hand__hit {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--card-width) * 0.04);
+  background: transparent;
+  cursor: pointer;
+}
+
+.hand__hit:focus-visible {
+  outline: 3px solid var(--color-gold-bright);
+  outline-offset: 2px;
+}
+
+/* Pointing at a card lifts it, straightens it, and zooms it so its rules can be read. */
+.hand__slot:hover,
+.hand__slot:focus-within {
+  z-index: 20 !important;
+  transform: translateY(-1.25rem) rotate(0deg) scale(1.3);
+  margin-inline: calc(var(--fit) + var(--card-width) * 0.2);
+}
+
+.hand__slot:not(.hand__slot--unplayable):hover .hand__card,
+.hand__slot:not(.hand__slot--unplayable):focus-within .hand__card {
+  filter: drop-shadow(0 0 0.6rem rgb(255 224 122 / 55%));
+}
+
+/* A card waiting for a target stays raised and glows until it is played or put back. */
+.hand:has(.hand__slot--selected) {
+  --grow: calc(2 * var(--selected-gap));
+}
+
+.hand__slot--selected,
+.hand__slot--selected:hover,
+.hand__slot--selected:focus-within {
+  z-index: 30 !important;
+  transform: translateY(-0.75rem) rotate(0deg) scale(1.07);
+  margin-inline: calc(var(--fit) + var(--selected-gap));
+}
+
+.hand__slot--selected .hand__card {
+  filter: drop-shadow(0 0 0.35rem var(--color-gold-bright))
+    drop-shadow(0 0 1.4rem var(--color-gold));
+  animation: selected-glow 1.2s ease-in-out infinite;
+}
+
+@keyframes selected-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0.35rem var(--color-gold-bright))
+      drop-shadow(0 0 1.2rem var(--color-gold));
+  }
+  50% {
+    filter: drop-shadow(0 0 0.5rem var(--color-gold-bright)) drop-shadow(0 0 2rem var(--color-gold));
+  }
+}
+
+/* Too costly, or the fight is over. */
+.hand__slot--unplayable .hand__card {
+  filter: saturate(0.35) brightness(0.62);
+}
+
+.hand__slot--unplayable .hand__hit {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hand__slot {
+    transition: none;
+  }
+
+  .hand__slot--selected .hand__card {
+    animation: none;
+  }
+}

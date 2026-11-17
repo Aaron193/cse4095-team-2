@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ENGINE_VERSION } from '@daily-delve/shared';
 import type { Health } from '@daily-delve/shared';
+import { ApiClientError, getHealth } from '../api/client.ts';
 import { browserRngCheck, sameNumbers } from '../game/selfcheck.ts';
 import './DeterminismCheck.css';
 
@@ -11,10 +12,12 @@ type ServerState =
   | { status: 'ready'; health: Health }
   | { status: 'error'; message: string };
 
-async function fetchHealth(signal: AbortSignal): Promise<Health> {
-  const response = await fetch('/api/health', { signal });
-  if (!response.ok) throw new Error(`The server answered ${response.status}`);
-  return (await response.json()) as Health;
+/** A short reason for the error message: "no answer", or the status and code. */
+function describeFailure(error: unknown): string {
+  if (error instanceof ApiClientError) {
+    return error.code === 'NETWORK_ERROR' ? 'no answer' : `${error.status} ${error.code}`;
+  }
+  return error instanceof Error ? error.message : 'unknown error';
 }
 
 export function DeterminismCheck() {
@@ -23,12 +26,11 @@ export function DeterminismCheck() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchHealth(controller.signal).then(
+    getHealth({ signal: controller.signal }).then(
       (health) => setServer({ status: 'ready', health }),
       (error: unknown) => {
         if (controller.signal.aborted) return;
-        const message = error instanceof Error ? error.message : 'Unknown error';
-        setServer({ status: 'error', message });
+        setServer({ status: 'error', message: describeFailure(error) });
       },
     );
     return () => controller.abort();
@@ -74,7 +76,7 @@ export function DeterminismCheck() {
       )}
       {server.status === 'error' && (
         <p className="check__result check__result--bad" role="alert">
-          Could not reach the server: {server.message}. Start it with <code>npm run dev</code>.
+          Could not reach the server ({server.message}). Start it with <code>npm run dev</code>.
         </p>
       )}
       {server.status === 'ready' && numbersMatch && versionsMatch && (

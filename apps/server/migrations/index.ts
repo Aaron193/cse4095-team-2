@@ -5,6 +5,7 @@
 // way under tsx, under Vitest, and in production, with no dependence on the working directory.
 import type { Knex } from 'knex';
 import * as init from './001_init.ts';
+import * as sessions from './002_sessions.ts';
 
 export interface Migration {
   name: string;
@@ -12,4 +13,7 @@ export interface Migration {
   down: (knex: Knex) => Promise<void>;
 }
 
-export const MIGRATIONS: Migration[] = [{ name: '001_init', up: init.up, down: init.down }];
+export const MIGRATIONS: Migration[] = [
+  { name: '001_init', up: init.up, down: init.down },
+  { name: '002_sessions', up: sessions.up, down: sessions.down },
+];

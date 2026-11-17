@@ -9,7 +9,8 @@ export default defineConfig({
     proxy: { '/api': 'http://localhost:3000' },
   },
   test: {
-    environment: 'jsdom',
+    // jsdom, with Node's AbortSignal and the other classes Node's fetch accepts.
+    environment: './src/test/jsdom-environment.ts',
     include: ['src/**/*.test.{ts,tsx}'],
     setupFiles: ['src/test/setup.ts'],
     css: false,

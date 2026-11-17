@@ -191,113 +191,113 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P1 Stream A
 
-- [ ] **P1-A1 · Number pipeline** — Owner: ____ — Needs: P0-A4
+- [x] **P1-A1 · Number pipeline** — Owner: Aaron Mark — Needs: P0-A4
   - Do: Write `src/engine/calc.ts`: `computeDamage` applying additive changes, then multiplicative (integer percent, floored), then caps and a floor of 0; and `applyDamage(unit, amount, { ignoreShield })`, which removes Shield before HP.
   - Done when: Table-driven tests cover the order of operations (base 4, plus 3, times 150 percent gives 10), Shield absorption, `ignoreShield`, and never going below 0.
 
-- [ ] **P1-A2 · Combat setup and drawing** — Owner: ____ — Needs: P0-A2, P0-A3, P0-A4
+- [x] **P1-A2 · Combat setup and drawing** — Owner: Aaron Mark — Needs: P0-A2, P0-A3, P0-A4
   - Do: Write `startCombat` in `src/engine/combat.ts`: build enemies from definitions, shuffle the deck with stream `shuffle:<nodeId>`, start turn 1 (draw `HAND_SIZE`, set energy, show intents). Drawing from an empty pile reshuffles the discard pile.
   - Done when: Tests show the same seed gives the same opening hand, a different node ID gives a different order, an empty draw pile reshuffles, and turn 1 has 5 cards and 3 energy.
 
-- [ ] **P1-A3 · Play a card** — Owner: ____ — Needs: P1-A1, P1-A2
+- [x] **P1-A3 · Play a card** — Owner: Aaron Mark — Needs: P1-A1, P1-A2
   - Do: Implement the `playCard` action with effect kinds `damage`, `shield`, `draw`, `energy`: check the hand index, cost, and target; pay energy; resolve effects in listed order; discard the card. The fight is won the moment the last enemy reaches 0 HP.
   - Done when: Tests cover each effect, and each illegal case (bad index, too costly, dead or missing target) returns `ok: false` with code `ILLEGAL_ACTION` and an unchanged state.
 
-- [ ] **P1-A4 · End turn and enemy phase** — Owner: ____ — Needs: P1-A3
+- [x] **P1-A4 · End turn and enemy phase** — Owner: Aaron Mark — Needs: P1-A3
   - Do: Implement `endTurn` in the R3 order: enemies act in index order on their shown intents, the hand is discarded, statuses tick, Shield expires per R3, intents advance, the next turn starts. Player death ends the run as lost. Reaching `FIGHT_TURN_CAP` ends the run as lost.
   - Done when: A scripted three-turn fight matches expected HP and Shield after every turn, and tests cover death and the turn cap.
 
-- [ ] **P1-A5 · Burn, Chill, Poison, and Shatter** — Owner: ____ — Needs: P1-A4
+- [x] **P1-A5 · Burn, Chill, Poison, and Shatter** — Owner: Aaron Mark — Needs: P1-A4
   - Do: Implement effect kinds `applyStatus` and `shatter` and the tick rules in R3, for enemies and for the player, capped at `STATUS_CAP`.
   - Done when: Tests cover each status's tick and decay, Chill lowering attack damage, Shatter removing Chill and dealing damage per stack, and the cap.
 
-- [ ] **P1-A6 · Tag synergy and Exhaust** — Owner: ____ — Needs: P1-A5
+- [x] **P1-A6 · Tag synergy and Exhaust** — Owner: Aaron Mark — Needs: P1-A5
   - Do: Track `tagsPlayedThisTurn` (reset each turn; a card does not count itself). Apply `perTagPlayed` as an additive bonus through `computeDamage`. Cards with `exhaust` go to the exhaust pile. Increment `stats.comboTriggers` per R3.
   - Done when: Tests show the second Fire card with "+3 per Fire card played" deals base plus 3 while the first deals base, an exhausted card never returns in a reshuffle, and `comboTriggers` counts both trigger kinds.
 
-- [ ] **P1-A7 · First ten cards, two enemies, test fight** — Owner: ____ — Needs: P1-A6
+- [x] **P1-A7 · First ten cards, two enemies, test fight** — Owner: Aaron Mark — Needs: P1-A6
   - Do: Write `content/cards.ts` with 10 cards (for each tag: a basic attack, a status applier, and a skill; plus one tag-synergy attack) and `STARTER_DECK`. Write `content/enemies.ts` with 2 normal enemies using three-step intent cycles. Export `createTestFight(seed)`, a run already in combat against one enemy.
   - Done when: A content test checks every card (cost 0 to 3, at least one tag, known effect kinds, non-empty text), and a scripted test wins the test fight with legal actions only.
 
-- [ ] **P1-A8 · Legal actions in combat and purity test** — Owner: ____ — Needs: P1-A7, P1-B7
+- [x] **P1-A8 · Legal actions in combat and purity test** — Owner: Aaron Mark — Needs: P1-A7, P1-B7
   - Do: Implement `legalActions` for the combat phase (each playable card with each valid target, plus `endTurn`). Add a property test that random-walks the test fight for 50 seeds with deep-frozen input states.
   - Done when: The test passes in under 5 seconds, no input state is mutated, and replaying the recorded actions gives the same `hashState`.
 
 ### P1 Stream B
 
-- [ ] **P1-B1 · Sessions** — Owner: ____ — Needs: P0-B2
+- [x] **P1-B1 · Sessions** — Owner: Aaron Mark — Needs: P0-B2
   - Do: Add `express-session` with a Knex-backed store (table `sessions`). Cookie `dd.sid`: httpOnly, SameSite Lax, Secure in production, 7 days. Set `trust proxy` in production. Write `requireAuth`, which returns 401 `UNAUTHENTICATED`.
   - Done when: Tests show a protected route returns 401 without a cookie and 200 with one, and the session still works after the app object is re-created on the same database.
 
-- [ ] **P1-B2 · Register** — Owner: ____ — Needs: P1-B1, P0-B3, P0-B4
+- [x] **P1-B2 · Register** — Owner: Aaron Mark — Needs: P1-B1, P0-B3, P0-B4
   - Do: Implement `POST /api/auth/register` per R5: validate, lowercase the username, hash with bcryptjs (cost from config, low in tests), default the display name to the username, start a session.
   - Done when: Tests cover success (201, cookie set, no password hash in the response), a taken username in different letter case (409), and each validation limit (400).
 
-- [ ] **P1-B3 · Login and logout** — Owner: ____ — Needs: P1-B2
+- [x] **P1-B3 · Login and logout** — Owner: Aaron Mark — Needs: P1-B2
   - Do: Implement `POST /api/auth/login` and `POST /api/auth/logout` per R5. Wrong username and wrong password give the same 401 `INVALID_CREDENTIALS`.
   - Done when: Tests cover login success, both failure cases, and that a protected route returns 401 after logout.
 
-- [ ] **P1-B4 · Current user** — Owner: ____ — Needs: P1-B3
+- [x] **P1-B4 · Current user** — Owner: Aaron Mark — Needs: P1-B3
   - Do: Implement `GET /api/me` per R5.
   - Done when: Tests show 200 with the user when logged in and 401 when not.
 
-- [ ] **P1-B5 · Security middleware** — Owner: ____ — Needs: P0-B1
+- [x] **P1-B5 · Security middleware** — Owner: Aaron Mark — Needs: P0-B1
   - Do: Add helmet, a 100 KB JSON body limit, and a rate limit of 10 requests a minute per address on `/api/auth/*` (limit configurable so tests can set it).
   - Done when: Tests show the request over the limit returns 429 `RATE_LIMITED` and an oversized body returns an R5-format error.
 
-- [ ] **P1-B6 · Daily dungeon endpoint** — Owner: ____ — Needs: P0-B2, P0-B3
+- [x] **P1-B6 · Daily dungeon endpoint** — Owner: Aaron Mark — Needs: P0-B2, P0-B3
   - Do: Write `getOrCreateDungeon(date)` and `GET /api/dungeons/today` per R5. Seed is the first 16 hex characters of HMAC-SHA256 of the date keyed by `SEED_SECRET`. The date comes from the injected `now()`. Insert-if-absent must be safe when two requests arrive together. `officialRun` is `null` until P2-B4.
   - Done when: Tests show two calls on one day return the same seed, advancing the clock a day returns a new date and seed, and parallel first requests create exactly one row.
 
-- [ ] **P1-B7 · State hashing** — Owner: ____ — Needs: P0-A3
+- [x] **P1-B7 · State hashing** — Owner: Aaron Mark — Needs: P0-A3
   - Do: In `packages/shared/src/engine/hash.ts` write `canonicalJson(value)` (keys sorted, no whitespace) and `hashState(state)` (a pure-TypeScript integer hash of the canonical JSON, returned as hex).
   - Done when: Tests show key order does not change the hash, changing one field does, and a committed sample object gives a committed hash.
 
 ### P1 Stream C
 
-- [ ] **P1-C1 · Game store** — Owner: ____ — Needs: P0-A3, P0-C1
+- [x] **P1-C1 · Game store** — Owner: Aaron Mark — Needs: P0-A3, P0-C1
   - Do: Write `src/game/useGame.ts` holding `{ seed, actions, state }`. `dispatch(action)` calls `applyAction`; on success it appends the action and replaces the state; on failure it reports the error and changes nothing. The UI never computes game results itself.
   - Done when: Unit tests with an injected fake engine cover a successful action and an illegal one.
 
-- [ ] **P1-C2 · Enemy component** — Owner: ____ — Needs: P0-C3
+- [x] **P1-C2 · Enemy component** — Owner: Aaron Mark — Needs: P0-C3
   - Do: Write `src/components/Enemy.tsx` showing name, HP bar, Shield, status badges, and the intent with its number. Add a hand-written `CombatState` fixture at `src/game/fixtures/combat.json` matching R4.
   - Done when: A component test finds HP, the text "Attack 6", and each status badge from the fixture.
 
-- [ ] **P1-C3 · Player panel** — Owner: ____ — Needs: P0-C3
+- [x] **P1-C3 · Player panel** — Owner: Aaron Mark — Needs: P0-C3
   - Do: Write `src/components/PlayerPanel.tsx` showing HP, Shield, statuses, energy, draw, discard, and exhaust pile counts, and an End Turn button that dispatches `{ type: 'endTurn' }`.
   - Done when: A component test finds every value from the fixture and sees the dispatch on click.
 
-- [ ] **P1-C4 · Hand and card play** — Owner: ____ — Needs: P0-C3, P1-C1
+- [x] **P1-C4 · Hand and card play** — Owner: Aaron Mark — Needs: P0-C3, P1-C1
   - Do: Write `src/components/Hand.tsx`. Cards that cost more than current energy are disabled. Clicking a card selects it; a card that needs a target is played by then clicking an enemy; other cards play at once.
   - Done when: Component tests cover a targeted play, an untargeted play, and a disabled card that dispatches nothing.
 
-- [ ] **P1-C5 · Combat screen** — Owner: ____ — Needs: P1-A7, P1-C2, P1-C3, P1-C4
+- [x] **P1-C5 · Combat screen** — Owner: Aaron Mark — Needs: P1-A7, P1-C2, P1-C3, P1-C4
   - Do: Assemble the combat screen at `/play/test-fight` on the real engine using `createTestFight`.
   - Done when: A fight can be played to its end with the mouse alone, and a test plays one card and sees the enemy's HP fall.
 
-- [ ] **P1-C6 · Fight end overlay** — Owner: ____ — Needs: P1-C5
+- [x] **P1-C6 · Fight end overlay** — Owner: Aaron Mark — Needs: P1-C5
   - Do: Show Victory or Defeat when the test fight ends, with a button that restarts it on a new seed.
   - Done when: A test drives a fixture state to each outcome and finds the matching overlay.
 
 ### P1 Stream D
 
-- [ ] **P1-D1 · Typed API client** — Owner: ____ — Needs: P0-B3, P0-C1
+- [x] **P1-D1 · Typed API client** — Owner: Aaron Mark — Needs: P0-B3, P0-C1
   - Do: Write `apps/client/src/api/client.ts` with one function per R5 endpoint, typed with the shared types, sending cookies, and throwing `ApiClientError { status, code, message, details }` on failure.
   - Done when: Unit tests with a mocked `fetch` cover a success and a failure for three endpoints, and every R5 endpoint has a function.
 
-- [ ] **P1-D2 · Mock API** — Owner: ____ — Needs: P1-D1
+- [x] **P1-D2 · Mock API** — Owner: Aaron Mark — Needs: P1-D1
   - Do: Add MSW handlers for every R5 endpoint backed by in-memory data, switched on in dev by `VITE_USE_MOCKS=1` and used in component tests.
   - Done when: With the server stopped and mocks on, register, login, and leaderboard calls from the client succeed.
 
-- [ ] **P1-D3 · Login and register screens** — Owner: ____ — Needs: P1-D1, P1-D2
+- [x] **P1-D3 · Login and register screens** — Owner: Aaron Mark — Needs: P1-D1, P1-D2
   - Do: Add an auth context and the `/login` and `/register` forms with the R5 limits checked in the browser and server errors shown. On success go to `/`.
   - Done when: Component tests cover a successful register, a taken username, and a failed login.
 
-- [ ] **P1-D4 · App shell and protected routes** — Owner: ____ — Needs: P1-D3
+- [x] **P1-D4 · App shell and protected routes** — Owner: Aaron Mark — Needs: P1-D3
   - Do: Add navigation (Today, Leaderboard, Profile, Log out, display name). Restore the session with `GET /api/me` on load. Send logged-out visitors of `/play` and `/profile` to `/login`.
   - Done when: Tests cover the redirect and a restored session after reload.
 
-- [ ] **P1-D5 · One-process production build** — Owner: ____ — Needs: P0-B1, P0-C1
+- [x] **P1-D5 · One-process production build** — Owner: Aaron Mark — Needs: P0-B1, P0-C1
   - Do: Make Express serve `apps/client/dist` and return `index.html` for any non-`/api` path. Root `npm run build` builds the client. Root `npm start` runs migrations, then the server with `tsx`.
   - Done when: `npm run build && npm start` serves the app and the API from one port locally.
 
@@ -305,7 +305,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Add `render.yaml`: one free web service, one free Postgres, `DATABASE_URL` wired in, generated `SESSION_SECRET` and `SEED_SECRET`, health check `/api/health`, deploy from `main` after CI passes. Create the database on or after Nov 13 (free Render Postgres expires 30 days after creation). Put the URL and the expiry date in the README.
   - Done when: The public URL serves the app, `/api/health` is OK, and a registered user still exists after a manual redeploy.
 
-- [ ] **P1-D7 · Postgres job in CI** — Owner: ____ — Needs: P0-B2, P0-D2
+- [x] **P1-D7 · Postgres job in CI** — Owner: Aaron Mark — Needs: P0-B2, P0-D2
   - Do: Add a second CI job that runs the `apps/server` tests against a Postgres service container with `DATABASE_URL` set.
   - Done when: The SQLite job and the Postgres job are both green on `main`.
 
