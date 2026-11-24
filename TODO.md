@@ -407,7 +407,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Dispatch `move` from the arrow keys, WASD, and a click on a tile next to the player, only for directions `legalActions` allows. Hovering a tile shows what it is; a closed gate shows which tag opens it and how many cards of that tag the deck holds.
   - Done when: Tests show a legal direction dispatches, a blocked direction does not, and the gate hint shows the tag and the count.
 
-- [ ] **P2-C3 · Run flow by phase** — Owner: ____ — Needs: P1-C5, P2-C1
+- [x] **P2-C3 · Run flow by phase** — Owner: Antonio Ayala — Needs: P1-C5, P2-C1
   - Do: Make `/play` render by `state.phase`: `map`, `combat`, `reward`, `shrine`, `ended`. No manual navigation between them.
   - Done when: A test feeds a state in each phase and finds the matching screen.
 
