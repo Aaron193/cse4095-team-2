@@ -18,7 +18,7 @@ Edit only your own line. Keep the blank lines between entries.
 
 **B (API, database, auth, verification):** not started. Blocked by: nothing
 
-**C (map, combat, reward screens):** playable grid-dungeon prototype on branch `antonio-dev`; this file now plans the hybrid in R3 DECISION 8 to 10. Blocked by: P0-T2
+**C (map, combat, reward screens):** P2-C1, P2-C3, P2-C5, P2-C8 done, pending review (built on a hand-written dungeon fixture). Blocked by: P2-A3 (P2-C2), P2-A4 (P2-C4), P2-A5 (P2-C6), P2-A7 (P2-C7, then P2-C9)
 
 **D (leaderboard, profile, deploy, tests, docs):** not started. Blocked by: nothing
 
