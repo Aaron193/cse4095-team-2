@@ -399,7 +399,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P2 Stream C
 
-- [ ] **P2-C1 · Dungeon screen** — Owner: ____ — Needs: P0-A5, P0-C3, P0-C4
+- [x] **P2-C1 · Dungeon screen** — Owner: Antonio Ayala — Needs: P0-A5, P0-C3, P0-C4
   - Do: Write `src/screens/MapScreen.tsx` drawing `state.dungeon.tiles` on a canvas: walls, floor, the three gate kinds, an icon per site type (cleared sites dimmed), and the player at `state.pos`. Port the tile drawing and sprites from `prototypes/dungeon-puzzle/src/client/render.ts` and `sprites.ts`. Beside the canvas list every site with its type and state as text, so the screen can be tested and read without the canvas. Build it against a hand-written dungeon fixture.
   - Done when: A component test finds every fixture site with its type in the list and the player's position.
 
