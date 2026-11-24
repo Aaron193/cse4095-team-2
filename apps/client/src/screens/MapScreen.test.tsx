@@ -1,5 +1,6 @@
 // The dungeon screen on the hand-written fixture dungeon (task P2-C1).
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { fixtureMapRun } from '../game/fixtures/index.ts';
 import { MapScreen } from './MapScreen.tsx';
@@ -56,5 +57,12 @@ describe('MapScreen', () => {
     const canvas = container.querySelector('canvas')!;
     expect(canvas.width).toBe(33 * 16);
     expect(canvas.height).toBe(19 * 16);
+  });
+
+  it('opens the deck viewer from the Deck button', async () => {
+    const user = userEvent.setup();
+    render(<MapScreen state={fixtureMapRun()} />);
+    await user.click(screen.getByRole('button', { name: 'Deck (10)' }));
+    expect(screen.getByRole('dialog', { name: 'Your deck (10 cards)' })).toBeInTheDocument();
   });
 });

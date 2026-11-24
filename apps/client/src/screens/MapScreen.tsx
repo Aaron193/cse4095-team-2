@@ -4,6 +4,7 @@
 import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import type { MapNode, RunState } from '@daily-delve/shared';
+import { DeckButton } from '../components/DeckViewer.tsx';
 import { drawDungeon, TILE } from '../game/map/render.ts';
 import './MapScreen.css';
 
@@ -42,7 +43,7 @@ export interface MapScreenProps {
   state: RunState;
   /** The place shown at the top of the screen. */
   place?: string;
-  /** Buttons for the status bar, such as the deck viewer's. */
+  /** More buttons for the status bar, beside the Deck button. */
   tools?: ReactNode;
 }
 
@@ -72,7 +73,10 @@ export function MapScreen({ state, place = 'The Sunken Halls', tools }: MapScree
             <dd>{state.stats.steps}</dd>
           </div>
         </dl>
-        {tools ? <div className="map__tools">{tools}</div> : null}
+        <div className="map__tools">
+          {tools}
+          <DeckButton deck={state.deck} />
+        </div>
       </header>
 
       <div className="map__body">

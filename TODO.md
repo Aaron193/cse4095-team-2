@@ -415,7 +415,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Show the three offered cards and a Skip button; dispatch `pickReward`.
   - Done when: Tests cover a pick and a skip.
 
-- [ ] **P2-C5 · Deck viewer** — Owner: ____ — Needs: P0-C3
+- [x] **P2-C5 · Deck viewer** — Owner: Antonio Ayala — Needs: P0-C3
   - Do: Add a modal listing the current deck, grouped by card with counts, opened from the map, combat, and reward screens.
   - Done when: A test opens it on a fixture deck and finds each card and count.
 

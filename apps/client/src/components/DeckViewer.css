@@ -1,0 +1,124 @@
+/* The deck viewer modal. Colors come from tokens.css. */
+.deck-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: var(--space-5);
+  background: rgb(8 7 15 / 78%);
+  backdrop-filter: blur(4px);
+}
+
+.deck-viewer__panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  width: min(100%, 30rem);
+  max-height: min(40rem, 100%);
+  padding: var(--space-5);
+  border: 2px solid var(--color-gold-line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--color-ink-3), var(--color-ink));
+  box-shadow: 0 30px 60px var(--color-shadow-deep);
+  color: var(--color-text);
+}
+
+.deck-viewer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.deck-viewer__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-gold-bright);
+}
+
+.deck-viewer__close {
+  width: var(--control-sm);
+  height: var(--control-sm);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--text-lg);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.deck-viewer__close:hover,
+.deck-viewer__close:focus-visible {
+  border-color: var(--color-gold);
+  color: var(--color-gold-bright);
+}
+
+.deck-viewer__list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.deck-viewer__row {
+  --row-color: var(--color-border-strong);
+
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-left: 3px solid var(--row-color);
+  border-radius: var(--radius-sm);
+  background: var(--color-text-veil);
+}
+
+.deck-viewer__row--fire {
+  --row-color: var(--color-fire);
+}
+
+.deck-viewer__row--frost {
+  --row-color: var(--color-frost);
+}
+
+.deck-viewer__row--poison {
+  --row-color: var(--color-poison);
+}
+
+.deck-viewer__cost {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--color-ink);
+  border: 1px solid var(--color-gold-line);
+  font-family: var(--font-display);
+  color: var(--color-gold-bright);
+}
+
+.deck-viewer__name {
+  display: grid;
+}
+
+.deck-viewer__meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.deck-viewer__count {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+.deck-viewer__empty {
+  margin: 0;
+  color: var(--color-text-muted);
+}
