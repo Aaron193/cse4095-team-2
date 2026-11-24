@@ -427,7 +427,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: After every action save `{ date, mode, engineVersion, seed, actions }` to localStorage key `dd.run.v1`. On load rebuild the state with `simulate`. Discard the save when the engine version or date differs.
   - Done when: A test reloads mid-fight and gets the same `hashState`, and a stale-version save is discarded.
 
-- [ ] **P2-C8 · Today screen** — Owner: ____ — Needs: P1-D1, P2-C3
+- [x] **P2-C8 · Today screen** — Owner: Antonio Ayala — Needs: P1-D1, P2-C3
   - Do: At `/` load `GET /api/dungeons/today`. Show the date, a map preview, and buttons for Official run and Practice run. When `officialRun` exists show its result instead of the official button. Starting creates the run from the returned seed.
   - Done when: Tests on mocks cover the states before and after an official run.
 

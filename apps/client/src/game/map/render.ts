@@ -2,8 +2,16 @@
 // state and never changes it. The tile drawing is ported from the grid-dungeon prototype
 // (prototypes/dungeon-puzzle/src/client/render.ts), cut down to the five R4 tile kinds:
 // '#' wall, '.' floor, 'B' brambles (Fire), '~' water (Frost), 'R' bars (Poison).
-import type { MapNode, RunState } from '@daily-delve/shared';
+import type { Dungeon, MapNode, RunState } from '@daily-delve/shared';
 import { drawSprite } from './sprites.ts';
+
+/** What the renderer reads from a run: enough to draw a dungeon before a run starts, too. */
+export type MapView = Pick<RunState, 'dungeon' | 'pos' | 'cleared' | 'openedGates'>;
+
+/** A dungeon as it looks at the start of a run, for the Today screen's preview. */
+export function startView(dungeon: Dungeon): MapView {
+  return { dungeon, pos: { ...dungeon.start }, cleared: [], openedGates: [] };
+}
 
 /** One tile is 16 by 16 canvas pixels. */
 export const TILE = 16;
@@ -22,7 +30,7 @@ const KINDS: Record<string, TileKind> = {
  * What the tile at (x, y) is now. Off the grid is wall, and an opened gate is floor for the
  * rest of the run (`openedGates` holds tile indexes, y * width + x).
  */
-export function tileKind(state: RunState, x: number, y: number): TileKind {
+export function tileKind(state: MapView, x: number, y: number): TileKind {
   const { dungeon } = state;
   if (x < 0 || y < 0 || x >= dungeon.width || y >= dungeon.height) return 'wall';
   const kind = KINDS[dungeon.tiles[y]?.[x] ?? '#'] ?? 'wall';
@@ -33,14 +41,14 @@ export function tileKind(state: RunState, x: number, y: number): TileKind {
 }
 
 /** The site on (x, y), if any. */
-export function siteAt(state: RunState, x: number, y: number): MapNode | undefined {
+export function siteAt(state: MapView, x: number, y: number): MapNode | undefined {
   return state.dungeon.nodes.find((node) => node.x === x && node.y === y);
 }
 
 /** A fixed per-tile number, so the floor speckles look the same on every draw. */
 const speckle = (x: number, y: number) => ((x * 73856093) ^ (y * 19349663)) >>> 0;
 
-function drawTile(ctx: CanvasRenderingContext2D, state: RunState, tx: number, ty: number) {
+function drawTile(ctx: CanvasRenderingContext2D, state: MapView, tx: number, ty: number) {
   const x = tx * TILE;
   const y = ty * TILE;
   const h = speckle(tx, ty);
@@ -105,7 +113,7 @@ function drawTile(ctx: CanvasRenderingContext2D, state: RunState, tx: number, ty
 }
 
 /** The whole dungeon: tiles, then every site (cleared ones dimmed), then the player. */
-export function drawDungeon(ctx: CanvasRenderingContext2D, state: RunState): void {
+export function drawDungeon(ctx: CanvasRenderingContext2D, state: MapView): void {
   const { dungeon } = state;
   ctx.imageSmoothingEnabled = false;
   for (let y = 0; y < dungeon.height; y++) {

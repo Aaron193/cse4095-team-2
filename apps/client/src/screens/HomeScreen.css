@@ -1,0 +1,114 @@
+/* Today's dungeon. Colors come from tokens.css. */
+.today {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  width: min(100%, 52rem);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.today__title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: var(--text-3xl);
+  color: var(--color-gold-bright);
+}
+
+.today__date {
+  margin: 0;
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-caps-wide);
+  color: var(--color-text-muted);
+}
+
+.today__preview {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.today__preview-missing {
+  margin: 0;
+  padding: var(--space-6) var(--space-4);
+  width: 100%;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+}
+
+.today__official {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid var(--color-gold-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.today__official-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.today__official-reached {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.today__official-stats {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-6);
+  margin: 0;
+}
+
+.today__official-stats dt {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.today__official-stats dd {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+.today__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.today__note {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.today__failed {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+}
+
+.today__dev {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-gold-hairline);
+  width: 100%;
+}

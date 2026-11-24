@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import type { MapNode, RunState } from '@daily-delve/shared';
 import { DeckButton } from '../components/DeckViewer.tsx';
 import { drawDungeon, TILE } from '../game/map/render.ts';
+import type { MapView } from '../game/map/render.ts';
 import './MapScreen.css';
 
 export const SITE_LABELS: Record<MapNode['type'], string> = {
@@ -20,7 +21,8 @@ export function tileName({ x, y }: { x: number; y: number }): string {
   return `(${x}, ${y})`;
 }
 
-function DungeonCanvas({ state }: { state: RunState }) {
+/** The dungeon drawn on a canvas, scaled to its box with square pixels. */
+export function DungeonCanvas({ state }: { state: MapView }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const ctx = canvas.current?.getContext('2d');
