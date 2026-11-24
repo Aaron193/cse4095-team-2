@@ -2,7 +2,7 @@
 // they lead to. The UI changes the game only through `dispatch`, and the engine decides what
 // each action does: the UI never works out a game result itself (Docs/screens.md).
 import { useCallback, useReducer } from 'react';
-import { applyAction, createTestFight } from '@daily-delve/shared';
+import { applyAction, createRun, createTestFight } from '@daily-delve/shared';
 import type { Action, ApplyResult, EngineError, RunState } from '@daily-delve/shared';
 
 /** The two engine calls the store needs. Tests pass a fake one. */
@@ -14,6 +14,9 @@ export interface GameEngine {
 
 /** Phase 1: the test fight on the real engine (task P1-C5). */
 export const TEST_FIGHT_ENGINE: GameEngine = { start: createTestFight, applyAction };
+
+/** A whole run of the day's dungeon on the real engine (task P2-C3). */
+export const RUN_ENGINE: GameEngine = { start: createRun, applyAction };
 
 export interface GameSnapshot {
   seed: string;

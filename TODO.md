@@ -18,7 +18,7 @@ Edit only your own line. Keep the blank lines between entries.
 
 **B (API, database, auth, verification):** not started. Blocked by: nothing
 
-**C (map, combat, reward screens):** playable grid-dungeon prototype on branch `antonio-dev`; this file now plans the hybrid in R3 DECISION 8 to 10. Blocked by: P0-T2
+**C (map, combat, reward screens):** P2-C1, P2-C3, P2-C5, P2-C8 done, pending review (built on a hand-written dungeon fixture). Blocked by: P2-A3 (P2-C2), P2-A4 (P2-C4), P2-A5 (P2-C6), P2-A7 (P2-C7, then P2-C9)
 
 **D (leaderboard, profile, deploy, tests, docs):** not started. Blocked by: nothing
 
@@ -399,7 +399,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
 
 ### P2 Stream C
 
-- [ ] **P2-C1 · Dungeon screen** — Owner: ____ — Needs: P0-A5, P0-C3, P0-C4
+- [x] **P2-C1 · Dungeon screen** — Owner: Antonio Ayala — Needs: P0-A5, P0-C3, P0-C4
   - Do: Write `src/screens/MapScreen.tsx` drawing `state.dungeon.tiles` on a canvas: walls, floor, the three gate kinds, an icon per site type (cleared sites dimmed), and the player at `state.pos`. Port the tile drawing and sprites from `prototypes/dungeon-puzzle/src/client/render.ts` and `sprites.ts`. Beside the canvas list every site with its type and state as text, so the screen can be tested and read without the canvas. Build it against a hand-written dungeon fixture.
   - Done when: A component test finds every fixture site with its type in the list and the player's position.
 
@@ -407,7 +407,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Dispatch `move` from the arrow keys, WASD, and a click on a tile next to the player, only for directions `legalActions` allows. Hovering a tile shows what it is; a closed gate shows which tag opens it and how many cards of that tag the deck holds.
   - Done when: Tests show a legal direction dispatches, a blocked direction does not, and the gate hint shows the tag and the count.
 
-- [ ] **P2-C3 · Run flow by phase** — Owner: ____ — Needs: P1-C5, P2-C1
+- [x] **P2-C3 · Run flow by phase** — Owner: Antonio Ayala — Needs: P1-C5, P2-C1
   - Do: Make `/play` render by `state.phase`: `map`, `combat`, `reward`, `shrine`, `ended`. No manual navigation between them.
   - Done when: A test feeds a state in each phase and finds the matching screen.
 
@@ -415,7 +415,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: Show the three offered cards and a Skip button; dispatch `pickReward`.
   - Done when: Tests cover a pick and a skip.
 
-- [ ] **P2-C5 · Deck viewer** — Owner: ____ — Needs: P0-C3
+- [x] **P2-C5 · Deck viewer** — Owner: Antonio Ayala — Needs: P0-C3
   - Do: Add a modal listing the current deck, grouped by card with counts, opened from the map, combat, and reward screens.
   - Done when: A test opens it on a fixture deck and finds each card and count.
 
@@ -427,7 +427,7 @@ Everything from here to the "OPTIONAL TASKS" marker is required for the demo.
   - Do: After every action save `{ date, mode, engineVersion, seed, actions }` to localStorage key `dd.run.v1`. On load rebuild the state with `simulate`. Discard the save when the engine version or date differs.
   - Done when: A test reloads mid-fight and gets the same `hashState`, and a stale-version save is discarded.
 
-- [ ] **P2-C8 · Today screen** — Owner: ____ — Needs: P1-D1, P2-C3
+- [x] **P2-C8 · Today screen** — Owner: Antonio Ayala — Needs: P1-D1, P2-C3
   - Do: At `/` load `GET /api/dungeons/today`. Show the date, a map preview, and buttons for Official run and Practice run. When `officialRun` exists show its result instead of the official button. Starting creates the run from the returned seed.
   - Done when: Tests on mocks cover the states before and after an official run.
 

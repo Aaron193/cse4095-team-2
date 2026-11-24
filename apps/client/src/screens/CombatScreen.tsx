@@ -5,6 +5,7 @@ import { useEffect, useMemo } from 'react';
 import type { CSSProperties } from 'react';
 import { CARDS, legalActions } from '@daily-delve/shared';
 import { splitName } from '../components/Card.tsx';
+import { DeckButton } from '../components/DeckViewer.tsx';
 import { Enemy } from '../components/Enemy.tsx';
 import { Hand } from '../components/Hand.tsx';
 import { PlayerPanel } from '../components/PlayerPanel.tsx';
@@ -93,10 +94,13 @@ export function CombatScreen({ game, place = 'The Sunken Halls', subtitle }: Com
       <Embers />
 
       <header className="combat__hud">
-        <p className="combat__turn" aria-label={`Turn ${combat.turn}`}>
-          <span className="combat__turn-word">Turn</span>
-          <span className="combat__turn-number">{combat.turn}</span>
-        </p>
+        <div className="combat__hud-start">
+          <p className="combat__turn" aria-label={`Turn ${combat.turn}`}>
+            <span className="combat__turn-word">Turn</span>
+            <span className="combat__turn-number">{combat.turn}</span>
+          </p>
+          <DeckButton deck={state.deck} />
+        </div>
         <div className="combat__place">
           <h1 className="combat__place-name">{place}</h1>
           {/* One line under the name: the seed, or while aiming, how to aim. Its height is

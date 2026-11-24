@@ -1,0 +1,187 @@
+/* The dungeon screen: a status bar, the pixel map, and the site list beside it. */
+.map {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-4);
+  padding: var(--space-4) clamp(var(--space-4), 3vw, var(--space-7));
+  color: var(--color-text);
+}
+
+.map__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-gold-hairline);
+}
+
+.map__place {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-gold-bright);
+}
+
+.map__stats {
+  display: flex;
+  gap: var(--space-5);
+  margin: 0;
+}
+
+.map__stat {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+
+.map__stat dt {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.map__stat dd {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+.map__tools {
+  display: flex;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.map__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(13rem, 17rem);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.map__board {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.map__canvas {
+  width: 100%;
+  max-height: calc(100dvh - var(--header-height, 4rem) - 10rem);
+  object-fit: contain;
+  border: 2px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-abyss);
+  box-shadow: 0 20px 40px var(--color-shadow);
+  image-rendering: pixelated;
+}
+
+.map__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.map__swatch {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-right: var(--space-1);
+  vertical-align: -0.1rem;
+  border-radius: 2px;
+}
+
+.map__swatch--start {
+  border: 1px solid var(--color-gold);
+}
+
+.map__swatch--brambles {
+  background: #2f7a3a;
+}
+
+.map__swatch--water {
+  background: #24539b;
+}
+
+.map__swatch--bars {
+  background: repeating-linear-gradient(90deg, #b08a5a 0 2px, #2b2536 2px 4px);
+}
+
+.map__side {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.map__position {
+  margin: 0;
+}
+
+.map__sites-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.map__sites {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map__site {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr auto 4.2rem;
+  gap: var(--space-2);
+  align-items: baseline;
+  font-variant-numeric: tabular-nums;
+}
+
+.map__site-id,
+.map__site-tile {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.map__site--elite .map__site-type {
+  color: var(--color-fire);
+}
+
+.map__site--shrine .map__site-type {
+  color: var(--color-frost);
+}
+
+.map__site--boss .map__site-type {
+  color: var(--color-gold-bright);
+  font-weight: 600;
+}
+
+.map__site--cleared {
+  opacity: 0.55;
+}
+
+.map__site-state {
+  font-size: var(--text-sm);
+  color: var(--color-success);
+  text-align: right;
+}
+
+@media (width < 48rem) {
+  .map__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

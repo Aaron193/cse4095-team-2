@@ -57,7 +57,7 @@ describe('App routes', () => {
   });
 
   it.each([
-    ['/play', 'Play'],
+    ['/play', 'No run in progress'],
     ['/profile', 'Profile'],
   ])('%s renders the %s screen for a logged-in player', async (path, name) => {
     logInAs(DEMO_USERNAME);
